@@ -1,0 +1,37 @@
+<div class="conten" style="padding: 10px;height:400px;max-height: 400px;overflow: auto;overflow-x: hidden">
+    <input type="hidden" name="val[username]" value="<?php echo $val['username']?>"/>
+    <input type="hidden" name="val[password]" value="<?php echo $val['password']?>"/>
+
+    <?php if(empty($boards)):?>
+        <div class="alert alert-warning"><?php _l('you-dont-have-boards')?></div>
+    <?php else:?>
+
+        <?php foreach($boards as $board):$already = model('account')->findAccountBySID($board->id, 'pinterest', 'board')?>
+            <?php if($board->name != 'Your Pinterest Likes'):?>
+                <div class="clearfix" style="margin-bottom: 10px;">
+                    <div class="float-left">
+                        <?php
+                        $image = assetUrl('assets/images/pinterest.png');
+                        ?>
+                        <img src="<?php echo $image?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                        <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $board->name?></span>
+                    </div>
+                    <div class="float-right">
+                        <div class="switch">
+                            <?php if($already):?>
+                                <input type="hidden" name="val[boards][]" value="<?php echo $board->id?>"/>
+                            <?php endif?>
+                            <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?>  id="cmn-toggle-group<?php echo $board->id?>" value="<?php echo $board->id?>" name="val[boards][]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-group<?php echo $board->id?>"></label>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+            <?php endif?>
+        <?php endforeach?>
+
+    <?php endif?>
+
+
+</div>

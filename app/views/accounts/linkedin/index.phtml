@@ -1,0 +1,149 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#accounts" data-toggle="tab" class="menu-item  active"><span>LinkedIn <?php echo strtolower(l('accounts'))?></span></a>
+            <?php if(model('user')->isAdmin()):?>
+                <a href="<?php echo url('admin/social/integration', array('page' => 'linkedin'))?>" data-ajax="true"  class="menu-item  hide-mobile-sm"><span><?php echo l('settings')?></span></a>
+            <?php endif?>
+            <a href="<?php echo url('accounts/linkedin', array('auth' => true))?>"  class="menu-item  ajax-action"><span><?php _l('add-new-account')?></span></a>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="accounts" role="tabpanel" >
+            <div class="grid-container clearfix">
+                <div class="each-container">
+                    <a  href="<?php echo url('accounts/linkedin', array('auth' => true))?>"  class="each each-add ajax-action">
+                        <i class="las la-plus"></i>
+                        <?php _l('add-account')?>
+                    </a>
+                </div>
+                <?php foreach ($accounts as $account): ?>
+                    <div class="each-container its-account">
+                        <div class="each">
+                            <div class="info">
+                                <?php if($account['status']):?>
+                                    <span class="badge badge-success"><?php _l('active')?></span>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('not-active')?></span>
+                                <?php endif?>
+                            </div>
+                            <img src=" <?php echo assetUrl($account['avatar'])?>" style="border-radius:100px">
+                            <p>
+                                <?php echo $account['username']?>
+                            </p>
+                            <div class="actions">
+                                <a class="confirm" data-ajax-action="true" href="<?php echo url('account/action',array('action' => 'delete','id' => $account['id']))?>"><i class="las la-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<?php if($details):?>
+    <div class="modal fade" id="linkedinSelectModal" style="height: 100vh;" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                <input type="hidden" name="val[token]" value="<?php echo $details['token']?>"/>
+                <input type="hidden" name="val[add]" value="1"/>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle"><?php _l('select-account')?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="conten" style="padding: 10px;height:400px;max-height: 400px;overflow: auto;overflow-x: hidden">
+                            <div class="clearfix" style="margin-bottom: 10px;">
+                                <div class="float-left">
+                                    <?php
+                                    $user = $details['user'];
+                                    $already = model('account')->findAccountBySID($user->id, 'linkedin', 'profile');
+
+                                    $image = $C->api('linkedin')->getAvatar($user);
+                                    $firstName_param = (array)$user->firstName->localized;
+                                    $lastName_param = (array)$user->lastName->localized;
+
+                                    $firstName = reset($firstName_param);
+                                    $lastName = reset($lastName_param);
+                                    $fullname = $firstName." ".$lastName;
+                                    ?>
+                                    <img src="<?php echo $image?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                                    <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $fullname?></span>
+                                </div>
+                                <div class="float-right">
+                                    <div class="switch">
+                                        <?php if($already):?>
+                                            <input type="hidden" name="val[user]" value="<?php echo $user->id?>"/>
+                                        <?php endif?>
+                                        <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?>  id="cmn-toggle-group<?php echo $user->id?>" value="<?php echo $user->id?>" name="val[user]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                        <label for="cmn-toggle-group<?php echo $user->id?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <?php if(!empty($details['companies']) && $details['companies']->_total != 0):?>
+                                <div class="alert alert-warning"><?php _l('you-dont-have-companies')?></div>
+                            <?php else:?>
+
+                                <h6><?php _l('your-companies')?></h6>
+
+                                <?php foreach($details['companies']->values as $company):$already = model('account')->findAccountBySID($company['id'], 'linkedin', 'company')?>
+                                    <div class="clearfix" style="margin-bottom: 10px;">
+                                        <div class="float-left">
+                                            <?php
+                                            $image = $details['user']->pictureUrl;
+                                            ?>
+                                            <img src="<?php echo $image?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                                            <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $company['name']?></span>
+                                        </div>
+                                        <div class="float-right">
+                                            <div class="switch">
+                                                <?php if($already):?>
+                                                    <input type="hidden" name="val[companies][]" value="<?php echo $company['id']?>"/>
+                                                <?php endif?>
+                                                <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?>  id="cmn-toggle-group<?php echo $company['id']?>" value="<?php echo $company['id']?>" name="val[companies][]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                                <label for="cmn-toggle-group<?php echo $company['id']?>"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                <?php endforeach?>
+
+                            <?php endif?>
+
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                        <button type="submit" class="btn btn-primary"><?php _l('submit')?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<?php endif?>
+
+
+
+
+

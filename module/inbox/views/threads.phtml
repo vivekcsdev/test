@@ -1,0 +1,11 @@
+<div data-paginate="true"
+     data-container=".social-<?php echo $social?>-thread-content"
+     data-offset="10"
+     data-url="<?php echo url('inbox/load/threads', array('social' => $social, 'id' => $id))?>"
+     class="threads-container modern-scroll" >
+    <div class="its-content social-<?php echo $social?>-thread-content">
+        <?php foreach($threads as $thread):?>
+            <?php echo view('inbox::display/thread', array('thread' => $thread,'social' => $social, 'id' => $id))?>
+        <?php endforeach;?>
+    </div>
+</div>

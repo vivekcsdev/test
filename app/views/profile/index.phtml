@@ -1,0 +1,315 @@
+
+<div id="horizontal-menu">
+    <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+    <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#account" data-toggle="tab" class="menu-item  active"><span><?php _l('account')?></span></a>
+            <a href="#password" data-toggle="tab" class="menu-item"><span><?php _l('password')?></span></a>
+            <?php if(model('user')->isOriginalOwner()):?>
+                <a href="#subscription" data-toggle="tab" class="menu-item"><span><?php _l('subscription-billing')?></span></a>
+            <?php endif?>
+            <a href="#appearance" data-toggle="tab" class="menu-item"><span><?php _l('appearance')?></span></a>
+            <?php if(model('user')->isOriginalOwner() or model('user')->teamCanUse('watermark')):?>
+                <a href="#watermark" data-toggle="tab" class="menu-item"><span><?php _l('watermark')?></span></a>
+            <?php endif?>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="account" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <input type="hidden" name="val[action]" value="profile"/>
+                <div class="form-group">
+                    <label><?php _l('full-name')?></label>
+                    <input class="form-control" name="val[full_name]" value="<?php echo $user['full_name']?>"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('email-address')?></label>
+                    <input class="form-control" name="val[email]" value="<?php echo $user['email']?>"/>
+                </div>
+
+
+                <div class="form-group">
+                    <label><?php _l('timezone')?></label>
+                    <select class="form-control select-timezone" name="val[timezone]">
+                        <option value=""><?php _l('select-timezone')?></option>
+                        <?php foreach(getTimezones() as $key => $name):?>
+                            <option <?php echo $user['timezone'] == $key ? 'selected' : null?> value="<?php echo $key?>"><?php echo $name?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('date-format')?></label>
+                    <select class="form-control" name="val[date_format]">
+                        <?php foreach(getDateFormats() as $key => $value):?>
+                            <option <?php echo ($user['date_format'] == $key) ? 'selected':null?> value="<?php echo $key?>"><?php echo $value?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+
+
+                <button class="btn  btn-primary"><?php _l('save-profile')?></button>
+
+                <div class="pane mt-5">
+
+                    <div class="alert alert-warning">
+                        <h6><?php _l('cancel-account')?></h6>
+                        <?php _l('delete-account-note')?>
+                        <div>
+                            <a href="<?php echo url('delete/account')?>" class="btn btn-dark mt-2 confirm"><?php _l('cancel-account')?></a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show " id="appearance" role="tabpanel" >
+
+            <div class="grid-container clearfix">
+                <?php foreach(model('admin')->getDesigns() as $designObj):?>
+                    <div class="each-container">
+                        <div style="cursor: pointer"  data-json='<?php echo json_encode(perfectUnSerialize($designObj['data']))?>' onclick="return preivewDesign(this,'<?php echo $designObj['primary_color']?>')" class="each each-design">
+                            <div class="coloh" style="background-color:<?php echo $designObj['primary_color']?>;height:100%;border-radius:10px">
+                                <?php if($designObj['id'] == model('user')->authUser['default_color']):?>
+                                    <div style="position:absolute;top: 7px;left:5px;padding: 6px 10px;border-radius:5px;background:rgba(0,0,0,0.5);color:#fff"><?php _l('selected')?></div>
+                                <?php else:?>
+                                    <a href="<?php echo url('profile', array('action' => 'set-color', 'id' => $designObj['id']))?>"  class="btn btn-light mtitle ajax-action" title="<?php _l('mark-selected')?>" style="position:absolute;bottom: 10px;right: 10px;border-radius:100px;width:30px;height:30px;padding:5px"><i class="las la-check"></i></a>
+                                <?php endif?>
+                                <div style="color: rgba(0,0,0,0.2);position:relative;padding-top: 80px;display: block;text-align: center">Click to preview</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                <?php endforeach;?>
+            </div>
+        </div>
+
+        <div class="tab-pane fade show " id="password" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <input type="hidden" name="val[action]" value="password"/>
+
+                <div class="form-group">
+                    <label><?php _l('current-password')?></label>
+                    <input type="password" class="form-control" name="val[currentpassword]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('new-password')?></label>
+                    <input type="password" class="form-control" name="val[password]"/>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('confirm-password')?></label>
+                    <input type="password" class="form-control" name="val[confirm]"/>
+                </div>
+
+                <button class="btn  btn-primary"><?php _l('change-password')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show" id="subscription" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <?php if(moduleExists('saas')):?>
+                    <?php
+                    $package = model('saas::saas')->findPackage(model('user')->authOwner['package']);
+                    ?>
+                    <?php if(model('user')->authOwner['payment_mode'] == 1):?>
+                        <div class="pane pane-bg mb-5">
+                            <h6><?php _l('current-package')?>: <span class="colored"><?php echo ($package) ? $package['title'] : 'Nil'?></span></h6>
+                            <h6><?php _l('expire-date')?>: <?php echo ($package) ? model('user')->authOwner['expire_date'] : 'Nil'?></h6>
+
+                            <?php if($package and $package['id'] == 1):?>
+                                <a href="<?php echo url('pricing', array('userid' => model('user')->authOwnerId, 'type' => 'upgrade'))?>" class="btn btn-white mr-2"><?php echo _l('upgrade-now')?></a>
+                            <?php endif?>
+                        </div>
+                    <?php else:?>
+                        <?php
+                        $subscription = model('saas::saas')->getSubscription();
+                        $subscriptionPackage = model('saas::saas')->findPackage($subscription['package_id']);
+                        ?>
+                        <div class="pane pane-bg mb-5">
+                            <h6><?php _l('current-package')?>: <span class="colored"><?php echo ($subscriptionPackage) ? $subscriptionPackage['title'] : 'Nil'?></span></h6>
+
+                            <?php if($package['id'] == 1):?>
+                                <h6><?php _l('recurring::trial-expire-date')?>: <?php echo ($subscriptionPackage) ? model('user')->authOwner['expire_date'] : 'Nil'?></h6>
+
+                                <div class="" style="background: #fff;border: solid 1px #D2D8DB;padding:10px;font-size:18px;display:inline-block;border-radius:5px; ">
+                                    <?php _l('you-will-be-billed')?> <span style="font-weight:bold" class="colored"><?php echo formatMoney(($subscription['duration_type'] == 'monthly') ? $subscriptionPackage['price_monthly']: $subscriptionPackage['price_annually']);?></span>
+                                    <?php _l('on')?> <strong><?php echo model('user')->authOwner['expire_date']?></strong>
+                                </div>
+                            <?php else:?>
+                                <h6><?php _l('expire-date')?>: <?php echo ($subscriptionPackage) ? model('user')->authOwner['expire_date'] : 'Nil'?></h6>
+                                <?php if(strtotime(model('user')->authOwner['expire_date']) > time()):?>
+                                    <a href="<?php echo url('pricing')?>?type=change" class="btn btn-primary"><?php _l('change-plan')?></a>
+                                <?php else:?>
+                                    <a href="<?php echo url('pricing')?>?type=upgrade" class="btn btn-primary"><?php _l('upgrade-now')?></a>
+                                <?php endif?>
+
+                            <?php endif?>
+                        </div>
+
+
+                    <?php endif?>
+                <?php endif?>
+
+                <?php if(moduleExists('saas')):?>
+                    <hr/>
+                    <h5><?php _l('payment-history')?></h5>
+                    <hr/>
+
+                    <div class="modern-table mt-4">
+                        <div class="table-head clearfix">
+
+
+                            <div class="each" style="width: 40%;">
+                                <?php _l('sale-id')?>
+                            </div>
+                            <div class="each" style="width: 20%;">
+                                <?php _l('amount')?>
+                            </div>
+                            <div class="each" style="width: 20%;">
+                                <?php _l('type')?>
+                            </div>
+                            <div class="each" style="width: 20%;">
+                                <?php _l('created')?>
+                            </div>
+                        </div>
+
+
+                        <div class="table-body" >
+                            <?php $payments = model('saas::saas')->getPayments(model('user')->authUser['id'], 100); foreach($payments->results() as $payment):$user = model('user')->getUser($payment['userid'])?>
+                                <div class="table-row clearfix">
+
+                                    <div class="each clearfix" style="width: 40%;">
+                                        <div class="left">
+                                            <?php _l('sale-id')?>
+                                        </div>
+                                        <div class="right">
+                                            <?php echo $payment['sale_id']?>
+                                            <?php if(config('enable-invoice', false)):?>
+                                                <a target="_blank" href="<?php echo url('invoice/000'.$payment['id'].'-'.md5(time().'dsdsds'))?>" class="btn btn-sm btn-primary"><?php _l('view-invoice')?></a>
+                                            <?php endif?>
+                                        </div>
+                                    </div>
+
+                                    <div class="each clearfix" style="width: 20%;">
+                                        <div class="left">
+                                            <?php _l('amount')?>
+                                        </div>
+                                        <div class="right">
+                                            <?php echo formatMoney($payment['amount'], null, false)?>
+                                        </div>
+                                    </div>
+
+                                    <div class="each clearfix" style="width: 20%;">
+                                        <div class="left">
+                                            <?php _l('type')?>
+                                        </div>
+                                        <div class="right">
+                                            <?php echo $payment['type']?>
+                                        </div>
+                                    </div>
+                                    <div class="each clearfix" style="width: 20%;">
+                                        <div class="left">
+                                            <?php _l('created')?>
+                                        </div>
+                                        <div class="right">
+                                            <?php echo date('m/d/Y', $payment['date_created'])?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach;?>
+                        </div>
+                    </div>
+
+                    <?php if($payments->total < 1):?>
+                        <div class="empty-content">
+                            <i class="la la-fill"></i>
+                            <span><?php _l('no-contents-show')?></span>
+                        </div>
+                    <?php else:?>
+
+                    <?php endif?>
+                <?php endif?>
+            </form>
+
+
+        </div>
+
+        <div class="tab-pane fade show" id="watermark" role="tabpanel" >
+            <?php if(model('user')->hasPermission('watermark')):?>
+                <div class="pane pane-bg short-form">
+                    <h6>
+                        <?php _l('watermark-settings')?>
+                        <a href="<?php echo url('remove/watermark')?>" class="btn btn-outline-danger confirm" data-ajax-action="true" >Remove Watermark</a>
+                    </h6>
+                    <hr/>
+                    <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                        <input type="hidden" name="val[action]" value="watermark"/>
+
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <div class="clearfix">
+                                        <div class="float-left">
+                                            <label><?php _l('watermark-image')?></label>
+                                        </div>
+                                        <div class="float-right">
+                                            <?php if($image = model('user')->getSettings('watermark-image')):?>
+                                                <img src="<?php echo assetUrl(model('user')->getSettings('watermark-image'))?>" style="width:60px;display: block;margin: 10px 0;"/>
+                                            <?php endif?>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="custom-file">
+                                        <input type="file" name="image" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile"><?php _l('choose-image')?></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label><?php _l('position')?></label>
+                                    <select name="val[position]" class="form-control">
+                                        <option <?php echo (model('user')->getSettings('watermark-position') == 'top_left') ? 'selected' :null?> value="top_left"><?php _l('top-left')?></option>
+                                        <option  <?php echo (model('user')->getSettings('watermark-position') == 'top_right') ? 'selected' :null?> value="top_right"><?php _l('top-right')?></option>
+                                        <option  <?php echo (model('user')->getSettings('watermark-position') == 'bottom_left') ? 'selected' :null?> value="bottom_left"><?php _l('bottom-left')?></option>
+                                        <option  <?php echo (model('user')->getSettings('watermark-position') == 'bottom_right') ? 'selected' :null?> value="bottom_right"><?php _l('bottom-right')?></option>
+                                        <option  <?php echo (model('user')->getSettings('watermark-position') == 'top_center') ? 'selected' :null?> value="top_center"><?php _l('top-center')?></option>
+                                        <option   <?php echo (model('user')->getSettings('watermark-position') == 'bottom_center') ? 'selected' :null?> value="bottom_center"><?php _l('bottom-center')?></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <label><?php _l('size')?>(px)</label>
+                                    <input type="number" class="form-control" name="val[size]" value="<?php echo model('user')->getSettings('watermark-size')?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label><?php _l('opacity')?></label>
+                                    <input type="number" class="form-control" name="val[opacity]" max="1" min="0.1" step="0.1" value="<?php echo model('user')->getSettings('watermark-opacity')?>"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn  btn-primary"><?php _l('save')?></button>
+                    </form>
+
+                </div>
+            <?php endif?>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,50 @@
+<div class="<?php echo ($isLast) ? 'last-folder-item':null?> item file-item-<?php echo $file['id']?>" style="position:relative;">
+
+    <div class="item-pane each-file-pane each-folder-pane <?php echo (isset($selected) and $selected) ? 'selected' : null?>"
+         onclick="return openFolder('<?php echo $file['id']?>', '<?php echo (isset($fromPost)) ? 1 : 0?>')"
+         data-folder="true"
+        >
+        <div class="folder-content" >
+            <img src="<?php echo assetUrl('assets/images/folder.png')?>"/>
+            <span class="folder-name"><?php echo str_limit($file['file_name'], 15)?></span>
+        </div>
+        <div style="display: none;"><input type="checkbox" value="<?php echo $file['id']?>" name="val[files][]"/></div>
+
+
+    </div>
+    <div class="dropdown dropleft" style="position:absolute;z-index: 9999;top: 5px;right: 10px;">
+        <a href="" style="font-size: 25px;background:#fff;border:solid 2px #D3D3D3;border-radius:100px;padding:2px 2px;color:#000" data-toggle="dropdown" class="dropdown-toggle " ><i class="la la-ellipsis-v"></i></a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item " data-toggle="modal" data-target="#editFolderModal<?php echo $file['id']?>"  href=""><?php _l('edit-folder')?></a>
+            <?php Hook::getInstance()->fire('folder-menu-extend', null, array($file))?>
+            <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('file-manager', array('action' => 'delete','id' => $file['id']))?>"><?php _l('delete')?></a>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="editFolderModal<?php echo $file['id']?>" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?php _l('edit-folder')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="<?php echo url('file-manager')?>" method="post" class="general-form">
+                <input type="hidden" name="val[editfolder]" value="1"/>
+                <input type="hidden" name="val[folder_id]" value="<?php echo $file['id']?>" class="file-folder-id-input"/>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label><?php _l('folder-name')?></label>
+                        <input type="text" class="form-control" id="folder-edit-name-<?php echo $file['id']?>" value="<?php echo $file['file_name']?>" name="val[name]"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="return sendEditFolder('<?php echo $file['id']?>')" class="btn btn-primary"><?php _l('save')?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

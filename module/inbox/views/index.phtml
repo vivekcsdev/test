@@ -1,0 +1,50 @@
+<div class="inner-container clearfix">
+    <div class="inner-left-pane ">
+
+        <div class="action-pane" style="height: 49px;padding:0 25px;border-bottom:solid 1px #F1F3F4">
+            <div class="inbox-social-menu nav nav-tabs" role="tablist">
+                <?php $i = 0; foreach(model('inbox::inbox')->getSocials() as $social => $info):?>
+                    <?php if(model('user')->hasPermission($social.'-direct-message')):?>
+                        <a href="#social-<?php echo $social?>" class="<?php echo $i == 0 ? 'active':null?>" data-toggle="tab" style="color: <?php echo $info['color']?>;"><i class="<?php echo $info['icon']?>"></i></a>
+                    <?php endif?>
+                <?php $i++;endforeach;?>
+            </div>
+
+        </div>
+
+        <div class="tab-content" id="myTabContent">
+            <?php $i = 0; foreach(model('inbox::inbox')->getSocials() as $social => $info):?>
+                    <?php if(model('user')->hasPermission($social.'-direct-message')):?>
+                        <div data-social="<?php echo $social?>" class="tab-pane fade show social-tabs <?php echo $i == 0 ? 'active':null?>" id="social-<?php echo $social?>" role="tabpanel" >
+                            <div class="clearfix" style="padding:10px 20px;">
+                                <div class="float-left" style="width:80%">
+                                    <select  onchange="loadInboxThread(this, '<?php echo $social?>')" style="width:100%" placeholder="<?php _l('select-account')?>" class="input-select-custom" data-data='<?php echo json_encode(model('inbox::inbox')->getAccounts($social))?>'></select>
+                                </div>
+                                <div class="float-right">
+                                    <button onclick="return reload_chat_pane()" class="btn btn-outline-dark" style="height:40px;border-radius:3px;border-color:#F0F0F0"><i class="las la-redo-alt"></i></button>
+                                </div>
+                            </div>
+                            <div class="threads-main-container" id="social-threads-<?php echo $social?>">
+
+                                <div class="empty-content" style="background: none">
+                                    <i class="las la-comment" style="color:lightgrey"></i>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif?>
+                <?php $i++;endforeach;?>
+        </div>
+
+
+
+    </div>
+    <div class="inner-right-pane">
+        <div class="chat-container" style="position: relative;">
+            <div class="empty-content" style="background: none;margin:0">
+                <i class="las la-comment" style="color:#F1F3F4;font-size:150px;padding-top:100px"></i>
+                <span style="color:lightgrey"><?php _l('select-account-and-chat-from-side')?></span>
+            </div>
+        </div>
+    </div>
+
+</div>

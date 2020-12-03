@@ -1,0 +1,59 @@
+<div class="campaign-start">
+    <div id="horizontal-menu" class="pl-2 d-flex align-items-center">
+        <span>Select the platforms to run your ads</span>
+    </div>
+    <div class="content">
+        <form action="<?php echo getFullUrl(true)?>" method="post" >
+        <div class="camp md-12">
+            <div class="row ">
+                <div class="facebook col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="facebook"> <i class="lab la-facebook-square la-2x"></i> Facbook
+                </div>
+                <div class="instagram col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="instagram"> <i class="lab la-instagram la-2x"></i> Instagram
+                </div>
+                <div class="linkedin col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="linkedin"> <i class="lab la-linkedin la-2x"></i> Linkein
+                </div>
+            </div>
+            <div class="row">
+                <div class="youtube col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="youtube"> <i class="lab la-youtube la-2x"></i> Youtube
+                </div>
+                <div class="twitter col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="twitter"> <i class="lab la-twitter la-2x"></i> Twitter
+                </div>
+                
+                <div class="google_ads col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="google ads"> <image id="google_image" src="<?php echo assetUrl('assets/images/google_ads.png')?>"></image> Google Ads
+                </div>
+            </div>
+            <div class="row">
+                <div class="snapchat col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="snapchat"> <i class="lab la-snapchat la-2x"></i> Snapchat
+                </div>
+                <div class="tiktok col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="tiktok"> <image src="<?php echo assetUrl('assets/images/tiktok.png')?>"></image> Tiktok
+                </div>
+                <div class="rss col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="rss"> <i class="las la-rss la-2x"></i> Rss
+                </div>
+            </div>
+            <div class="row">
+                <div class="whatsapp col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="whatsapp"> <i class="lab la-whatsapp la-2x"></i> Whatsapp
+                </div>
+                <div class="social-accounts-container each pinterest col-md-3 p-3 m-2">
+                    <input type="radio" name="val[camp_platform]" value="pinterest"> <i class="lab la-pinterest la-2x"></i> Pinterest
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <div class="col-md-2 float-right m-4">
+                <a class="btn btn-block campaign-buttons" href="<?php echo url('post/details')?>">PROCEED</a>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>

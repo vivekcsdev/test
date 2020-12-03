@@ -1,0 +1,15 @@
+<?php if($results):?>
+    <?php foreach($results as $result):?>
+        <a href="" class="each-post-location" onclick="return selectInstagramLocation(this)">
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio"  id="customRadioInline1" value='<?php echo serialize($result)?>' name="val[selected_location]" class="custom-control-input">
+                <label class="custom-control-label" for="customRadioInline1">
+                    <?php echo $result->getName()?><br/>
+                    <span><?php echo $result->getAddress()?></span>
+                </label>
+            </div>
+        </a>
+    <?php endforeach?>
+<?php else:?>
+    <div class="no-result"><?php _l('no-location-found')?></div>
+<?php endif?>

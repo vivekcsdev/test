@@ -1,0 +1,74 @@
+<?php
+$post = model('post')->find($draftPost['post_id']);
+autoLoadVendor();
+$postData = perfectUnserialize($post['type_data']);
+$caption    = $postData['text'];
+$link = ($postData['link']) ? $postData['link'] : '';
+$title = ($postData['title']) ? $postData['title'] : '';
+
+$emojione = new \Emojione\Client(new \Emojione\Ruleset());
+$caption = $emojione->shortnameToUnicode($caption);
+$medias = isset($postData['media']) ? $postData['media'] : array();
+$account = model('account')->find($post['account']);
+$draft = model('post')->findDraft($draftPost['collection_id'])
+?>
+<div class="each-container">
+    <div class="each">
+        <div id="postCarousel<?php echo $post['id']?>" class="carousel slide" data-interval="false">
+
+            <ol class="carousel-indicators">
+                <?php $i = 0; foreach($medias as $media):?>
+                    <li data-target="#postCarousel<?php echo $post['id']?>" data-slide-to="<?php echo $i?>" class="<?php echo ($i == 0) ? 'active':null?>"></li>
+                    <?php $i++; endforeach?>
+
+            </ol>
+            <div class="carousel-inner">
+                <?php $i=0; foreach($medias as $media):?>
+
+                    <?php if(isImage($media)):?>
+                        <div class="carousel-item <?php echo ($i == 0) ? 'active':null?> " style="background-image: url(<?php echo assetUrl($media)?>)">
+                        </div>
+                    <?php else:?>
+                        <div class="carousel-item <?php echo ($i == 0) ? 'active':null?>  each">
+                            <video  playsinline loop muted src='<?php echo assetUrl($media)?>' ></video>
+                        </div>
+                    <?php endif?>
+
+                    <?php $i++; endforeach;?>
+            </div>
+        </div>
+
+        <div class="info-content">
+
+            <p>
+                <?php echo str_limit($caption, 40)?>
+            </p>
+
+            <div class="info-time">
+                <i class="las la-clock"></i>
+                <?php _l('last-saved-on')?> <strong><?php echo date('M d, Y ', $draftPost['last_save'])?></strong>
+
+            </div>
+        </div>
+
+        <div class="info-footer clearfix">
+            <div class="float-left">
+                <a class="btn btn-white btn-sm confirm" data-ajax-action="true" href="<?php echo url('drafts',array('action' => 'delete-post','id' => $draftPost['id']))?>"><i class="la la-trash"></i></a>
+            </div>
+            <div class="float-right">
+
+                <?php if($draft['userid'] != model('user')->authId):?>
+                    <a class="btn btn-primary btn-sm mtitle" title="<?php _l('use-post')?>" data-ajax="true" href="<?php echo url('post',array('draft' => $draftPost['id']))?>"><i class="la la-pencil"></i> <?php _l('use-post')?></a>
+                <?php else:?>
+                    <a class="btn btn-light btn-sm mtitle" title="<?php _l('edit-post')?>" data-ajax="true" href="<?php echo url('post',array('draft' => $draftPost['id']))?>"><i class="la la-pencil"></i> <?php _l('edit')?></a>
+                    <?php if($post['is_scheduled']):?>
+                        <a class="btn btn-primary btn-sm mtitle confirm"  data-ajax-action="true" href="<?php echo url('drafts',array('action' => 'post','id' => $draftPost['id']))?>"><i class="la la-check"></i> <?php _l('schedule-now')?></a>
+                    <?php else:?>
+                        <a class="btn btn-primary btn-sm mtitle confirm"  data-ajax-action="true" href="<?php echo url('drafts',array('action' => 'post','id' => $draftPost['id']))?>"><i class="la la-check"></i> <?php _l('post-now')?></a>
+
+                    <?php endif?>
+                <?php endif?>
+            </div>
+        </div>
+    </div>
+</div>

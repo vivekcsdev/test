@@ -1,0 +1,33 @@
+<div class="modern-table">
+
+
+
+    <div class="table-body" >
+
+        <?php foreach($languages as $language):?>
+
+            <div class="table-row clearfix">
+                <form action="<?php echo getFullUrl()?>"  method="post" class="general-form p-2">
+                    <input type="hidden" name="val[edit]" value="<?php echo $language['id']?>"/>
+                    <div class="input-group">
+
+                        <input value="<?php echo str_replace('"', "'", $language['translated'])?>" name="val[word]" type="text" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>
+                        <div class="input-group-append">
+                            <button class="input-group-text btn btn-light" id="inputGroupPrepend2"><i class="la la-check"></i></button>
+                        </div>
+                    </div>
+                    <span class="text-muted" style="font-size: 9px;"><?php echo $language['original']?></span>
+                </form>
+
+            </div>
+        <?php endforeach;?>
+    </div>
+</div>
+
+<?php if(count($languages) < 1):?>
+    <div class="empty-content">
+        <i class="la la-fill"></i>
+        <span><?php _l('no-contents-show')?></span>
+    </div>
+<?php endif?>
+

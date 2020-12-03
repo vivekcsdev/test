@@ -1,0 +1,5 @@
+<?php echo view('home/header', array('active' => $page['slug'], 'styled' => true))?>
+    <div class="container single-page-container" style="">
+        <?php echo output_content($page['content'])?>
+    </div>
+<?php echo view('home/footer')?>

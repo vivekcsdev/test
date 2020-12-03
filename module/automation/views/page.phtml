@@ -1,0 +1,882 @@
+<?php
+$account = model('account')->find($accountId);
+$automation = model('automation::automation')->findByAccount($accountId);
+if ($account['social_type'] == 'instagram') {
+    $features = array(
+        'likes' => 0,
+        'comments' => 0,
+        'follow' => 0,
+        'unfollow' => 0,
+        'stories' => 0,
+        'repost' => 0,
+        'messages' => 0
+    );
+    $settings = array(
+        'speed' => config('instagram_activity_speed', 'slow'),
+        'profile-filter' => 1,
+        'media-age' => 1,
+        'media-type' => 1,
+        'min-follower' => 0,
+        'max-follower' => 0,
+        'min-following' => 0,
+        'max-following' => 0,
+        'min-likes' => 0,
+        'max-likes' => 0,
+        'min-comments' => 0,
+        'max-comments' => 0,
+        'blacklist-keywords' => config('instagram-default-blacklist-keywords', "fuck,sex,xxx,nude"),
+        'blacklist-tags' => config('instagram-default-blacklist-tags', "fuck,sex,xxx,nude"),
+        'blacklist-usernames'=> '',
+        'tags' => config('instagram-default-tags', "nature,games,actor,actress,movies,football,volleyball"),
+        'keywords' => '',
+        'users' => '',
+        'locations' => '',
+        'target-follower' => 1,
+        'target-following' => 1,
+        'comments-counter' => 0,
+        'follow-counter' => 0,
+        'unfollow-counter' => 0,
+        'repost-counter' => 0,
+        'messages-counter' => 0,
+        'likes-counter' => 0,
+        'stories-counter' => 0,
+        'comments' => config('instagram-default-comments', "That's nice, Very sweet, Good day,that's cool, made my day"),
+        'messages' => config('instagram-default-direct-message', "Hi {username}, Hi {username} how are you?, Hi {username} good day"),
+        'messages-target' => 1,
+        'follow-same-user' => 0,
+        'reposts' => config('instagram-default-repost-caption', "{originalcaption}"),
+        'unfollow-source' => 0,
+        'unfollow-user-after' => 1,
+        'no-comment-same-user' => 0,
+        'follow-private-user' => 0,
+
+    );
+} else {
+    $features = array(
+        'comments' => 0,
+        'follow' => 0,
+        'unfollow' => 0,
+        'repost' => 0,
+        'messages' => 0
+    );
+    $settings = array(
+        'speed' => config('pinterest_activity_speed', 'slow'),
+        'profile-filter' => 1,
+        'media-age' => 1,
+        'media-type' => 1,
+        'min-follower' => 0,
+        'max-follower' => 0,
+        'min-following' => 0,
+        'max-following' => 0,
+
+        'blacklist-keywords' => config('pinterest-default-blacklist-keywords', "fuck,sex,xxx,nude"),
+        'blacklist-tags' => config('pinterest-default-blacklist-tags', "fuck,sex,xxx,nude"),
+        'blacklist-usernames'=> '',
+        'tags' => config('pinterest-default-tags', "nature,games,actor,actress,movies,football,volleyball"),
+        'keywords' => '',
+        'users' => '',
+        'target-follower' => 1,
+        'target-following' => 1,
+        'comments-counter' => 0,
+        'follow-counter' => 0,
+        'unfollow-counter' => 0,
+        'repost-counter' => 0,
+        'messages-counter' => 0,
+        'likes-counter' => 0,
+        'stories-counter' => 0,
+        'comments' => config('pinterest-default-comments', "That's nice, Very sweet, Good day,that's cool, made my day"),
+        'messages' => config('pinterest-default-direct-message', "Hi {username}, Hi {username} how are you?, Hi {username} good day"),
+        'messages-target' => 1,
+        'follow-same-user' => 0,
+        'reposts' => config('pinterest-default-repost-caption', "{originalcaption}"),
+        'repost-board' => 0,
+        'unfollow-source' => 0,
+        'unfollow-user-after' => 1,
+        'no-comment-same-user' => 0,
+
+    );
+}
+if ($automation['features']) $features = array_merge($features, perfectUnserialize($automation['features']));
+if ($automation['settings']) $settings = array_merge($settings, perfectUnserialize($automation['settings']));
+
+if ($account['social_type'] == 'pinterest') {
+    $account['username'] = $account['access_token'];
+}
+?>
+<form data-no-loader="true" action="<?php echo getFullUrl(true)?>" method="post" class="general-form " id="automation-page" data-id="<?php echo $account['id']?>">
+<div class="inner-container clearfix"  >
+    <div class="inner-left-pane modern-scroll">
+        <div class="automation-profile-info">
+            <div class="avatar" style="background-image:url(<?php echo assetUrl($account['avatar'])?>)"></div>
+            <div class="info">
+                <h6 class="m-0"><?php echo $account['username']?></h6>
+                <span style="background:<?php echo ($account['social_type'] == 'instagram') ? '#B84C7C': '#E60030'?>" class="badge badge-secondary"><?php echo ucwords($account['social_type'])?></span>
+            </div>
+        </div>
+        <ul class="automation-profile-links clearfix">
+           <li><a href="">
+                   <span class="count post-count">--</span>
+                   <?php _l('posts')?>
+               </a> </li>
+            <li><a href=""><span class="count followers-count">--</span><?php _l('followers')?></a> </li>
+            <li><a href=""><span class="count following-count">--</span><?php _l('following')?></a> </li>
+        </ul>
+        <div class="automation-start-container">
+            <div class="btn-group">
+                <a href="" class="btn btn-light"><i style="animation: rotation 2s infinite linear;" class="las la-clock"></i></a>
+                <?php if($automation['status'] == 0):?>
+                    <a href="<?php echo getFullUrl()?>?action=start" class="btn btn-1 btn-primary ajax-action"> <?php _l('start')?></a>
+
+
+                <?php elseif($automation['status'] == 1):?>
+                    <a href="<?php echo getFullUrl()?>?action=stop"  class="btn btn-1 btn-danger ajax-action"> <?php _l('stop-bot')?></a>
+
+                <?php endif?>
+
+            </div>
+        </div>
+
+
+           <div class="automations-actions">
+               <h6><?php _l('automated-actions')?></h6>
+               <div class="clearfix">
+                   <div class="float-left">
+                       <div class="row">
+                           <div class="col-4">
+                               <div class="switch">
+                                   <input type="hidden" value="0" name="val[features][comments]"/>
+                                   <input onchange="saveAutoBot(this)"  data-type="comments" name="val[features][comments]"  <?php echo ($features['comments']) ? 'checked': null?>  id="cmn-toggle-enable-comments" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                   <label for="cmn-toggle-enable-comments"></label>
+                               </div>
+                           </div>
+                           <div class="col-8">
+                               <div class="p-1"><?php _l('comments')?></div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="float-right">
+                       <?php echo model('automation::automation')->countActionSinceLastStart($automation['id'], 'comments')?>
+                   </div>
+               </div>
+
+               <div class="clearfix">
+                   <div class="float-left">
+                       <div class="row">
+                           <div class="col-4">
+                               <div class="switch">
+                                   <input type="hidden" value="0" name="val[features][follow]"/>
+                                   <input onchange="saveAutoBot(this)"  data-type="follow" name="val[features][follow]"  <?php echo ($features['follow']) ? 'checked': null?>  id="cmn-toggle-enable-follow" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                   <label for="cmn-toggle-enable-follow"></label>
+                               </div>
+                           </div>
+                           <div class="col-8">
+                               <div class="p-1" style="padding-left:11px !important;"><?php _l('follow')?></div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="float-right">
+                       <?php echo model('automation::automation')->countActionSinceLastStart($automation['id'], 'follow')?>
+                   </div>
+               </div>
+
+               <div class="clearfix">
+                   <div class="float-left">
+                       <div class="row">
+                           <div class="col-4">
+                               <div class="switch">
+                                   <input type="hidden" value="0" name="val[features][unfollow]"/>
+                                   <input onchange="saveAutoBot(this)"  data-type="unfollow"  name="val[features][unfollow]"  <?php echo ($features['unfollow']) ? 'checked': null?>  id="cmn-toggle-enable-unfollow" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                   <label for="cmn-toggle-enable-unfollow"></label>
+                               </div>
+                           </div>
+                           <div class="col-8">
+                               <div class="p-1" style="padding-left:7px !important;"><?php _l('unfollow')?></div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="float-right">
+                       <?php echo model('automation::automation')->countActionSinceLastStart($automation['id'], 'unfollow')?>
+                   </div>
+               </div>
+
+               <div class="clearfix">
+                   <div class="float-left">
+                       <div class="row">
+                           <div class="col-4">
+                               <div class="switch">
+                                   <input type="hidden" value="0" name="val[features][repost]"/>
+                                   <input  onchange="saveAutoBot(this)"  data-type="repost"  name="val[features][repost]"  <?php echo ($features['repost']) ? 'checked': null?>  id="cmn-toggle-enable-repost" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                   <label for="cmn-toggle-enable-repost"></label>
+                               </div>
+                           </div>
+                           <div class="col-8">
+                               <div class="p-1" style="padding-left:11px !important;"><?php _l('repost')?></div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="float-right">
+                       <?php echo model('automation::automation')->countActionSinceLastStart($automation['id'], 'repost')?>
+                   </div>
+               </div>
+
+               <div class="clearfix">
+                   <div class="float-left">
+                       <div class="row">
+                           <div class="col-4">
+                               <div class="switch">
+                                   <input type="hidden" value="0" name="val[features][messages]"/>
+                                   <input  onchange="saveAutoBot(this)" data-type="messages"  name="val[features][messages]"  <?php echo ($features['messages']) ? 'checked': null?>  id="cmn-toggle-enable-messages" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                   <label for="cmn-toggle-enable-messages"></label>
+                               </div>
+                           </div>
+                           <div class="col-8">
+                               <div class="p-1" style="padding-left:0px !important;position:relative;left:-4px"><?php _l('direct-messages')?></div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="float-right">
+                       <?php echo model('automation::automation')->countActionSinceLastStart($automation['id'], 'messages')?>
+                   </div>
+               </div>
+
+               <?php if($account['social_type'] == 'instagram'):?>
+                   <div class="clearfix">
+                       <div class="float-left">
+                           <div class="row">
+                               <div class="col-4">
+                                   <div class="switch">
+                                       <input type="hidden" value="0" name="val[features][likes]"/>
+                                       <input  onchange="saveAutoBot()"  name="val[features][likes]"  <?php echo ($features['likes']) ? 'checked': null?>  id="cmn-toggle-enable-likes" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                       <label for="cmn-toggle-enable-likes"></label>
+                                   </div>
+                               </div>
+                               <div class="col-8">
+                                   <div class="p-1" style="padding-left:15px !important;"><?php _l('likes')?></div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="float-right">
+                           <?php echo model('automation::automation')->countActionSinceLastStart($automation['id'], 'likes')?>
+                       </div>
+                   </div>
+                   <!--<div class="clearfix">
+                       <div class="float-left">
+                           <div class="row">
+                               <div class="col-4">
+                                   <div class="switch">
+                                       <input type="hidden" value="0" name="val[features][stories]"/>
+                                       <input  onchange="saveAutoBot()"  name="val[features][stories]"  <?php echo ($features['stories']) ? 'checked': null?>  id="cmn-toggle-enable-stories" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                       <label for="cmn-toggle-enable-stories"></label>
+                                   </div>
+                               </div>
+                               <div class="col-8">
+                                   <div class="p-1" style="padding-left:0px !important;position:relative;left:-4px"><?php _l('watching-stories')?></div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="float-right">
+                           <?php echo model('automation::automation')->countActionSinceLastStart($automation['id'], 'stories')?>
+                       </div>
+                   </div>-->
+               <?php endif?>
+           </div>
+
+    </div>
+    <div class="inner-right-pane">
+        <div id="horizontal-menu">
+            <div class="menu-container">
+                <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+                <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+                <div class="menu " role="tablist">
+                    <a href="#statistics" id="new-toggle-button" data-toggle="tab" class="menu-item active "><span><?php _l('overview')?></span></a>
+
+                    <a href="#settings" id="new-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('settings')?></span></a>
+
+
+                        <a  style="<?php echo (!$features['comments']) ? 'display:none': null?>" href="#comments" id="comments-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('comments')?></span></a>
+
+
+
+                        <a  style="<?php echo (!$features['follow']) ? 'display:none': null?>" href="#follow" id="follow-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('follow')?></span></a>
+
+
+                        <a  style="<?php echo (!$features['unfollow']) ? 'display:none': null?>" href="#unfollow" id="unfollow-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('unfollow')?></span></a>
+
+                        <a  style="<?php echo (!$features['messages']) ? 'display:none': null?>" href="#messages" id="messages-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('direct-messages')?></span></a>
+
+                    <a style="<?php echo (!$features['repost']) ? 'display:none': null?>" href="#repost" id="repost-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('repost')?></span></a>
+
+
+                </div>
+            </div>
+        </div>
+
+
+            <div class="tab-content content mt-3" id="myTabContent">
+
+                <div class="tab-pane fade show active " id="statistics" role="tabpanel" >
+                    <div class="statistics-container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="each bot-status-container" style="height:280px;border-radius:3px;" >
+                                    <?php if($automation['status'] == 1):?>
+                                        <i class="las la-clock" style="color:#4CAF50;animation: rotation 2s infinite linear;"></i>
+                                    <?php else:?>
+                                        <i class="las la-stop-circle" style="color: #FBB6B1;"></i>
+                                    <?php endif?>
+
+                                    <div class="bottom">
+                                        <div class="float-left">
+                                            <?php _l('started-on')?>:
+                                        </div>
+                                        <div class="float-right " style="font-weight: lighter;">
+                                            <?php echo ($automation['status']) ? date(getAdminDateFormat().' h:i A', $automation['time']) : '---'?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="each" style="background: #E6F8F3;border: none;border-radius:0">
+                                            <div class="count">
+                                                <span style="color:grey"><?php echo model('automation::automation')->countAllLogs($automation['id'])?></span>
+                                                <div ><?php _l('total-actions-completed')?></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="each" style="background: #FFF8EA;border: none;border-radius:0">
+                                            <div class="count">
+                                                <span class="" style="color:grey"><?php
+                                                    $count = 0;
+                                                    foreach($features as $f => $v) {$count += ($v) ? 1 : 0; }
+                                                    echo $count;
+                                                    ?></span>
+                                                <div ><?php _l('automated-actions')?></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                        <div class="each" style="height:110px;border-radius:3px;">
+                                            <div class="count">
+                                                <span class="colored-grey" style="color:grey"><?php _l('speed')?>: <strong style="font-size:20px;color:grey;font-weight:lighter"><?php _l($settings['speed'])?></strong></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="mt-4" >
+                        <h5><?php _l('last-50-logs')?></h5>
+
+                        <hr/>
+                        <div class="modern-table">
+                            <div class="table-head clearfix">
+
+                                <div class="each" style="width: 50%;">
+                                    <?php _l('action')?>
+                                </div>
+                                <div class="each" style="width: 30%;">
+                                    Instagram <?php _l('userid')?>
+                                </div>
+                                <div class="each" style="width: 20%;">
+                                    <?php _l('created')?>
+                                </div>
+                            </div>
+
+
+                            <div class="table-body" >
+                                <?php foreach(model('automation::automation')->getAllLogs($automation['id']) as $log):?>
+                                    <div class="table-row clearfix">
+                                        <div class="each clearfix" style="width: 50%;">
+                                            <div class="left">
+                                                <?php _l('action')?>
+                                            </div>
+                                            <div class="right">
+                                                <?php _l($log['action'])?>
+                                            </div>
+                                        </div>
+                                        <div class="each clearfix" style="width: 30%;">
+                                            <div class="left">
+                                                Instagram <?php _l('userid')?>
+                                            </div>
+                                            <div class="right">
+                                                <?php echo $log['userid']?>
+                                            </div>
+                                        </div>
+                                        <div class="each clearfix" style="width: 20%;">
+                                            <div class="left">
+                                                <?php _l('action')?>
+                                            </div>
+                                            <div class="right">
+                                                <?php echo date(getAdminDateFormat().' h:i A', $log['created'])?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach;?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="settings" role="tabpanel" >
+                    <div class="short-form">
+
+                        <div class="row">
+                            <div class="col-8">
+                                <label><?php _l('automation-bot-speed')?></label>
+                            </div>
+                            <div class="col-4">
+                                <select  onchange="saveAutoBot()"  class="form-control" name="val[settings][speed]">
+                                    <option <?php echo ($settings['speed'] == 'very-slow') ? 'selected':null?> value="very-slow"><?php _l('very-slow')?></option>
+                                    <option  <?php echo ($settings['speed'] == 'slow') ? 'selected':null?> value="slow"><?php _l('slow')?></option>
+                                    <option  <?php echo ($settings['speed'] == 'normal') ? 'selected':null?> value="normal"><?php _l('normal')?></option>
+                                    <option  <?php echo ($settings['speed'] == 'fast') ? 'selected':null?> value="fast"><?php _l('fast')?></option>
+                                    <option  <?php echo ($settings['speed'] == 'very-fast') ? 'selected':null?> value="very-fast"><?php _l('very-fast')?></option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr/>
+                        <h6><?php _l('filters')?></h6>
+                        <hr/>
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <label><?php _l('profile-filter')?></label>
+                            </div>
+                            <div class="col-4">
+                                <select  onchange="saveAutoBot()"  class="form-control" name="val[settings][profile-filter]">
+                                    <option  <?php echo ($settings['profile-filter'] == 1) ? 'selected':null?> value="1"><?php _l('most-have-avatar')?></option>
+                                    <option <?php echo ($settings['profile-filter'] == 2) ? 'selected':null?> value="2"><?php _l('most-have-posts')?></option>
+                                    <option <?php echo ($settings['profile-filter'] == 3) ? 'selected':null?> value="3"><?php _l('most-have-both-avatar-posts')?></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <label><?php _l('media-age')?></label>
+                            </div>
+                            <div class="col-4">
+                                <select  onchange="saveAutoBot()"  class="form-control" name="val[settings][media-age]">
+                                    <option <?php echo ($settings['media-age'] == 1) ? 'selected':null?> value="1"><?php _l('any')?></option>
+                                    <option <?php echo ($settings['media-age'] == 2) ? 'selected':null?> value="2"><?php _l('newest')?></option>
+                                    <option <?php echo ($settings['media-age'] == 3) ? 'selected':null?> value="3"><?php _l('1-day')?></option>
+                                    <option <?php echo ($settings['media-age'] == 5) ? 'selected':null?> value="4"><?php _l('1-week')?></option>
+                                    <option <?php echo ($settings['media-age'] == 6) ? 'selected':null?> value="5"><?php _l('1-month')?></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <label><?php _l('media-type')?></label>
+                            </div>
+                            <div class="col-4">
+                                <select  onchange="saveAutoBot()"  class="form-control" name="val[settings][media-type]">
+                                    <option <?php echo (isset($settings['media-type']) and $settings['media-type'] == 1) ? 'selected':null?> value="1"><?php _l('any')?></option>
+                                    <option <?php echo (isset($settings['media-type']) and $settings['media-type'] == 2) ? 'selected':null?> value="2"><?php _l('photos')?></option>
+                                    <option <?php echo (isset($settings['media-type']) and $settings['media-type'] == 3) ? 'selected':null?> value="3"><?php _l('videos')?></option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <label><?php _l('followers')?></label>
+                            </div>
+                            <div class="col-4">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label><?php _l('min')?></label>
+                                        <input  onchange="saveAutoBot()"  value="<?php echo $settings['min-follower']?>" style="height:35px" type="number" class="form-control" name="val[settings][min-follower]"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <label><?php _l('max')?></label>
+                                        <input  onchange="saveAutoBot()"  value="<?php echo $settings['max-follower']?>"  style="height:35px" type="number" class="form-control" name="val[settings][max-follower]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <label><?php _l('following')?></label>
+                            </div>
+                            <div class="col-4">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label><?php _l('min')?></label>
+                                        <input  onchange="saveAutoBot()"  value="<?php echo $settings['min-following']?>" style="height:35px" type="number" class="form-control" name="val[settings][min-following]"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <label><?php _l('max')?></label>
+                                        <input  onchange="saveAutoBot()"  value="<?php echo $settings['max-following']?>"  style="height:35px" type="number" class="form-control" name="val[settings][max-following]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php if($account['social_type'] == 'instagram'):?>
+                            <div class="row mt-4">
+                                <div class="col-8">
+                                    <label><?php _l('likes')?></label>
+                                </div>
+                                <div class="col-4">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label><?php _l('min')?></label>
+                                            <input  onchange="saveAutoBot()"  value="<?php echo $settings['min-likes']?>" style="height:35px" type="number" class="form-control" name="val[settings][min-likes]"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <label><?php _l('max')?></label>
+                                            <input  onchange="saveAutoBot()"  value="<?php echo $settings['max-likes']?>"  style="height:35px" type="number" class="form-control" name="val[settings][max-likes]"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-8">
+                                    <label><?php _l('comments')?></label>
+                                </div>
+                                <div class="col-4">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label><?php _l('min')?></label>
+                                            <input  onchange="saveAutoBot()"  value="<?php echo $settings['min-comments']?>" style="height:35px" type="number" class="form-control" name="val[settings][min-comments]"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <label><?php _l('max')?></label>
+                                            <input  onchange="saveAutoBot()"  value="<?php echo $settings['max-comments']?>"  style="height:35px" type="number" class="form-control" name="val[settings][max-comments]"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif?>
+
+                        <hr/>
+                        <h6><?php _l('targets')?></h6>
+                        <hr/>
+                       <?php if($account['social_type'] == 'instagram'):?>
+                           <div class="form-group">
+                               <label><?php _l('locations')?></label>
+                               <input  onchange="saveAutoBot()"  type="text" data-url="<?php echo url('automations/location/fetch/'.$account['id'])?>" class="input-tags-fetch " name="val[settings][locations]"
+                                       value="<?php echo (is_array($settings['locations'])) ? implode(',', $settings['locations']) : $settings['locations']?>" />
+                           </div>
+                        <?php endif?>
+                        <div class="form-group">
+                            <label>#<?php _l('hashtags')?></label>
+                            <input  onchange="saveAutoBot()"  type="text" data-url="<?php echo url('automations/tag/fetch/'.$account['id'])?>" class="input-tags-fetch " name="val[settings][tags]"
+                                   value="<?php echo (is_array($settings['tags'])) ? implode(',', $settings['tags']) : $settings['tags']?>" />
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('keywords')?></label>
+                            <input  onchange="saveAutoBot()"  type="text" class="input-tags " name="val[settings][keywords]"
+                                   value="<?php echo (is_array($settings['keywords'])) ? implode(',', $settings['keywords']) : $settings['keywords']?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('usernames')?></label>
+                            <input  onchange="saveAutoBot()"  data-url="<?php echo url('automations/username/fetch/'.$account['id'])?>" type="text" class="input-tags-fetch " name="val[settings][users]"
+                                   value="<?php echo (is_array($settings['users'])) ? implode(',', $settings['users']) : $settings['users']?>"/>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <label><?php _l('which-follower')?></label>
+                            </div>
+                            <div class="col-4">
+                                <select  onchange="saveAutoBot()"  class="form-control" name="val[settings][target-follower]">
+                                    <option <?php echo ($settings['target-follower'] == 1) ? 'selected':null?> value="1"><?php _l('all')?></option>
+                                    <option <?php echo ($settings['target-follower'] == 2) ? 'selected':null?> value="2"><?php _l('from-usernames-above')?></option>
+                                    <option <?php echo ($settings['target-follower'] == 3) ? 'selected':null?> value="3"><?php _l('my-account')?></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <label><?php _l('which-following')?></label>
+                            </div>
+                            <div class="col-4">
+                                <select  onchange="saveAutoBot()"  class="form-control" name="val[settings][target-following]">
+                                    <option  <?php echo ($settings['target-following'] == 1) ? 'selected':null?> value="1"><?php _l('all')?></option>
+                                    <option  <?php echo ($settings['target-following'] == 2) ? 'selected':null?> value="2"><?php _l('from-usernames-above')?></option>
+                                    <option  <?php echo ($settings['target-following'] == 3) ? 'selected':null?> value="3"><?php _l('my-account')?></option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <hr/>
+                        <h6><?php _l('blacklists')?></h6>
+                        <hr/>
+
+                        <div class="form-group">
+                            <label>#<?php _l('hashtags')?></label>
+                            <input  onchange="saveAutoBot()" data-url="<?php echo url('automations/tag/fetch/'.$account['id'])?>"  type="text" class="input-tags-fetch " name="val[settings][blacklist-tags]"
+                                   value="<?php echo (is_array($settings['blacklist-tags'])) ? implode(',', $settings['blacklist-tags']) : $settings['blacklist-tags']?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('keywords')?></label>
+                            <input  onchange="saveAutoBot()"  type="text" class="input-tags " name="val[settings][blacklist-keywords]"
+                                   value="<?php echo (is_array($settings['blacklist-keywords'])) ? implode(',', $settings['blacklist-keywords']) : $settings['blacklist-keywords']?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('usernames')?></label>
+                            <input  onchange="saveAutoBot()" data-url="<?php echo url('automations/username/fetch/'.$account['id'])?>"  type="text" class="input-tags-fetch " name="val[settings][blacklist-usernames]"
+                                   value="<?php echo (is_array($settings['blacklist-usernames'])) ? implode(',', $settings['blacklist-usernames']) : $settings['blacklist-usernames']?>"/>
+                        </div>
+
+                        <hr/>
+                        <h6><?php _l('auto-stop')?></h6>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row mt-4">
+                                    <div class="col-8">
+                                        <label><?php _l('comments-counter')?></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input  onchange="saveAutoBot()"  value="<?php echo $settings['comments-counter']?>"  style="height:35px" type="number" class="form-control" name="val[settings][comments-counter]"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row mt-4">
+                                    <div class="col-8">
+                                        <label><?php _l('follow-counter')?></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input  onchange="saveAutoBot()"  value="<?php echo $settings['follow-counter']?>" style="height:35px" type="number" class="form-control" name="val[settings][follow-counter]"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="row mt-4">
+                                    <div class="col-8">
+                                        <label><?php _l('unfollow-counter')?></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input   onchange="saveAutoBot()"  value="<?php echo $settings['unfollow-counter']?>"  style="height:35px" type="number" class="form-control" name="val[settings][unfollow-counter]"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row mt-4">
+                                    <div class="col-8">
+                                        <label><?php _l('repost-counter')?></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input  onchange="saveAutoBot()"  value="<?php echo $settings['repost-counter']?>"  style="height:35px" type="number" class="form-control" name="val[settings][repost-counter]"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="row mt-4">
+                                    <div class="col-8">
+                                        <label><?php _l('messages-counter')?></label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input  onchange="saveAutoBot()"  value="<?php echo $settings['messages-counter']?>"  style="height:35px" type="number" class="form-control" name="val[settings][messages-counter]"/>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            
+                            <?php if($account['social_type'] == 'instagram'):?>
+                                <div class="col-6">
+                                    <div class="row mt-4">
+                                        <div class="col-8">
+                                            <label><?php _l('likes-counter')?></label>
+                                        </div>
+                                        <div class="col-4">
+                                            <input  onchange="saveAutoBot()"  value="<?php echo $settings['likes-counter']?>" style="height:35px" type="number" class="form-control" name="val[settings][likes-counter]"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row mt-4">
+                                        <div class="col-10">
+                                            <label><?php _l('stories-counter')?></label>
+                                        </div>
+                                        <div class="col-2">
+                                            <input  onchange="saveAutoBot()"  value="<?php echo $settings['stories-counter']?>"  style="height:35px" type="number" class="form-control" name="val[settings][stories-counter]"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif?>
+
+
+
+                        </div>
+                        <hr/>
+                        <button type="submit" class="btn btn-primary mt-4"><?php _l('save-changes')?></button>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade " id="comments" role="tabpanel" >
+                    <div class="short-form">
+                        <div class="row">
+                            <div class="col-10"><label><?php _l('dont-comment-same-users')?></label></div>
+                            <div class="col-2">
+                                <div class="switch">
+                                    <input type="hidden" value="0" name="val[settings][no-comment-same-user]"/>
+                                    <input  onchange="saveAutoBot()"  onchange="saveAutoBot();" name="val[settings][no-comment-same-user]"  <?php echo ($settings['no-comment-same-user']) ? 'checked': null?>  id="cmn-toggle-no-comment-same-user" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                    <label for="cmn-toggle-no-comment-same-user"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><?php _l('comments')?></label>
+
+                            <textarea  class="emoji-text" id="auto-bot-comment-text"></textarea>
+                            <button  type="button" onclick="return addNewAutoBotBadge('#auto-bot-comment-text','.comments-auto-container','comments')" class="btn btn-secondary mt-3"><?php _l('add-comment')?></button>
+                        </div>
+
+                        <hr/>
+                        <?php $comments = (is_array($settings['comments'])) ? $settings['comments']['comments'] : explode(',', $settings['comments']);?>
+                        <div class="comments-auto-container">
+                            <?php foreach($comments as $comment):?>
+                                <span class="badge badge-light m-2 each-autobot-badge">
+                                <?php echo $comment?>
+                                    <input type="hidden" name="val[settings][comments][]" value="<?php echo $comment?>"/>
+                                <a href="" onclick="return removeThisAutoBadge(this)"><i class="la la-times"></i></a>
+                            </span>
+                            <?php endforeach;?>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="follow" role="tabpanel" >
+                    <div class="short-form">
+                        <div class="row">
+                            <div class="col-10"><label><?php _l('dont-follow-same-users')?></label></div>
+                            <div class="col-2">
+                                <div class="switch">
+                                    <input type="hidden" value="0" name="val[settings][follow-same-user]"/>
+                                    <input onchange="saveAutoBot();" name="val[settings][follow-same-user]"  <?php echo ($settings['follow-same-user']) ? 'checked': null?>  id="cmn-toggle-follow-same-user" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                    <label for="cmn-toggle-follow-same-user"></label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                       <?php if($account['social_type'] == 'instagram'):?>
+                           <hr/>
+                           <div class="row">
+                               <div class="col-10"><label><?php _l('dont-follow-private-users')?></label></div>
+                               <div class="col-2">
+                                   <div class="switch">
+                                       <input type="hidden" value="0" name="val[settings][follow-private-user]"/>
+                                       <input onchange="saveAutoBot();" name="val[settings][follow-private-user]"  <?php echo ($settings['follow-private-user']) ? 'checked': null?>  id="cmn-toggle-follow-private-user" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                       <label for="cmn-toggle-follow-private-user"></label>
+                                   </div>
+                               </div>
+                           </div>
+                       <?php endif?>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="unfollow" role="tabpanel" >
+                    <div class="short-form">
+                        <div class="row">
+                            <div class="col-10"><label><?php _l('unfollow-all-followers')?></label></div>
+                            <div class="col-2">
+                                <div class="switch">
+                                    <input type="hidden" value="0" name="val[settings][unfollow-source]"/>
+                                    <input onchange="saveAutoBot();" name="val[settings][unfollow-source]"  <?php echo ($settings['unfollow-source']) ? 'checked': null?>  id="cmn-toggle-unfollow-source" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                    <label for="cmn-toggle-unfollow-source"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr/>
+                        <div class="row">
+                            <div class="col-10"><label><?php _l('unfollow-after-in-days')?></label></div>
+                            <div class="col-2">
+                               <select onchange="saveAutoBot()" name="val[settings][unfollow-user-after]" class="form-control">
+                                   <?php for($i=1;$i<11;$i++):?>
+                                        <option <?php echo ($settings['unfollow-user-after'] == $i) ? 'selected':null?> value="<?php $i?>"><?php echo $i?> <?php _l('days')?></option>
+                                   <?php endfor?>
+                               </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="repost" role="tabpanel" >
+                    <div class="short-form">
+                        <?php if($account['social_type'] == 'pinterest'):?>
+                            <div class="row">
+                                <div class="col-8"><label><?php _l('which-board-repost-to')?></label></div>
+                                <div class="col-4">
+                                    <select onchange="saveAutoBot()" name="val[settings][repost-board]" class="form-control">
+                                        <option value=""><?php _l('select-board')?></option>
+                                       <?php foreach(model('automation::automation')->getBoards($account) as $board):?>
+                                            <option <?php echo ($settings['repost-board'] == $board['sid']) ? 'selected' : null?> value="<?php echo $board['sid']?>"><?php echo $board['username']?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                            </div>
+                        <?php endif?>
+
+                        <hr/>
+
+                       <div class="form-group">
+                           <label><?php _l('repost-caption')?></label>
+                           <textarea  onchange="saveAutoBot()" rows="7" class="form-control " name="val[settings][reposts]"
+                           ><?php echo $settings['reposts']?></textarea>
+                           <span class="text-muted"><?php _l('default-repost-caption-note')?></span>
+                       </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="messages" role="tabpanel" >
+                   <div class="short-form">
+                       <div class="row">
+                           <div class="col-8"><label><?php _l('direct-message-target')?></label></div>
+                           <div class="col-4">
+                               <select onchange="saveAutoBot()" name="val[settings][messages-target]" class="form-control">
+                                   <option <?php echo ($settings['messages-target'] == 1) ? 'selected':null?> value="1"><?php _l('new-followers')?></option>
+                                   <option <?php echo ($settings['messages-target'] == 2) ? 'selected':null?> value="2"><?php _l('your-targets')?></option>
+
+                               </select>
+                           </div>
+                       </div>
+
+                       <div class="form-group">
+                           <label><?php _l('messages')?></label>
+
+                           <textarea class="emoji-text" id="auto-bot-messages-text"></textarea>
+                           <button  type="button" onclick="return addNewAutoBotBadge('#auto-bot-messages-text','.messages-auto-container','messages')" class="btn btn-secondary mt-3"><?php _l('add-message')?></button>
+                       </div>
+
+                       <hr/>
+                       <?php $messages = (is_array($settings['messages'])) ? $settings['messages']['messages'] : explode(',', $settings['messages']);?>
+                       <div class="messages-auto-container">
+                           <?php foreach($messages as $message):?>
+                               <span class="badge badge-light m-2 each-autobot-badge">
+                                <?php echo $message?>
+                                   <input type="hidden" name="val[settings][messages][]" value="<?php echo $message?>"/>
+                                <a href="" onclick="return removeThisAutoBadge(this)"><i class="la la-times"></i></a>
+                            </span>
+                           <?php endforeach;?>
+                       </div>
+
+
+                   </div>
+                </div>
+            </div>
+
+    </div>
+
+</div>
+</form>
+

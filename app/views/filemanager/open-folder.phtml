@@ -1,0 +1,52 @@
+<?php if($from == 0):?>
+    <div class="content scroll-paginate"
+         data-container=".uploads-files-container"
+         data-offset="40"
+         data-url="<?php echo url('file/open/folder', array('from' => $from, 'id'=> $id))?>"
+    >
+        <div class="tab-content the-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="files" role="tabpanel" >
+
+                <form id="files-form-container" action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                    <input type="hidden" class="action" name="val[action]" value="1"/>
+                    <div  data-upload-url="<?php echo url('file-manager', array('dragged' => true, 'folder'=>$id))?>" class="uploads-files-container clearfix">
+                        <?php $folders = model('filemanager')->getFolders($id);$i=0; foreach($folders as $file):?>
+                            <?php echo view('filemanager/display-folder', array('file' => $file,'isLast' => $i == count($folders)-1))?>
+                        <?php $i++;endforeach?>
+                        <?php foreach($files as $file):?>
+                            <?php echo view('filemanager/display', array('file' => $file))?>
+                        <?php endforeach;?>
+                        <?php if(count($files) < 1):?>
+                            <div class="empty-content" id="file-upload-empty">
+                                <i class="la la-fill"></i>
+                                <span><?php _l('no-contents-show')?></span>
+                            </div>
+                        <?php endif?>
+                    </div>
+
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+<?php else:?>
+    <input type="hidden" class="action" name="val[action]" value="1"/>
+    <div data-upload-url="<?php echo url('file-manager', array('dragged' => true, 'folder' => $id))?>" class="uploads-files-container clearfix modern-scroll"
+         data-paginate="true"
+         data-container=".uploads-files-container"
+         data-offset="40"
+         data-url="<?php echo url('file/open/folder', array('from' => $from, 'id'=> $id))?>"
+    >
+        <div class="the-content">
+            <?php $folders = model('filemanager')->getFolders($id);$i=0;  foreach($folders as $file):?>
+                <?php echo view('filemanager/display-folder', array('file' => $file, 'fromPost' => true,'isLast' => $i == count($folders)-1))?>
+            <?php endforeach?>
+            <?php foreach($files as $file):?>
+                <?php echo view('filemanager/display', array('file' => $file))?>
+            <?php endforeach;?>
+        </div>
+
+    </div>
+<?php endif?>

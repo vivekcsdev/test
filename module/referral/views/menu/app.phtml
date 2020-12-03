@@ -1,0 +1,9 @@
+<li><a style="position:relative;" id="affiliate-icon-color" data-ajax="true" href="<?php echo url('referral')?>" title="<?php _l('affiliates')?>"  class="mtitle-right <?php echo ($C->activeIconMenu == 'affiliate')  ? 'active' : null?>"><i class="las la-hand-holding-usd"></i> <span>
+            <?php _l('affiliates')?>
+
+        </span>
+        <?php $payouts = model('referral::referral')->getPendingPayouts()?>
+        <?php if(model('user')->isAdmin() and count($payouts) > 0):?>
+            <div style="position:absolute;background:red;color: #ffffff;padding:2px 7px;border-radius:100px;right: 10px;top: 0;"><?php echo count($payouts)?></div>
+        <?php endif?>
+    </a> </li>

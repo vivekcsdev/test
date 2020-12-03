@@ -1,0 +1,268 @@
+<div class="inner-account-container">
+   <div class="page-title-panel">
+      <h2>Connect Your Accoounts Here</h2>
+   </div>
+   <div class="content content-big">
+      <div class="d-none">
+         <h5><?php _l('have-social-accounts')?></h5>
+         <h6 style="font-weight: lighter;color: grey;"><?php _l('have-social-accounts-info')?></h6>
+      </div>
+      <div class="social-accounts-container">
+         <div class="row">
+            <?php if(model('user')->canUseSocial('instagram')):?>
+            <div class="col-md-4">
+               <?php $instagramAccount = model('account')->hasAccount('instagram')?>
+               <a href="<?php echo url('accounts/instagram')?>" data-ajax="true" class="each instagram ">
+                  <i class="las la-plus"></i>
+                  <?php if($instagramAccount):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-instagram"></i> <span>Instagram</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $instagramAccount?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-instagram"></i>
+                     <h6>Instagram</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('facebook')):?>
+            <div class="col-md-4">
+               <?php $facebookAccount = model('account')->hasAccount('facebook')?>
+               <a href="<?php echo url('accounts/facebook')?>" data-ajax="true" class="each facebook ">
+                  <i class="las la-plus"></i>
+                  <?php if($facebookAccount):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-facebook"></i> <span>Facebook</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $facebookAccount?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-facebook"></i>
+                     <h6>Facebook</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('twitter')):?>
+            <div class="col-md-2">
+               <?php $twitterAccount = model('account')->hasAccount('twitter')?>
+               <a href="<?php echo url('accounts/twitter')?>" data-ajax="true" class="each twitter ">
+                  <i class="las la-plus"></i>
+                  <?php if($twitterAccount):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-twitter"></i> <span>Twitter</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $twitterAccount?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-twitter"></i>
+                     <h6>Twitter</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('youtube')):?>
+            <?php $account = model('account')->hasAccount('youtube')?>
+            <div class="<?php echo ($account)? 'col-md-2' : 'col-md-2'?>">
+               <a href="<?php echo url('accounts/youtube')?>" data-ajax="true" class="each youtube">
+                  <?php if($account):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-youtube"></i> <span>Youtube</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $account?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-youtube"></i>
+                     <h6>Youtube</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('linkedin')):?>
+            <?php $account = model('account')->hasAccount('linkedin')?>
+            <div class="<?php echo ($account)? 'col-md-2' : 'col-md-2'?>">
+               <a href="<?php echo url('accounts/linkedin')?>" data-ajax="true" class="each linkedin">
+                  <?php if($account):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-linkedin"></i> <span>Linkedin</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $account?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-linkedin"></i>
+                     <h6>Linkedin</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('google')):?>
+            <?php $account = model('account')->hasAccount('google')?>
+            <div class="<?php echo ($account)? 'col-md-2' : 'col-md-2'?>">
+               <a href="<?php echo url('accounts/google')?>" data-ajax="true" class="each google">
+                  <?php if($account):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-google"></i> <span>Google Business</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $account?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-google"></i>
+                     <h6>Google Business</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('snapchat')):?>
+            <?php $account = model('account')->hasAccount('snapchat')?>
+            <div class="<?php echo ($account)? 'col-md-2' : 'col-md-2'?>">
+               <a href="<?php echo url('accounts/snapchat')?>" data-ajax="true" class="each snapchat">
+                  <?php if($account):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-snapchat"></i> <span>Snapchat</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $account?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-snapchat"></i>
+                     <h6>Snapchat</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('tiktok')):?>
+            <?php $account = model('account')->hasAccount('tiktok')?>
+            <div class="<?php echo ($account)? 'col-md-2' : 'col-md-2'?>">
+               <a href="<?php echo url('accounts/tiktok')?>" data-ajax="true" class="each tiktok">
+                  <?php if($account):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-tiktok"></i> <span>Tiktok</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $account?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                  <image src="<?php echo assetUrl('assets/images/tiktok.png')?>" height="50px" class="mb-2"></image>
+                     <h6>Tiktok</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-" class="bg-white"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('pinterest')):?>
+            <?php $account = model('account')->hasAccount('pinterest')?>
+            <div class="<?php echo ($account)? 'col-md-2' : 'col-md-2'?>">
+               <a href="<?php echo url('accounts/pinterest')?>" data-ajax="true" class="each pinterest">
+                  <?php if($account):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-pinterest"></i> <span>Pinterest</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $account?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-pinterest"></i>
+                     <h6>Pinterest</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+            <?php if(model('user')->canUseSocial('whatsapp')):?>
+            <?php $account = model('account')->hasAccount('whatsapp')?>
+            <div class="camp <?php echo ($account)? 'col-md-2' : 'col-md-2'?>">
+               <a href="<?php echo url('accounts/whatsapp')?>" data-ajax="true" class="each whatsapp">
+                  <?php if($account):?>
+                  <div class="has-account">
+                     <h1><i class="lab la-whatsapp"></i> <span>Whatsapp</span></h1>
+                     <div class="info">
+                        <span class="count"><?php echo $account?></span>
+                        <p><?php _l('accounts-connected')?></p>
+                     </div>
+                  </div>
+                  <?php else:?>
+                  <div class="no-account">
+                     <i class="lab la-whatsapp"></i>
+                     <h6>Whatsapp</h6>
+                     <div class="switch">
+                        <input  id="cmn-toggle-hdsdshk"  disabled="disabled" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                        <label for="cmn-toggle-"></label>
+                     </div>
+                  </div>
+                  <?php endif?>
+               </a>
+            </div>
+            <?php endif?>
+         </div>
+      </div>
+   </div>
+</div>

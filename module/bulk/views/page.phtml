@@ -1,0 +1,367 @@
+<div class="inner-container clearfix"  >
+    <div class="inner-left-pane modern-scroll">
+        <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+            <input type="hidden" name="val[action]" value="rule"/>
+            <div class="action-pane" style="height: 49px;position: relative;padding-left: 20px;">
+                <h6 ><?php _l('post-rules')?></h6>
+
+                <div style="position:absolute;top: 5px;right: 20px;">
+                    <button type="submit" class="btn btn-white"><?php _l('save')?></button>
+                    <a href="" onclick="return addPostRule()"  class="btn btn-primary" ><?php _l('add-rule')?></a>
+                </div>
+            </div>
+
+            <div class="posts-rule-container">
+                <?php $rules = model('bulk::bulk')->getPostRules($bulk['id']);?>
+                <?php $ii = 0; foreach($rules as $rule):?>
+                    <div class="each-post-rule">
+                        <div style="padding: 5px;position:relative;">
+                            <?php _l('rule')?>
+                            <a href="" onclick="return removePostRule(this)" style="position:absolute;right: 5px;top:4px;color: #000;"><i class="la la-trash-o"></i></a>
+                        </div>
+                        <hr style="margin: 0;"/>
+                        <ul class="days">
+                            <li><a onclick="return activeRuleDay(this)" href=""  class="<?php echo ($rule['mon']) ? 'active': null?>"><input type="hidden" name="val[rules][<?php echo $ii?>][days][mon]" value="<?php echo $rule['mon']?>"/><?php _l('mon')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href="" class="<?php echo ($rule['tues']) ? 'active': null?>"><input type="hidden" name="val[rules][<?php echo $ii?>][days][tues]" value="<?php echo $rule['tues']?>"/><?php _l('tues')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href="" class="<?php echo ($rule['wed']) ? 'active': null?>"><input type="hidden" name="val[rules][<?php echo $ii?>][days][wed]" value="<?php echo $rule['wed']?>"/><?php _l('wed')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href="" class="<?php echo ($rule['thur']) ? 'active': null?>"><input type="hidden" name="val[rules][<?php echo $ii?>][days][thur]" value="<?php echo $rule['thur']?>"/><?php _l('thur')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href="" class="<?php echo ($rule['fri']) ? 'active': null?>"><input type="hidden" name="val[rules][<?php echo $ii?>][days][fri]" value="<?php echo $rule['fri']?>"/><?php _l('fri')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href="" class="<?php echo ($rule['sat']) ? 'active': null?>"><input type="hidden" name="val[rules][<?php echo $ii?>][days][sat]" value="<?php echo $rule['sat']?>"/><?php _l('sat')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href="" class="<?php echo ($rule['sun']) ? 'active': null?>"><input type="hidden" name="val[rules][<?php echo $ii?>][days][sun]" value="<?php echo $rule['sun']?>"/><?php _l('sun')?> </a> </li>
+                        </ul>
+
+                        <div class="row" style="padding: 5px;padding-bottom:0">
+                            <div class="col-6">
+                                <select class="form-control" name="val[rules][<?php echo $ii?>][order]">
+                                    <option <?php echo ($rule['post_order'] == 1) ? 'selected':null?> value="1"><?php _l('orderly')?></option>
+                                    <option <?php echo ($rule['post_order'] == 2) ? 'selected':null?> value="2"><?php _l('random')?></option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <select class="form-control" name="val[rules][<?php echo $ii?>][number]">
+                                    <?php for($i=1;$i<=10;$i++):?>
+                                        <option <?php echo ($rule['post_daily'] == $i) ? 'selected':null?> value="<?php echo $i?>"><?php echo $i?> <?php _l('posts-daily')?></option>
+                                    <?php endfor?>
+                                </select>
+                            </div>
+                        </div>
+                        <hr/>
+                        <h6 style="padding:0 5px ;font-weight:lighter;font-size:12px">Post between:</h6>
+
+                        <div class="row p-2">
+                            <div class="col-5">
+                                <input type="text" style="height:25px;font-size:10px;" value="<?php echo date(getAdminDateFormat(), strtotime($rule['from_date']))?>" name="val[rules][<?php echo $ii?>][date_from]" class="form-control datepicker-input"/>
+                            </div>
+                            <div class="col-2"><div style="position:relative;top: 20px;"><?php _l('to')?></div></div>
+                            <div class="col-5">
+                                <input type="text" style="height:25px;font-size:10px;" value="<?php echo date(getAdminDateFormat(), strtotime($rule['to_date']))?>" name="val[rules][<?php echo $ii?>][date_to]" class="form-control datepicker-input"/>
+                            </div>
+                        </div>
+
+                        <div class="row p-2">
+                            <div class="col-5">
+                                <input type="text" style="height:25px;font-size:10px;" value="<?php echo date('h:i A', strtotime($rule['from_date']))?>" name="val[rules][<?php echo $ii?>][time_from]" class="form-control timepicker"/>
+                            </div>
+                            <div class="col-2"></div>
+                            <div class="col-5">
+                                <input type="text" style="height:25px;font-size:10px;" value="<?php echo date('h:i A', strtotime($rule['to_date']))?>" name="val[rules][<?php echo $ii?>][time_to]" class="form-control timepicker"/>
+                            </div>
+                        </div>
+
+
+                    </div>
+                <?php $ii++;endforeach;?>
+                <?php if(empty($rules)):?>
+                    <div class="each-post-rule">
+                        <div style="padding: 5px;position:relative;">
+                            <?php _l('rule')?>
+                            <a href="" onclick="return removePostRule(this)" style="position:absolute;right: 5px;top:4px;color: #000;"><i class="la la-trash-o"></i></a>
+                        </div>
+                        <hr style="margin: 0;"/>
+                        <ul class="days">
+                            <li><a onclick="return activeRuleDay(this)" href="" ><input type="hidden" name="val[rules][0][days][mon]" value="0"/><?php _l('mon')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href="" ><input type="hidden" name="val[rules][0][days][tues]" value="0"/><?php _l('tues')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][0][days][wed]" value="0"/><?php _l('wed')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][0][days][thur]" value="0"/><?php _l('thur')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][0][days][fri]" value="0"/><?php _l('fri')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][0][days][sat]" value="0"/><?php _l('sat')?> </a> </li>
+                            <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][0][days][sun]" value="0"/><?php _l('sun')?> </a> </li>
+                        </ul>
+
+                        <div class="row" style="padding: 5px;padding-bottom:0">
+                            <div class="col-6">
+                                <select class="form-control" name="val[rules][0][order]">
+                                    <option value="1"><?php _l('orderly')?></option>
+                                    <option value="2"><?php _l('random')?></option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <select class="form-control" name="val[rules][0][number]">
+                                    <?php for($i=1;$i<=10;$i++):?>
+                                        <option value="<?php echo $i?>"><?php echo $i?> <?php _l('posts-daily')?></option>
+                                    <?php endfor?>
+                                </select>
+                            </div>
+                        </div>
+                        <hr/>
+                        <h6 style="padding:0 5px ;font-weight:lighter;font-size:12px">Post between:</h6>
+
+                        <div class="row p-2">
+                            <div class="col-5">
+                                <input type="text" style="height:25px;font-size:10px;" value="<?php echo date(getAdminDateFormat())?>" name="val[rules][0][date_from]" class="form-control datepicker-input"/>
+                            </div>
+                            <div class="col-2"><div style="position:relative;top: 20px;"><?php _l('to')?></div></div>
+                            <div class="col-5">
+                                <input type="text" style="height:25px;font-size:10px;" value="<?php echo date(getAdminDateFormat())?>" name="val[rules][0][date_to]" class="form-control datepicker-input"/>
+                            </div>
+                        </div>
+
+                        <div class="row p-2">
+                            <div class="col-5">
+                                <input type="text" style="height:25px;font-size:10px;" value="06:00 AM" name="val[rules][0][time_from]" class="form-control timepicker"/>
+                            </div>
+                            <div class="col-2"></div>
+                            <div class="col-5">
+                                <input type="text" style="height:25px;font-size:10px;" value="02:00 PM" name="val[rules][0][time_to]" class="form-control timepicker"/>
+                            </div>
+                        </div>
+
+
+                    </div>
+                <?php endif?>
+            </div>
+        </form>
+
+        <div class="rules-template-container" style="display: none;">
+            <div class="each-post-rule">
+                <div style="padding: 5px;position:relative;">
+                    <?php _l('rule')?>
+                    <a href="" onclick="return removePostRule(this)" style="position:absolute;right: 5px;top:4px;color: #000;"><i class="la la-trash-o"></i></a>
+                </div>
+                <hr style="margin: 0;"/>
+                <ul class="days">
+                    <li><a onclick="return activeRuleDay(this)" href="" ><input type="hidden" name="val[rules][placeholder][days][mon]" value="0"/><?php _l('mon')?> </a> </li>
+                    <li><a onclick="return activeRuleDay(this)" href="" ><input type="hidden" name="val[rules][placeholder][days][tues]" value="0"/><?php _l('tues')?> </a> </li>
+                    <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][placeholder][days][wed]" value="0"/><?php _l('wed')?> </a> </li>
+                    <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][placeholder][days][thur]" value="0"/><?php _l('thur')?> </a> </li>
+                    <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][placeholder][days][fri]" value="0"/><?php _l('fri')?> </a> </li>
+                    <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][placeholder][days][sat]" value="0"/><?php _l('sat')?> </a> </li>
+                    <li><a onclick="return activeRuleDay(this)" href=""><input type="hidden" name="val[rules][placeholder][days][sun]" value="0"/><?php _l('sun')?> </a> </li>
+
+                </ul>
+
+                <div class="row" style="padding: 5px;padding-bottom:0">
+                    <div class="col-6">
+                        <select class="form-control" name="val[rules][placeholder][order]">
+                            <option value="1"><?php _l('orderly')?></option>
+                            <option value="2"><?php _l('random')?></option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control" name="val[rules][placeholder][number]">
+                            <?php for($i=1;$i<=10;$i++):?>
+                                <option value="<?php echo $i?>"><?php echo $i?> <?php _l('posts-daily')?></option>
+                            <?php endfor?>
+                        </select>
+                    </div>
+                </div>
+                <hr/>
+                <h6 style="padding:0 5px ;font-weight:lighter;font-size:12px">Post between:</h6>
+
+                <div class="row p-2">
+                    <div class="col-5">
+                        <input type="text" style="height:25px;font-size:10px;" value="<?php echo date(getAdminDateFormat())?>" name="val[rules][placeholder][date_from]" class="form-control datepicker-input-2"/>
+                    </div>
+                    <div class="col-2"><div style="position:relative;top: 20px;"><?php _l('to')?></div></div>
+                    <div class="col-5">
+                        <input type="text" style="height:25px;font-size:10px;" value="<?php echo date(getAdminDateFormat())?>" name="val[rules][placeholder][date_to]" class="form-control datepicker-input-2"/>
+                    </div>
+                </div>
+
+                <div class="row p-2">
+                    <div class="col-5">
+                        <input type="text" style="height:25px;font-size:10px;" value="06:00 AM" name="val[rules][placeholder][time_from]" class="form-control timepicker"/>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                        <input type="text" style="height:25px;font-size:10px;" value="02:00 PM" name="val[rules][placeholder][time_to]" class="form-control timepicker"/>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <div class="inner-right-pane">
+        <div class="rss-container clearfix">
+            <div class="middle">
+                <form class="general-form " id="rss-accounts-form" action="<?php echo getFullUrl(true)?>" method="post">
+                    <input type="hidden" name="account" value="<?php echo $bulk['id']?>"/>
+                    <div class="top clearfix">
+                        <div class="float-left">
+                            <div id="horizontal-menu">
+                                <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+                                <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+                                <div class="menu-container">
+                                    <div class="menu " role="tablist">
+                                        <?php foreach(model('bulk::bulk')->getAccounts($bulk['id']) as $account):$account = model('account')->find($account['account_id'])?>
+                                            <div class="menu-item mtitle each-<?php echo $account['id']?>"  data-original-title="<?php echo ucwords($account['social_type'])?>  - <?php echo $account['username']?>"><img src="<?php echo assetUrl($account['avatar'])?>"><input type="hidden" value="<?php echo $account['id']?>" name="accounts[]"><a onclick="return removeAccountRss(this)" href=""><i class="las la-times"></i></a></div>
+                                        <?php endforeach;?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="" onclick="return openAccountSelector()" class="mtitle add-button" title="<?php _l('choose-account')?>">
+                            <i class="las la-user-plus"></i>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="horizontal-menu">
+            <div class="menu-container">
+                <div class="menu " role="tablist">
+                    <a href="#posts" data-toggle="tab" class="menu-item  active"><span><?php _l('posts')?></span></a>
+                    <a href="#faq" data-toggle="tab" class="menu-item "><span><?php _l('how-to')?></span></a>
+
+                </div>
+            </div>
+
+            <div class="actions-pane">
+                <ul class="clearfix">
+                    <li>
+                        <a href="" class="btn btn-outline-light" data-toggle="modal" data-target="#csv-modal" style="position:relative;overflow: hidden">
+
+                                <i class="las la-cloud-download-alt"></i> <?php _l('import')?>
+                            </form>
+                        </a>
+                        <div class="modal" id="csv-modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"><?php _l('import')?></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post" data-no-loader="true" data-upload="#csv-upload-progress" action="<?php echo getFullUrl()?>" enctype="multipart/form-data" class="general-form csv-uploader">
+                                        <input type="hidden" name="val[action]" value="upload-csv"/>
+                                        <input type="hidden" name="val[id]" value="<?php echo $bulk['id']?>"/>
+
+
+
+                                    <div class="modal-body">
+                                        <div id="csv-upload-progress" class="mb-2" style="display: none">
+                                            <div class="progress" style="height:2px;">
+                                                <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-warning">CSV <?php _l('format')?> : <i>text,image_url</i><br/>
+                                                     <i style="margin-left:80px">text,image_url</i><br/>
+                                            <i style="margin-left:80px">text,image_url</i></div>
+                                        <input  type="file" name="file" class="form-control">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button"  onclick="return submitCsvImport()" class="btn btn-secondary" ><?php _l('upload')?></button>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class="btn btn-outline-light" style="position:relative;overflow: hidden">
+                            <form method="post" data-no-loader="true" data-upload="#upload-progress" action="<?php echo getFullUrl()?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
+                                <input type="hidden" name="val[action]" value="upload"/>
+                                <input type="hidden" name="val[id]" value="<?php echo $bulk['id']?>"/>
+                                <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
+                                <i class="la la-plus"></i> <?php _l('upload')?>
+                            </form>
+                        </a>
+                    </li>
+                    <li><a  class="btn btn-outline-danger confirm" data-ajax-action="true" href="<?php echo url('bulk/schedule/'.$C->request->segment(2),array('action' => 'delete-bulk','id' => $bulk['id']))?>"><?php _l('delete')?></a> </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div id="upload-progress">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="tab-content " id="myTabContent">
+            <div class="tab-pane fade show active" id="posts" role="tabpanel" >
+                <div class="content content-big scroll-paginate" style="height:calc(100vh - 200px);padding:0 27px;padding-top:0;margin: 0;"
+                     data-container=".scheduled-posts-grid"
+                     data-offset="8"
+                     data-url="<?php echo getFullUrl(true)?>">
+
+                    <div class="the-content">
+
+                        <div class="grid-container clearfix scheduled-posts-grid" style="margin:0">
+                            <?php  foreach($posts as $post):?>
+                                <?php echo view('bulk::page/display', array('post' => $post, 'bulk' => $bulk))?>
+                            <?php endforeach;?>
+                        </div>
+
+
+                        <?php if(count($posts) < 1):?>
+                            <div class="empty-content">
+                                <i class="la la-fill"></i>
+                                <span><?php _l('no-contents-show')?></span>
+                            </div>
+                        <?php endif?>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade " id="faq" role="tabpanel" >
+                <div class="content">
+                    <h5><?php _l('how-to-schedule')?></h5>
+
+                    <hr/>
+                    <ol class="short-form faq-list" style="padding: 10px;margin:0">
+                        <li><?php _l('bulk-instruction-1')?></li>
+                        <li><?php _l('bulk-instruction-2')?></li>
+                        <li><?php _l('bulk-instruction-3')?></li>
+                        <li><?php _l('bulk-instruction-4')?></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="addAccountModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <select onchange="openAccountSelector()">
+                            <option value="all"><?php _l('all-accounts')?></option>
+                            <?php foreach(model('user')->getAvailableSocials() as $social):?>
+                                <option value="<?php echo $social?>"><?php echo ucwords($social)?></option>
+                            <?php endforeach;?>
+
+                        </select>
+                        <select id="groups-select-input" onchange="loadGroupSelector()">
+                            <option value=""><?php _l('select-from-group')?></option>
+                            <?php foreach(model('group')->lists() as $group):?>
+                                <option value="<?php echo $group['id']?>"><?php echo $group['title']?></option>
+                            <?php endforeach;?>
+
+                        </select>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body account-lists"></div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="renderRssSelectedAccounts()" class="btn btn-primary btn-sm"><?php _l('continue')?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

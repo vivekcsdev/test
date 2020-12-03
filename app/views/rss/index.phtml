@@ -1,0 +1,57 @@
+<div class="rss-feeds-container">
+
+   <div class="page-title-panel d-flex align-items-center">
+      <div><h2><?php _l('rss-feeds')?></h2></div>
+      <div class="ml-auto">
+          <a href="#new" id="new-toggle-button" data-toggle="tab" class="menu-item btn"><span><?php _l('add-rss-feed')?></span></a>  
+      </div>
+   </div>
+
+   <div id="horizontal-menu" class="d-none">
+      <?php $page = $C->request->input('p')?>
+      <div class="menu-container">
+         <div class="menu " role="tablist">
+            <a href="#rss" data-toggle="tab" class="menu-item  active"><span><?php _l('rss-feeds')?></span></a>
+            <a href="#new" id="new-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('add-rss-feed')?></span></a>
+         </div>
+      </div>
+   </div>
+   <div class="content">
+      <div class="tab-content" id="myTabContent">
+         <div class="tab-pane fade show active" id="rss" role="tabpanel" >
+            <div class="grid-container clearfix">
+               <div class="each-container">
+                  <a  href=""  onclick="return clickButton('#new-toggle-button')" class="each each-add ">
+                  <i class="las la-plus"></i>
+                  <?php _l('add-rss-feed')?>
+                  </a>
+               </div>
+               <?php foreach($lists as $list):?>
+               <div  class="each-container rss-each-container" >
+                  <div class="each">
+                     <span class="count" ><?php echo model('rss')->countPosts($list['id'])?></span>
+                     <p>
+                        <a data-ajax="true" style="" href="<?php echo url('rss/'.$list['id'])?>"><?php echo $list['name']?></a>
+                     </p>
+                     <div class="actions">
+                        <a href="<?php echo url('rss', array('delete' => $list['id']))?>" data-ajax-action="true" class=" confirm"><i class="lar la-trash-alt"></i></a>
+                     </div>
+                  </div>
+               </div>
+               <?php endforeach?>
+            </div>
+         </div>
+         <div class="tab-pane fade show " id="new" role="tabpanel" >
+            <form action="<?php echo getFullUrl(true)?>" method="post" id="instagramAccountForm" class="general-form short-form">
+               <input type="hidden" name="val[create]" value="1"/>
+               <div class="form-group">
+                  <label>RSS URL</label>
+                  <input autocomplete="off" type="text" name="val[url]" class="form-control"/>
+               </div>
+               <button class="btn btn-primary btn-lg"><?php _l('add-rss-feed')?></button>
+            </form>
+         </div>
+      </div>
+   </div>
+
+</div>

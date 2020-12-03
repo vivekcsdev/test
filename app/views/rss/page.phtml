@@ -1,0 +1,298 @@
+<div class="rss-container clearfix">
+    <div class="middle">
+        <form class="general-form " id="rss-accounts-form" action="<?php echo getFullUrl(true)?>" method="post">
+            <input type="hidden" name="account" value="<?php echo $rss['id']?>"/>
+            <div class="top clearfix">
+                <div class="float-left">
+                    <div id="horizontal-menu">
+                        <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+                        <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+                        <div class="menu-container">
+                            <div class="menu " role="tablist">
+                                <?php foreach(model('rss')->getAccounts($rss['id']) as $account):$account = model('account')->find($account['account_id'])?>
+                                    <div class="menu-item mtitle each-<?php echo $account['id']?>"  data-original-title="<?php echo ucwords($account['social_type'])?>  - <?php echo $account['username']?>"><img src="<?php echo assetUrl($account['avatar'])?>"><input type="hidden" value="<?php echo $account['id']?>" name="accounts[]"><a onclick="return removeAccountRss(this)" href=""><i class="las la-times"></i></a></div>
+                                <?php endforeach;?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="" onclick="return openAccountSelector()" class="mtitle add-button" title="<?php _l('choose-account')?>">
+                    <i class="las la-user-plus"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#posts" data-toggle="tab" class="menu-item  active"><span><?php _l('last-posts')?></span></a>
+            <!--<a href="#history" id="new-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('history')?></span></a>-->
+            <a href="#settings" id="new-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('settings')?></span></a>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="content" style="height: calc(100vh - 183px);">
+    <div class="statistics-container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="each" >
+                    <div class="icon"><i class="las la-feather"></i></div>
+                    <div class="count">
+                        <span class="color"><?php echo model('rss')->countPosts($rss['id'])?></span>
+                        <?php _l('posts')?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="each">
+                    <div class="icon"><i class="las la-feather"></i></div>
+                    <div class="count">
+                        <span class="color-green"><?php echo model('rss')->countHistory($rss['id'],1)?></span>
+                        <div ><?php _l('posted-successfully')?></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="each">
+                    <div class="icon"><i class="las la-feather"></i></div>
+                    <div class="count">
+                        <span style="color:grey"><?php echo model('rss')->countHistory($rss['id'],0)?></span>
+                        <div ><?php _l('scheduled')?></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="each">
+                    <div class="icon"><i class="las la-feather"></i></div>
+                    <div class="count">
+                        <span class="colored-red"><?php echo model('rss')->countHistory($rss['id'],2)?></span>
+                        <div ><?php _l('error')?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content mt-3" id="myTabContent">
+        <div class="tab-pane fade show active" id="posts" role="tabpanel" >
+
+            <form action="<?php echo getFullUrl(true)?>" class="general-form" method="post" id="rss-posts-list-form">
+                <input type="hidden" value="1" name="val[bulk_action]"/>
+                <input type="hidden" value="last-post" name="val[action_type]"/>
+                <div class="modern-table">
+                    <div class="table-head clearfix">
+                        <div class="each" style="width:5%;">
+                            <a href="javascript:void(0)" onclick="submitForm('#rss-posts-list-form', 'bulk')" class="btn btn-light"><i class="las la-share-alt"></i></a>
+                        </div>
+
+                        <div class="each" style="width: 40%;">
+                            <?php _l('title')?>
+                        </div>
+                        <div class="each" style="width: 45%;">
+                            <?php _l('content')?>
+                        </div>
+                        <div class="each" style="width: 10%;text-align: right">
+                            <?php _l('options')?>
+                        </div>
+                    </div>
+
+
+                    <div class="table-body" >
+
+                        <?php foreach(model('rss')->getLastPosts($rss['id']) as $post):?>
+                            <div class="table-row clearfix">
+                                <div class="each clearfix" style="width: 5%;">
+                                    <div class="left">
+
+                                    </div>
+                                    <div class="right">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="val[id][]" value="<?php echo $post['id']?>" class="custom-control-input" id="customCheck<?php echo $post['id']?>">
+                                            <label class="custom-control-label" for="customCheck<?php echo $post['id']?>"></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="each clearfix" style="width: 40%;">
+                                    <div class="left">
+                                        <?php _l('title')?>
+                                    </div>
+                                    <div class="right">
+                                        <?php echo $post['title']?>
+                                    </div>
+                                </div>
+                                <div class="each clearfix" style="width:45%;">
+                                    <div class="left">
+                                        <?php _l('content')?>
+                                    </div>
+                                    <div class="right">
+                                        <?php echo str_limit(strip_tags($post['content']), 200)?>
+                                    </div>
+                                </div>
+                                <div class="each clearfix" style="width: 10%;">
+                                    <div class="left">
+                                        <?php _l('options')?>
+                                    </div>
+                                    <div class="right">
+                                        <a href="<?php echo url('rss/'.$rss['id'], array('repost' => $post['id']))?>"  data-ajax-action="true" class="btn btn-white float-right confirm"><i class="las la-share-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+
+
+
+        <div class="tab-pane fade show " id="settings" role="tabpanel" >
+            <form action="<?php echo getFullUrl(true)?>" class="general-form short-form" method="post" >
+                <input type="hidden" name="val[settings]" value="1"/>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <h6 style="font-size: 13px;"><?php _l('enable')?></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="switch" style="margin: auto;text-align: right">
+                            <input type="hidden" name="val[enabled]" value="0"/>
+                            <input  id="cmn-toggle-enable" value="1" name="val[enabled]" <?php echo ($rss['enabled']) ? 'checked': null?> class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable" style="float: right;"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr/>
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <h6 style="font-size: 13px;"><?php _l('post-frequency-per-hour')?></h6>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="val[per_hour]" class="form-control" value="<?php echo $rss['per_hour']?>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <h6 style="font-size: 13px;"><?php _l('how-many-post-frequency')?></h6>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="val[per_hour_post]" class="form-control" value="<?php echo $rss['post_per_hour']?>"/>
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <h6 style="font-size: 13px;"><?php _l('publish-description')?></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="switch" style="margin: auto;text-align: right">
+                            <input type="hidden" name="val[description]" value="0"/>
+                            <input  id="cmn-toggle-enable-desc" value="1" name="val[description]" <?php echo ($rss['publish_description']) ? 'checked': null?> class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-desc" style="float: right;"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <h6 style="font-size: 13px;"><?php _l('publish-url')?></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="switch" style="margin: auto;text-align: right">
+                            <input type="hidden" name="val[url]" value="0"/>
+                            <input  id="cmn-toggle-enable-url" value="1" name="val[url]" <?php echo ($rss['publish_url']) ? 'checked': null?> class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-url" style="float: right;"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <h6 style="font-size: 13px;"><?php _l('autopost')?></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="switch" style="margin: auto;text-align: right">
+                            <input type="hidden" name="val[autopost]" value="0"/>
+                            <input  id="cmn-toggle-enable-autopost" value="1" name="val[autopost]" <?php echo ($rss['autopost']) ? 'checked': null?> class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-autopost" style="float: right;"></label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <h6 style="font-size: 13px;"><?php _l('referal-code')?></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" placeholder="ex: ref=code" class="form-control" name="val[referral]" value="<?php echo $rss['referral_code']?>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <h6 style="font-size: 13px;"><?php _l('rss-includes-only')?></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="<?php echo _l('separate-words-comma')?>" name="val[includes]" value="<?php echo $rss['includes']?>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <h6 style="font-size: 13px;"><?php _l('rss-excludes-only')?></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="<?php echo _l('separate-words-comma')?>" name="val[excludes]" value="<?php echo $rss['excludes']?>"/>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary"><?php _l('submit')?></button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" id="addAccountModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <select onchange="openAccountSelector()">
+                    <option value="all"><?php _l('all-accounts')?></option>
+                    <?php foreach(model('user')->getAvailableSocials() as $social):?>
+                        <?php if(!in_array($social, array('instagram','youtube','vimeo','dailymotion', 'pinterest'))):?>
+                            <option value="<?php echo $social?>"><?php echo ucwords($social)?></option>
+                        <?php endif?>
+                    <?php endforeach;?>
+
+                </select>
+                <select id="groups-select-input" onchange="loadGroupSelector()">
+                    <option value=""><?php _l('select-from-group')?></option>
+                    <?php foreach(model('group')->lists() as $group):?>
+                        <option value="<?php echo $group['id']?>"><?php echo $group['title']?></option>
+                    <?php endforeach;?>
+
+                </select>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body account-lists"></div>
+            <div class="modal-footer">
+                <button type="button" onclick="renderRssSelectedAccounts()" class="btn btn-primary btn-sm"><?php _l('continue')?></button>
+            </div>
+        </div>
+    </div>
+</div>

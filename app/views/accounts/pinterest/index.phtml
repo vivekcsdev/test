@@ -1,0 +1,191 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#accounts" data-toggle="tab" class="menu-item  active"><span>Pinterest <?php echo strtolower(l('accounts'))?></span></a>
+            <?php if(model('user')->isAdmin()):?>
+                <a href="<?php echo url('admin/social/integration', array('page' => 'pinterest'))?>" data-ajax="true"  class="menu-item  hide-mobile-sm"><span><?php echo l('settings')?></span></a>
+            <?php endif?>
+            <a data-toggle="modal" data-target="#addPinterestModal" href=""  class="menu-item  "><span><?php _l('add-new-account')?></span></a>
+
+        </div>
+    </div>
+
+    <div class="actions-pane">
+        <ul class="clearfix">
+
+            <li class="btn-group">
+                <a href=""  class="btn btn-outline-light"><i class="la la-plus"></i> <?php _l('add')?></a>
+
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="accounts" role="tabpanel" >
+            <div class="grid-container clearfix">
+                <div class="each-container">
+                    <a data-toggle="modal" data-target="#addPinterestModal" href=""  class="each each-add ">
+                        <i class="las la-plus"></i>
+                        <?php _l('add-account')?>
+                    </a>
+                </div>
+
+                <?php foreach ($accounts as $account): ?>
+                    <div class="each-container its-account">
+                        <div class="each">
+                            <div class="info">
+                                <?php if($account['status']):?>
+                                    <span class="badge badge-success"><?php _l('active')?></span>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('not-active')?></span>
+                                <?php endif?>
+                            </div>
+                            <img src=" <?php echo assetUrl($account['avatar'])?>" style="border-radius:100px">
+                            <p>
+                                <?php echo $account['username']?>
+                            </p>
+                            <div class="actions">
+                                <a class="confirm" data-ajax-action="true" href="<?php echo url('account/action',array('action' => 'delete','id' => $account['id']))?>"><i class="las la-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal" id="addPinterestModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?php _l('connect-boards')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <a href="<?php echo url('accounts/pinterest', array('auth' => true))?>" class="btn btn-block btn-primary ajax-action"><i class="la la-pinterest-p"></i> <?php _l('connect-with-pinterest')?></a>
+
+                <div style="padding:10px 0; "><?php _l('or')?></div>
+
+                <form class="general-form" action="<?php echo getFullUrl(true)?>" method="post">
+                    <input type="hidden" name="val[action]" value="login"/>
+                    <div class="form-group">
+                        <label>Pinterest <?php _l('username')?></label>
+                        <input type="text" class="form-control" placeholder="<?php _l('username')?>" name="val[username]"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pinterest <?php _l('password')?></label>
+                        <input type="password" class="form-control" placeholder="<?php _l('password')?>" name="val[password]"/>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-secondary"><?php _l('submit')?></button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pinterestAPISelectModal" style="height: 100vh;" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+            <input type="hidden" name="val[token]" value=""/>
+            <input type="hidden" name="val[add]" value="1"/>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle"><?php _l('select-boards')?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                    <button type="submit" class="btn btn-primary"><?php _l('submit')?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?php if($details):?>
+    <div class="modal fade" id="pinterestSelectModal" style="height: 100vh;" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                <input type="hidden" name="val[token]" value="<?php echo $details['token']?>"/>
+                <input type="hidden" name="val[add]" value="1"/>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle"><?php _l('select-boards')?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="conten" style="padding: 10px;height:400px;max-height: 400px;overflow: auto;overflow-x: hidden">
+                            <?php if(empty($details['boards'])):?>
+                                <div class="alert alert-warning"><?php _l('you-dont-have-boards')?></div>
+                            <?php else:?>
+
+                                <?php foreach($details['boards'] as $key => $board):$already = model('account')->findAccountBySID($board->url, 'pinterest', 'board')?>
+                                    <div class="clearfix" style="margin-bottom: 10px;">
+                                        <div class="float-left">
+                                            <?php
+                                            $image = assetUrl('assets/images/pinterest.png');
+                                            if(!empty($details['user']->image)){
+                                                foreach ($details['user']->image as $row) {
+                                                    $row   = (object)$row;
+                                                    $image = $row->url;
+                                                }
+                                            }
+                                            ?>
+                                            <img src="<?php echo $image?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                                            <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $board->name?></span>
+                                        </div>
+                                        <div class="float-right">
+                                            <div class="switch">
+                                                <?php if($already):?>
+                                                    <input type="hidden" name="val[boards][]" value="<?php echo $board->url?>"/>
+                                                <?php endif?>
+                                                <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?>  id="cmn-toggle-group<?php echo $board->url?>" value="<?php echo $board->url?>" name="val[boards][]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                                <label for="cmn-toggle-group<?php echo $board->url?>"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                <?php endforeach?>
+
+                            <?php endif?>
+
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                        <button type="submit" class="btn btn-primary"><?php _l('submit')?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<?php endif?>
+
+
+
+

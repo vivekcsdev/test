@@ -1,0 +1,22 @@
+<a data-thread="<?php echo $thread['id']?>"
+   data-social="<?php echo $social?>"
+   data-account="<?php echo $id?>"
+   onclick="return openInboxThread(this,'<?php echo $thread['id']?>', '<?php echo $social?>', '<?php echo $id?>')" href="" class="each-thread">
+    <?php if($thread['image'] == 'letter'):?>
+        <?php
+            $colors = array('#2196F3','#FF5722','#F44336','#673AB7','#3F51B5','#00BCD4','#4CAF50','#FF9800','#607D8B','#F9C48C');
+            $color = $colors[rand(0, count($colors)-1)];
+        ?>
+        <div class="avatar letter-avatar" style="background:<?php echo $color?>;color:#fff;border-radius:100px"><?php echo model('inbox::inbox')->getLetters($thread['name'])?></div>
+    <?php else:?>
+        <div class="avatar" style="background-image: url(<?php echo $thread['image']?>);"></div>
+    <?php endif?>
+    <div class="info">
+        <h6><?php echo $thread['name']?></h6>
+        <p><?php echo $thread['text']?></p>
+
+        <?php if($thread['has-new']):?>
+            <span class="new"></span>
+        <?php endif?>
+    </div>
+</a>

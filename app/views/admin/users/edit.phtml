@@ -1,0 +1,60 @@
+<div id="horizontal-menu">
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#user" data-toggle="tab" class="menu-item  active"><span><?php _l('edit-user')?></span></a>
+            <a href="<?php echo url('admin/users?p=new')?>"  data-ajax="true" class="menu-item  "><span><?php _l('create-new-user')?></span></a>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="user" role="tabpanel" >
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                <input type="hidden" name="val[create]" value="1"/>
+                <div class="form-group">
+                    <label><?php _l('full-name')?></label>
+                    <input type="text" class="form-control" name="val[full_name]" value="<?php echo $user['full_name']?>"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('email-address')?></label>
+                    <input type="text" class="form-control" name="val[email]" value="<?php echo $user['email']?>"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('change-password')?></label>
+                    <input type="password" class="form-control" name="val[password]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('confirm-password')?></label>
+                    <input type="password" class="form-control" name="val[confirm]"/>
+                </div>
+
+                <?php Hook::getInstance()->fire('admin.edit.user', null, array($user))?>
+
+                <div class="form-group">
+                    <label><?php _l('select-timezone')?></label>
+                    <select class="form-control select-timezone" name="val[timezone]">
+                        <option value=""><?php _l('select-timezone')?></option>
+                        <?php foreach(getTimezones() as $key => $name):?>
+                            <option <?php echo ($user['timezone'] == $key) ? 'selected' : null?> value="<?php echo $key?>"><?php echo $name?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[role]" value="0"/>
+                    <input type="checkbox" name="val[role]" value="1" <?php echo ($user['role'] == 1) ? 'checked' : null?> class="custom-control-input" id="customCheck1">
+                    <label class="custom-control-label" for="customCheck1"><?php _l('is-admin')?></label>
+                </div>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-user')?></button>
+
+            </form>
+        </div>
+    </div>
+</div>

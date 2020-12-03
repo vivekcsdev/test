@@ -1,0 +1,418 @@
+<div id="horizontal-menu">
+    <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+    <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#overview" data-toggle="tab" class="menu-item  active"><span><?php _l('overview')?></span></a>
+            <?php if(model('user')->isAdmin()):$payouts = model('referral::referral')->getPendingPayouts();?>
+
+                <a href="#pending-payouts" data-toggle="tab" class="menu-item">
+                    <span>
+                        <?php _l('pending-payouts')?>
+                    </span></a>
+            <?php endif?>
+            <a href="#users" data-toggle="tab" class="menu-item"><span><?php _l('users')?></span></a>
+            <a href="#banners" data-toggle="tab" class="menu-item"><span><?php _l('banners')?></span></a>
+            <a href="#payouts" data-toggle="tab" class="menu-item"><span><?php _l('payouts')?></span></a>
+        </div>
+    </div>
+</div>
+
+<?php
+    $referral = model('referral::referral')->getDetails();
+    //print_r($referral);
+?>
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <?php if(model('user')->isAdmin()):?>
+            <div class="tab-pane fade" id="pending-payouts" role="tabpanel" >
+                <a href="<?php echo url('referral')?>?action=pay" class="btn btn-primary confirm mb-2"  data-ajax-action="true">Pay All with MassPay</a>
+                <div  class="modern-table">
+                    <div class="table-head clearfix">
+
+                        <div class="each" style="width: 30%;">
+                            <?php _l('full-name')?>
+                        </div>
+                        <div class="each" style="width: 20%;">
+                            <?php _l('amount')?>
+                        </div>
+
+                        <div class="each" style="width: 30%;">
+                            <?php _l('paypal-email')?>
+                        </div>
+                        <div class="each" style="width: 20%;">
+                            <?php _l('action')?>
+                        </div>
+                    </div>
+
+                    <div class="table-body" >
+                        <?php foreach($payouts as $payout):$userDetails = model('user')->getUser($payout['userid'])?>
+                        <div class="table-row clearfix">
+                            <div class="each clearfix" style="width: 30%;">
+                                <div class="left">
+                                    <?php _l('full-name')?>
+                                </div>
+                                <div class="right">
+                                    <?php echo $userDetails['full_name']?>
+                                </div>
+                            </div>
+                            <div class="each clearfix" style="width: 20%;">
+                                <div class="left">
+                                    <?php _l('amount')?>
+                                </div>
+                                <div class="right">
+                                    <?php echo formatMoney($payout['amount'])?>
+                                </div>
+                            </div>
+                            <div class="each clearfix" style="width: 20%;">
+                                <div class="left">
+                                    <?php _l('paypal-email')?>
+                                </div>
+                                <div class="right">
+                                    <?php
+                                        $thReferral = model('referral::referral')->getDetails($payout['userid']);
+                                        echo $thReferral['paypal_email'];
+                                    ?>
+
+                                </div>
+                                <div class="left">
+                                    <?php _l('action')?>
+                                </div>
+                                <div class="right">
+                                    <a class=" confirm" data-ajax-action="true" href="<?php echo url('referral', array('action' => 'mark','id' => $payout['id']))?>"><?php _l('mark-paid')?></a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+
+            </div>
+        <?php endif?>
+        <div class="tab-pane fade show active" id="overview" role="tabpanel" >
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="referral-stats clearfix">
+                        <div class="each-container">
+                            <div class="each">
+                                <div class="count"><?php echo model('referral::referral')->countTrialMembers()?></div>
+                                <div class="text"><?php _l('trial-members')?></div>
+                                <div class="icon-container">
+                                    <i class="las la-user-friends"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each-container">
+                            <div class="each">
+                                <div class="count"><?php echo $referral['clicks']?></div>
+                                <div class="text"><?php _l('link-clicks')?></div>
+                                <div class="icon-container">
+                                    <i class="las la-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each-container">
+                            <div class="each">
+                                <div class="count"><?php echo formatMoney(model('referral::referral')->getTotalEarned())?></div>
+                                <div class="text"><?php _l('total-amount-earned')?></div>
+                                <div class="icon-container">
+                                    <i class="las la-money-check-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each-container">
+                            <div class="each">
+                                <div class="count"><?php echo model('referral::referral')->countPaidMembers()?></div>
+                                <div class="text"><?php _l('paid-members')?></div>
+                                <div class="icon-container">
+                                    <i class="las la-user-friends"></i>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="share-your-link-container">
+                        <h6 class="mb-4"><?php _l('share-your-link')?></h6>
+                        <div class="clearfix referral-code-box">
+                            <div class="float-left pt-2" style="width: 90%;">
+                                <?php echo url('?ref='.model('referral::referral')->getReferralCode())?>
+                                <input type="text" style="opacity: 0;height: 0;width:100%" id="referral-link-copy" value="<?php echo url('?ref='.model('referral::referral')->getReferralCode())?>"/>
+                            </div>
+                            <div class="float-right">
+                                <a href="" onclick="return referralCopy('referral-link-copy')" class="colored"><i class="las la-copy"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="referral-note-lists">
+                        <?php if(config('referral-commission-type', 1) == 1):?>
+                            <li><?php _l('referral-earn-note', array('amount' => config('referral-commission', 30)))?> </li>
+                        <?php else:?>
+                            <li><?php _l('referral-earn-amount-note', array('amount' => formatMoney(config('referral-commission', 30))))?> </li>
+
+                        <?php endif?>
+                        <li><?php _l('withdraw-earning-referral', array('amount' => formatMoney(config('referral-minimum-withdraw', 25))))?></li>
+
+                        </li>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade " id="users" role="tabpanel" >
+            <div class="modern-table">
+                <div class="table-head clearfix">
+
+                    <div class="each" style="width: 30%;">
+                        <?php _l('full-name')?>
+                    </div>
+                    <div class="each" style="width: 20%;">
+                        <?php _l('package')?>
+                    </div>
+
+                    <div class="each" style="width: 20%;">
+                        <?php _l('commission')?>
+                    </div>
+                    <div class="each" style="width: 20%;">
+                        <?php _l('status')?>
+                    </div>
+                    <div class="each" style="width: 10%;">
+                        <?php _l('signup-date')?>
+                    </div>
+                </div>
+
+                <?php $users = model('referral::referral')->getUsers();?>
+
+                <div class="table-body" >
+                    <?php foreach($users->results() as $user):$userDetails = model('user')->getUser($user['userid']);?>
+                        <div class="table-row clearfix">
+                            <div class="each clearfix" style="width: 30%;">
+                                <div class="left">
+                                    <?php _l('full-name')?>
+                                </div>
+                                <div class="right">
+                                    <?php echo $userDetails['full_name']?>
+                                </div>
+                            </div>
+
+                            <div class="each clearfix" style="width: 20%;">
+                                <div class="left">
+                                    <?php $package = model('saas::saas')->findPackage($user['package'])?>
+                                    <?php _l('package')?>
+                                </div>
+                                <div class="right">
+                                    <?php echo $package['title']?>
+                                </div>
+                            </div>
+                            <div class="each clearfix" style="width: 20%;">
+                                <div class="left">
+                                    <?php _l('commission')?>
+                                </div>
+                                <div class="right">
+                                    <?php echo formatMoney($user['commission'])?>
+                                </div>
+                            </div>
+                            <div class="each clearfix" style="width: 20%;">
+                                <div class="left">
+                                    <?php _l('status')?>
+                                </div>
+                                <div class="right">
+                                    <?php if($user['status']):?>
+                                        <span class="badge badge-success"><?php _l('successful')?></span>
+
+                                    <?php else:?>
+                                        <span class="badge badge-secondary"><?php _l('pending')?></span>
+                                    <?php endif?>
+                                </div>
+                            </div>
+                            <div class="each clearfix" style="width: 10%;">
+                                <div class="left">
+                                    <?php _l('signup-date')?>
+                                </div>
+                                <div class="right">
+                                    <?php echo date(getAdminDateFormat(), $user['signup_date'])?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach;?>
+                </div>
+                <?php if($users->total < 1):?>
+                    <div class="empty-content">
+                        <i class="la la-fill"></i>
+                        <span><?php _l('no-contents-show')?></span>
+                    </div>
+                <?php else:?>
+                    <?php echo $users->links()?>
+                <?php endif?>
+            </div>
+        </div>
+        <div class="tab-pane fade " id="banners" role="tabpanel" >
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-light p-0">
+                        <?php _l('banner-header-note')?>
+                    </div>
+
+                    <div class="row referral-banner-container">
+                        <div class="col-3">
+                            <ul>
+                                <li><a class="colored-re" href="" onclick="return referralShowBanner(this,1)"><?php _l('size')?> 160x600px</a> </li>
+                                <li><a href="" onclick="return referralShowBanner(this,2)"><?php _l('size')?> 300x250px</a> </li>
+                                <li><a href="" onclick="return referralShowBanner(this,3)"><?php _l('size')?> 728x90px</a> </li>
+                                <li><a href="" onclick="return referralShowBanner(this,4)"><?php _l('size')?> 800x800px</a> </li>
+
+                            </ul>
+                        </div>
+                        <div class="col-9">
+                            <div class="box">
+                                <div class="each-banner each-banner-1" style="display: block;">
+                                    <button onclick="return referralCopy('banner-code-1')" class="btn btn-light"><?php _l('copy-link')?></button>
+
+                                    <div><img src="<?php echo assetUrl('module/referral/banners/1.png')?>" style="width:160px;height:600px"/></div>
+
+                                    <input type="text" id="banner-code-1" style="opacity: 0;height: 0;" value="<a href='<?php echo url('?ref='.$referral['code'])?>'><img src='<?php echo assetUrl('module/referral/banners/1.png')?>' width='160' height='600'></a>"/>
+                                </div>
+
+                                <div class="each-banner each-banner-2">
+                                    <button onclick="return referralCopy('banner-code-2')" class="btn btn-light"><?php _l('copy-link')?></button>
+
+                                    <div><img src="<?php echo assetUrl('module/referral/banners/2.png')?>" style="width:300px;height:250px"/></div>
+
+                                    <input type="text" id="banner-code-2" style="opacity: 0;height: 0;" value="<a href='<?php echo url('?ref='.$referral['code'])?>'><img src='<?php echo assetUrl('module/referral/banners/2.png')?>' width='300' height='250'></a>"/>
+                                </div>
+
+                                <div class="each-banner each-banner-3">
+                                    <button onclick="return referralCopy('banner-code-3')" class="btn btn-light"><?php _l('copy-link')?></button>
+
+                                    <div><img src="<?php echo assetUrl('module/referral/banners/3.png')?>" style="width:728px;height:90px"/></div>
+
+                                    <input type="text" id="banner-code-3" style="opacity: 0;height: 0;" value="<a href='<?php echo url('?ref='.$referral['code'])?>'><img src='<?php echo assetUrl('module/referral/banners/3.png')?>' width='728' height='90'></a>"/>
+                                </div>
+
+                                <div class="each-banner each-banner-4">
+                                    <button onclick="return referralCopy('banner-code-4')" class="btn btn-light"><?php _l('copy-link')?></button>
+
+                                    <div><img src="<?php echo assetUrl('module/referral/banners/4.png')?>" style="width:800px;height:800px"/></div>
+
+                                    <input type="text" id="banner-code-4" style="opacity: 0;height: 0;" value="<a href='<?php echo url('?ref='.$referral['code'])?>'><img src='<?php echo assetUrl('module/referral/banners/4.png')?>' width='800' height='800'></a>"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade " id="payouts" role="tabpanel" >
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="referral-stats clearfix">
+                                <div class="each-container" style="width: 100% !important;">
+                                    <div class="each">
+                                        <div class="count"><?php echo formatMoney($referral['balance'])?></div>
+                                        <div class="text"><?php _l('available-earnings')?></div>
+                                        <div class="icon-container">
+                                            <i class="las la-dollar-sign"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="payout-settings">
+                                <h6><?php _l('payout-settings')?></h6>
+
+                                <p><?php _l('payout-settings-note')?></p>
+
+                                <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+                                    <input type="hidden" name="val[action]" value="payout"/>
+                                    <div class="form-group">
+
+                                        <div class="referral-paypal-email">
+                                            <div class="mt-4 form-group " >
+                                                <label><?php _l('paypal-email')?></label>
+                                                <input <?php echo ($referral['payout_type'] == 1) ? 'required':null?> type="text" name="val[email]" class="form-control" value="<?php echo $referral['paypal_email']?>" />
+                                            </div>
+
+                                            <div class="mt-2 form-group " >
+                                                <label><?php _l('how-much-you-withdraw')?> </label>
+                                                <input type="number" class="form-control" min="<?php echo config('referral-minimum-withdraw', 25)?>" name="val[minimum]" value="<?php echo $referral['minimum_payout']?>"/>
+                                                <span class="text-muted" style="color:red !important;"><?php _l('withdraw-amount-is', array('amount' => formatMoney(config('referral-minimum-withdraw', 25))))?></span>
+
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary mt-3"><?php _l('save-changes')?></button>
+                                    </div>
+                                </form>
+                            </div>
+                            <h5><?php _l('payments-history')?></h5>
+                            <div class="modern-table">
+                                <div class="table-head clearfix">
+
+                                    <div class="each" style="width: 30%;">
+                                        <?php _l('amount')?>
+                                    </div>
+                                    <div class="each" style="width: 30%;">
+                                        <?php _l('payout-type')?>
+                                    </div>
+                                    <div class="each" style="width: 20%;">
+                                        <?php _l('status')?>
+                                    </div>
+                                    <div class="each" style="width: 20%;">
+                                        <?php _l('date')?>
+                                    </div>
+                                </div>
+
+
+                                <div class="table-body" >
+
+                                    <?php foreach(model('referral::referral')->getMyPayouts() as $payout):?>
+                                        <div class="table-row clearfix">
+                                            <div class="each clearfix" style="width: 30%;">
+                                                <div class="left">
+                                                    <?php _l('amount')?>
+                                                </div>
+                                                <div class="right">
+                                                    <?php echo formatMoney($payout['amount'])?>
+                                                </div>
+                                            </div>
+                                            <div class="each clearfix" style="width: 30%;">
+                                                <div class="left">
+                                                    <?php _l('payout-type')?>
+                                                </div>
+                                                <div class="right">
+                                                    <?php echo ($payout['type'] == 1) ? 'PayPal' : 'Subscription'?>
+                                                </div>
+                                            </div>
+                                            <div class="each clearfix" style="width: 20%;">
+                                                <div class="left">
+                                                    <?php _l('status')?>
+                                                </div>
+                                                <div class="right">
+                                                    <span class="badge badge-secondary"><?php echo ($payout['status'] == 1) ? 'Completed' : 'Pending'?></span>
+                                                </div>
+                                            </div>
+                                            <div class="each clearfix" style="width: 20%;">
+                                                <div class="left">
+                                                    <?php _l('date')?>
+                                                </div>
+                                                <div class="right">
+                                                    <?php echo date('d/m/Y', $payout['created'])?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach;?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

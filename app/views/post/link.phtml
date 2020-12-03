@@ -1,0 +1,7 @@
+<div class="link-left">
+    <div class="image" style="background-image:url(<?php echo $link->getImage()?>"></div>
+</div>
+<div class="link-right">
+    <h6><?php echo str_limit($link->getTitle(), 50)?></h6>
+    <p><?php echo str_limit($link->getDescription(), 40)?></p>
+</div>

@@ -1,0 +1,137 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#accounts" data-toggle="tab" class="menu-item  active"><span>Facebook <?php echo strtolower(l('accounts'))?></span></a>
+            <?php if(model('user')->isAdmin()):?>
+                <a href="<?php echo url('admin/social/integration', array('page' => 'facebook'))?>" data-ajax="true" class="menu-item hide-mobile-sm"><span><?php echo l('settings')?></span></a>
+            <?php endif?>
+            <a href="<?php echo url('accounts/facebook', array('auth' => true))?>"  class="menu-item ajax-action "><span><?php _l('add-new-account')?></span></a>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="accounts" role="tabpanel" >
+            <div class="grid-container clearfix">
+                <div class="each-container">
+                    <a  href="<?php echo url('accounts/facebook', array('auth' => true))?>" class="each each-add ajax-action">
+                        <i class="las la-plus"></i>
+                        <?php _l('add-account')?>
+                    </a>
+                </div>
+                <?php foreach ($accounts as $account): ?>
+                    <div class="each-container its-account">
+                        <div class="each">
+                            <div class="info">
+                                <?php if($account['status']):?>
+                                    <span class="badge badge-success"><?php _l('active')?></span>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('not-active')?></span>
+                                <?php endif?>
+                                <span class="badge badge-secondary"><?php echo ($account['account_type'] == 'page') ? l('page') : l('group')?> </span>
+                            </div>
+                            <img src=" <?php echo assetUrl($account['avatar'])?>" style="border-radius:100px">
+                            <p>
+                                <?php echo $account['username']?>
+                            </p>
+                            <div class="actions">
+                                <a class="confirm" data-ajax-action="true" href="<?php echo url('account/action',array('action' => 'delete','id' => $account['id']))?>"><i class="las la-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+<?php if($details):?>
+    <div class="modal fade" id="facebookSelectModal" style="height: 100vh;" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                <input type="hidden" name="val[token]" value="<?php echo $details['access_token']?>"/>
+                <input type="hidden" name="val[add]" value="1"/>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle"><?php _l('select-pages-groups')?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="conten" style="padding: 10px;height:400px;max-height: 400px;overflow: auto;overflow-x: hidden">
+                            <?php if(isset($details['groups']['data']) and is_array($details['groups']['data'])):?>
+                                <h5><?php _l('your-groups')?></h5>
+                                <hr/>
+                                <?php foreach($details['groups']['data'] as $group):$already = model('account')->findAccountBySID($group['id'], 'facebook', 'group')?>
+                                    <div class="clearfix" style="margin-bottom: 10px;">
+                                        <div class="float-left">
+                                            <?php
+                                            $groupAvatar = $C->api('facebook')->getGroupAvatar($group);
+                                            ?>
+                                            <img src="<?php echo $groupAvatar?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                                            <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $group['name']?></span>
+                                        </div>
+                                        <div class="float-right">
+                                            <div class="switch">
+                                                <?php if($already):?>
+                                                    <input type="hidden" name="val[groups][]" value="groups-<?php echo $group['id']?>"/>
+                                                <?php endif?>
+                                                <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?>  id="cmn-toggle-group<?php echo $group['id']?>" value="groups-<?php echo $group['id']?>" name="val[groups][]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                                <label for="cmn-toggle-group<?php echo $group['id']?>"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                <?php endforeach?>
+                            <?php endif?>
+
+                            <?php if(isset($details['pages']['data']) and is_array($details['pages']['data'])):?>
+                                <h5><?php _l('your-pages')?></h5>
+                                <hr/>
+                                <?php foreach($details['pages']['data'] as $page):$already = model('account')->findAccountBySID($page['id'], 'facebook', 'page')?>
+                                    <div class="clearfix" style="margin-bottom: 10px;">
+                                        <div class="float-left">
+                                            <?php
+                                            $pageAvatar = $C->api('facebook')->getPageAvatar($page);
+                                            ?>
+                                            <img src="<?php echo $pageAvatar?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                                            <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $page['name']?></span>
+                                        </div>
+                                        <div class="float-right">
+                                            <div class="switch">
+                                                <?php if($already):?>
+                                                    <input type="hidden" name="val[pages][]" value="pages-<?php echo $page['id']?>"/>
+                                                <?php endif?>
+                                                <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?> id="cmn-toggle-group<?php echo $page['id']?>" value="pages-<?php echo $page['id']?>" name="val[pages][]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                                <label for="cmn-toggle-group<?php echo $page['id']?>"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                <?php endforeach?>
+                            <?php endif?>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _l('cancel')?></button>
+                        <button type="submit" class="btn btn-primary"><?php _l('submit')?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<?php endif?>
+

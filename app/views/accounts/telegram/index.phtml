@@ -1,0 +1,90 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#accounts" data-toggle="tab" class="menu-item  active"><span>Telegram <?php echo strtolower(l('accounts'))?></span></a>
+
+            <a href="#new" id="new-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('add-new-account')?></span></a>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="accounts" role="tabpanel" >
+            <div class="grid-container clearfix">
+                <div class="each-container">
+                    <a  href=""  onclick="return clickButton('#new-toggle-button')" class="each each-add ">
+                        <i class="las la-plus"></i>
+                        <?php _l('add-account')?>
+                    </a>
+                </div>
+                <?php foreach ($accounts as $account): ?>
+                    <div class="each-container its-account">
+                        <div class="each">
+                            <div class="info">
+                                <?php if($account['status']):?>
+                                    <span class="badge badge-success"><?php _l('active')?></span>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('not-active')?></span>
+                                <?php endif?>
+                            </div>
+                            <img src=" <?php echo assetUrl($account['avatar'])?>" style="border-radius:100px">
+                            <p>
+                                <?php echo $account['username']?>
+                            </p>
+                            <div class="actions">
+                                <a class="confirm" data-ajax-action="true" href="<?php echo url('account/action',array('action' => 'delete','id' => $account['id']))?>"><i class="las la-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+
+
+
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade show " id="new" role="tabpanel" >
+
+            <div class="row">
+                <div class="col-md-5">
+                    <form action="<?php echo getFullUrl(true)?>" method="post" id="instagramAccountForm" class="general-form ">
+                        <input type="hidden" name="val[create]" value="1"/>
+
+                        <div class="form-group">
+                            <label>Telegram <?php _l('api-key')?></label>
+                            <input autocomplete="off" type="text" name="val[key]" class="form-control"/>
+                        </div>
+
+
+
+                        <button class="btn btn-primary btn-lg"><?php _l('add-account')?></button>
+
+                    </form>
+                </div>
+                <div class="col-md-5">
+                    <div class="alert alert-secondary">
+                        <h6><?php _l('how-to-get-access-token')?></h6>
+
+                        <p><?php _l('how-to-get-access-token-note')?></p>
+                        <ol>
+                            <li><?php _l('click-button-to-create-bot')?> <a href="" target="_blank" class="btn btn-sm btn-outline-primary"><?php _l('create-a-bot')?></a> </li>
+                            <li><?php _l('complete-access-token-creation')?></li>
+                            <li><?php _l('now-go-to-your-telegram-groups-add-both')?></li>
+                            <li><?php _l('now-go-to-your-telegram-channel-add-both')?></li>
+                            <li><strong><?php _l('only-group-and-channel-with-get-add')?></strong></li>
+
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

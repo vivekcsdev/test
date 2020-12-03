@@ -1,0 +1,132 @@
+<div id="horizontal-menu">
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#modules" data-toggle="tab" class="menu-item  active"><span><?php _l('modules')?></span></a>
+            <a href="#install" data-toggle="tab" class="menu-item  "><span><?php _l('install-new-module')?></span></a>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="modules" role="tabpanel" >
+            <div class="modern-table">
+                <div class="table-head clearfix">
+                    <div class="each" style="width: 10%;">
+
+                    </div>
+                    <div class="each" style="width: 40%;">
+                        <?php _l('name')?>
+                    </div>
+                    <div class="each" style="width: 10%;">
+                        <?php _l('version')?>
+                    </div>
+                    <div class="each" style="width: 30%;">
+                        <?php _l('license-key')?>
+                    </div>
+                    <div class="each" style="width: 10%;">
+                        <?php _l('action')?>
+                    </div>
+                </div>
+                <div class="table-body">
+
+                    <?php
+                    $plugins = $C->model('admin')->listPlugins();
+                    $active = $C->model('admin')->getActivePlugins();
+                    ?>
+
+                    <?php if($plugins):?>
+                        <?php foreach($plugins as $id => $info):?>
+                            <form id="admin-plugins-<?php echo $id?>" action="<?php echo getFullUrl(true)?>" method="post" class="general-form admin-plugins">
+                                <input type="hidden" name="val[id]" value="<?php echo $id?>"/>
+                                <input type="hidden" name="val[activated]" value="<?php echo (in_array($id, $active)) ? 1 : 0?>"/>
+                                <div class="table-row clearfix">
+                                    <div class="each clearfix each-first" >
+                                       <div class="left">
+                                        <?php _l('icon')?>
+                                       </div>
+                                        <div class="right">
+                                            <img class="mr-3" src="<?php echo $info['icon']?>" style="" >
+                                        </div>
+                                    </div>
+                                    <div class="each clearfix" style="width: 40%;">
+                                        <div class="left">
+                                            <?php _l('name')?>
+                                        </div>
+                                        <div class="right">
+                                            <h6 class="mt-0 ">
+                                                <?php echo $info['title']?> </span>
+                                            </h6>
+                                            <div>
+                                                <?php echo $info['desc']?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="each clearfix" style="width: 10%;">
+                                        <div class="left">
+                                            <?php _l('version')?>
+                                        </div>
+                                        <div class="right">
+                                            <span class="badge badge-secondary"><?php echo $info['version']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="each clearfix" style="width: 30%;">
+                                        <div class="left">
+                                            <?php _l('license-key')?>
+                                        </div>
+                                        <div class="right">
+                                            <?php if($info['license']):?>
+                                                <input type="hidden" name="val[license_required]" value="1"/>
+                                                <?php if(in_array($id, $active)):?>
+                                                    <span class="badge badge-secondary"><?php _l('activated')?></span>
+                                                <?php else:?>
+                                                    <input style="width: 90%" name="val[license]" type="text" class="form-control" placeholder="<?php _l('enter-license-key')?>"/>
+                                                <?php endif?>
+                                            <?php else:?>
+                                                <input type="hidden" name="val[license_required]" value="0"/>
+                                                <span class="badge badge-secondary"><?php _l('no')?></span>
+                                            <?php endif?>
+                                        </div>
+                                    </div>
+                                    <div class="each clearfix " style="width: 10%;">
+                                       <div class="left">
+                                           <?php _l('action')?>
+                                       </div>
+                                        <div class="right" style="">
+                                            <div class="switch" >
+                                                <input onchange="submitForm('#admin-plugins-<?php echo $id?>')" id="cmn-toggle-<?php echo $id?>" value="<?php echo $id?>" name="val[]" <?php echo (in_array($id, $active)) ? 'checked': null?> class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                                <label for="cmn-toggle-<?php echo $id?>" style="float: right;"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        <?php endforeach;?>
+                    <?php endif?>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade show" id="install" role="tabpanel" >
+            <form enctype="multipart/form-data" action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                <input type="hidden" value="1" name="val[upload]"/>
+                <div class="alert alert-dark">
+                    <?php _l('upload-module-info')?>
+                </div>
+                <div class="form-group mt-3 mt-4">
+                    <label><?php _l('module-zip-file')?></label>
+                    <input type="file" class="form-control" name="file"/>
+                </div>
+
+
+
+                <button class="btn btn-primary btn-lg"><?php _l('upload')?></button>
+
+            </form>
+        </div>
+
+
+    </div>
+</div>

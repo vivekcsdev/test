@@ -1,0 +1,1027 @@
+<div class="campaign-start">
+    <div id="horizontal-menu" class="pl-2 d-flex align-items-center text-white">
+        <span>Compose Campaign</span>
+    </div>
+</div>
+<div class="post-container clearfix">
+    <div class="post-mobile-menu cleafix">
+        <a href="" onclick="return switchPostContent(this,'left')"><?php _l('media')?></a>
+        <a href="" onclick="return switchPostContent(this,'middle')" class="active"><?php _l('editor')?></a>
+        <a href="" onclick="return switchPostContent(this,'right')"><?php _l('preview')?></a>
+    </div>
+
+    <?php
+        $files = $C->model('filemanager')->getFiles();
+
+        $editPost = ($C->request->input('id')) ? model('post')->find($C->request->input('id')) : null;
+        if($draftId = $C->request->input('draft')) {
+            $draftPost = model('post')->findDraftPost($draftId);
+            $draft = model('post')->findDraft($draftPost['collection_id']);
+            if ($draft) {
+                $editPost = model('post')->find($draftPost['post_id']);
+            }
+        }
+        $mediasIds = array();
+        if ($editPost) {
+            autoLoadVendor();
+
+            $postData = perfectUnserialize($editPost['type_data']);
+            $caption    = $postData['text'];
+            $link = ($postData['link']) ? $postData['link'] : '';
+            $title = ($postData['title']) ? $postData['title'] : '';
+
+            $emojione = new \Emojione\Client(new \Emojione\Ruleset());
+            $caption = $emojione->shortnameToUnicode($caption);
+            $medias = (isset($postData['media']) ) ? $postData['media'] : array();
+            foreach($medias as $media) {
+                $mediasIds[] = model('filemanager')->findId($media);
+            }
+        }
+        ?>
+
+    <div class="middle">
+        <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form schedule-form" data-validate="validatePosting">
+            <div class="top clearfix" id="post-middle-top-accounts">
+                <div class="float-left">
+                    <div id="horizontal-menu">
+                        <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+                        <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+                        <div class="menu-container">
+                            <div class="menu " role="tablist">
+                                <?php if($editPost and !isset($draft)):$theAccount = model('account')->find($editPost['account']);?>
+
+                                    <div class="post-edit-content"><input type="hidden" name="val[edit_post]" value="<?php echo $editPost['id']?>"/> </div>
+                                    <div class="menu-item mtitle each-<?php echo $theAccount['id']?>" data-type="<?php echo $theAccount['social_type']?>" data-tippy="" data-original-title="<?php echo ucwords($theAccount['social_type'])?>  - <?php echo $theAccount['username']?>">
+                                        <img src="<?php echo assetUrl($theAccount['avatar'])?>">
+                                        <input type="hidden" value="<?php echo $theAccount['id']?>" name="val[accounts][]">
+                                    </div>
+                                    <input type="hidden" id="edit-content-social-count" value="<?php echo count($accounts)?>"/>
+                                    <input type="hidden" id="edit-content-post-type" value="<?php echo $editPost['type']?>"/>
+                                    <input type="hidden" id="edit-content-social" value="<?php echo $theAccount['social_type']?>"/>
+                                <?php endif?>
+                                <?php if(isset($draft) and $draft['userid'] == model('user')->authId): $accounts = explode(',', $editPost['account']);?>
+                                    <div class="post-edit-content">
+                                        <input type="hidden" name="val[edit_post]" value="<?php echo $editPost['id']?>"/>
+                                        <input type="hidden" name="val[draft_id]" value="<?php echo $draft['id']?>"/>
+
+                                    </div>
+                                    <?php foreach($accounts as $ac): $theAccount = model('account')->find($ac);?>
+
+                                        <div class="menu-item mtitle each-<?php echo $theAccount['id']?>" data-type="<?php echo $theAccount['social_type']?>" data-tippy="" data-original-title="<?php echo ucwords($theAccount['social_type'])?>  - <?php echo $theAccount['username']?>">
+                                            <img src="<?php echo assetUrl($theAccount['avatar'])?>">
+                                            <input type="hidden" value="<?php echo $theAccount['id']?>" name="val[accounts][]">
+                                            <a onclick="return removeAccountPost(this)" href=""><i class="las la-times"></i></a>
+                                        </div>
+                                    <?php endforeach?>
+
+                                    <input type="hidden" id="edit-content-social-count" value="<?php echo count($accounts)?>"/>
+                                    <input type="hidden" id="edit-content-post-type" value="<?php echo $editPost['type']?>"/>
+                                    <?php if(count($accounts) <2):?>
+                                        <input type="hidden" id="edit-content-social" value="<?php echo $theAccount['social_type']?>"/>
+                                    <?php endif?>
+                                <?php endif?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php if(!$editPost or isset($draft)):?>
+                    <a href="" onclick="return openAccountSelector()" class="mtitle add-button" title="<?php _l('choose-account')?>">
+                        <i class="las la-user-plus"></i>
+                    </a>
+                <?php endif?>
+            </div>
+
+            <div class="post-menus-container">
+                <div class="post-menu clearfix" id="general-post-menu" style="display: block;">
+                    <a href="" onclick="return switchGeneralMenu('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <a href="" onclick="return switchGeneralMenu('link', this)" ><i class="las la-link"></i> <?php _l('link')?></a>
+                    <a href="" onclick="return switchGeneralMenu('text', this)" ><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+                <div class="post-menu <?php echo (model('user')->hasPermission('instagram-livestream')) ? 'post-menu-five':'post-menu-four'?> clearfix" id="instagram-post-menu">
+                    <a href="" onclick="return switchInstagramMenu('media', this)" class="active">
+                        <i class="la la-photo"></i> <?php _l('media')?>
+                    </a>
+                    <a href="" onclick="return switchInstagramMenu('story', this)"><i class="la la-camera"></i> <?php _l('story')?></a>
+
+                    <?php if(model('user')->hasPermission('instagram-igtv')):?>
+                    <a href="" onclick="return switchInstagramMenu('igtv', this)"><i class="las la-tv"></i> <?php _l('IGTV')?></a>
+                    <?php endif?>
+                    <?php if(model('user')->hasPermission('instagram-livestream')):?>
+                    <a href="" onclick="return switchInstagramMenu('livestream', this)"><i class="las la-stream"></i> <?php _l('livestream')?></a>
+                    <?php endif?>
+                    <a href="" onclick="return switchInstagramMenu('album', this)" class="its-album"><i class="la la-layer-group"></i> <?php _l('carousel')?></a>
+                </div>
+
+                <div class="post-menu <?php echo (model('user')->hasPermission('facebook-livestream')) ? 'post-menu-four':'post-menu-three'?> clearfix" id="facebook-post-menu">
+                    <a href="" onclick="return switchFacebookMenu('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <a href="" onclick="return switchFacebookMenu('link', this)"><i class="las la-link"></i> <?php _l('link')?></a>
+
+                    <?php if(model('user')->hasPermission('facebook-livestream')):?>
+                    <a href="" onclick="return switchFacebookMenu('livestream', this)"><i class="las la-stream"></i> <?php _l('livestream')?></a>
+                    <?php endif?>
+                    <a href="" onclick="return switchFacebookMenu('text', this)"><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+
+                <div class="post-menu  clearfix" id="linkedin-post-menu">
+                    <a href="" onclick="return switchLinkedInMenu('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <a href=""  onclick="return switchLinkedInMenu('link', this)"><i class="las la-link"></i> <?php _l('link')?></a>
+
+                    <a href="" onclick="return switchLinkedInMenu('text', this)"><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+
+                <div class="post-menu  clearfix" id="tumblr-post-menu">
+                    <a href="" onclick="return switchTumblrMenu('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <a href="" onclick="return switchTumblrMenu('link', this)"><i class="las la-link"></i> <?php _l('link')?></a>
+
+                    <a href="" onclick="return switchTumblrMenu('text', this)"><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+
+                <div class="post-menu  clearfix" id="twitter-post-menu">
+                    <a href="" onclick="return switchTwitterMenu('photo', this)" class="active"><i class="la la-photo"></i> <?php _l('photo')?></a>
+                    <a href="" onclick="return switchTwitterMenu('video', this)"><i class="las la-link"></i> <?php _l('video')?></a>
+
+                    <a href="" onclick="return switchTwitterMenu('text', this)"><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+
+                <div class="post-menu post-menu-two clearfix" id="google-post-menu">
+                    <a href="" onclick="return switchGoogleMenu('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <a href="" onclick="return switchGoogleMenu('text', this)" ><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+
+                <div class="post-menu  clearfix" id="vk-post-menu">
+                    <a href="" onclick="return switchVkMenu('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <a href="" onclick="return switchVkMenu('link', this)"><i class="las la-link"></i> <?php _l('link')?></a>
+
+                    <a href="" onclick="return switchVkMenu('text', this)"><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+
+                <div class="post-menu  clearfix" id="reddit-post-menu">
+                    <a href="" onclick="return switchRedditMenu('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <a href="" onclick="return switchRedditMenu('link', this)"><i class="las la-link"></i> <?php _l('link')?></a>
+
+                    <a href="" onclick="return switchRedditMenu('text', this)"><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+
+                <div class="post-menu  clearfix" id="telegram-post-menu">
+                    <a href="" onclick="return switchTelegramMenu('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <a href="" onclick="return switchTelegramMenu('link', this)"><i class="las la-link"></i> <?php _l('link')?></a>
+
+                    <a href="" onclick="return switchTelegramMenu('text', this)"><i class="las la-poll-h"></i> <?php _l('text')?></a>
+                </div>
+
+                <div class="post-menu post-menu-one clearfix" id="vimeo-post-menu">
+                    <a href="" onclick="return switchVimeo('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                </div>
+
+                <div class="post-menu post-menu-one clearfix" id="dailymotion-post-menu">
+                    <a href="" onclick="return switchDailymotion('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                </div>
+
+                <div class="post-menu <?php echo (moduleExists('livestream') and model('user')->hasPermission('youtube-livestream')) ? 'post-menu-two':'post-menu-one'?> clearfix" id="youtube-post-menu">
+                    <a href="" onclick="return switchYoutube('media', this)" class="active"><i class="la la-photo"></i> <?php _l('media')?></a>
+                    <?php if(moduleExists('livestream') and model('user')->hasPermission('youtube-livestream')):?>
+                        <a href=""  onclick="return switchYoutube('livestream', this)" ><i class="las la-stream"></i> <?php _l('livestream')?></a>
+                    <?php endif?>
+                </div>
+
+
+            </div>
+
+
+
+            <input type="hidden" name="val[post_type]" value="general" id="post-type-input"/>
+
+            <div class="approved-post-types">
+
+            </div>
+            <div class="use-caption-container">
+                <div class="top">
+                    <h6><?php _l('use-caption')?></h6>
+                    <a href="" class="close" onclick="return closeLoadCaptions()"><i class="las la-times"></i></a>
+                </div>
+                <div class="caption-list"></div>
+            </div>
+
+            <div class="use-hashtag-container">
+                <div class="top">
+                    <h6><?php _l('use-hashtag')?></h6>
+                    <a href="" class="close" onclick="return closeLoadHashtags()"><i class="las la-times"></i></a>
+                </div>
+                <div class="hashtag-list"></div>
+            </div>
+
+            <div class="post-form-content modern-scroll">
+                <?php Hook::getInstance()->fire('extend.post.media', null, array($editPost))?>
+                <div class="post-selected-media clearfix">
+                    <?php Hook::getInstance()->fire('extend.post.selected.media', null, array($editPost))?>
+                    <?php if($useFileId = $C->request->input('file_id')): $useFile = model('filemanager')->find($useFileId);$media=$useFile['file_name']?>
+                        <div class="each selected-media-<?php echo $useFileId?>" style="background-image:url(<?php echo (isImage($media)) ? assetUrl($media) : ''?>)">
+                            <a style="z-index:99" onclick='return removePostEditorMedia(this,"<?php echo $useFileId?>")' href=''><i class='la la-times'></i></a>
+                            <?php if(!isImage($media)):?>
+                                <div class="video-content" style="width:100%;height:100%;overflow: hidden;position:relative;">
+                                    <video src="<?php echo assetUrl($media)?>" playsinline muted loop></video>
+                                </div>
+                            <?php endif?>
+
+                            <input type="hidden"
+                                   data-url="<?php echo assetUrl($media)?>"
+                                   data-type="<?php echo (isImage($media)) ? 'image': 'video'?>" value="<?php echo $media?>"
+                                   name="val[media][]" class="selected-media-file selected-media-<?php echo model('filemanager')->findId($media)?>">
+
+                        </div>
+                    <?php endif?>
+                    <?php if($editPost):?>
+                        <?php foreach($medias as $media):?>
+                            <div class="each" style="background-image:url(<?php echo (isImage($media)) ? assetUrl($media) : ''?>)">
+                                <a style="z-index:99" onclick='return removePostEditorMedia(this,"<?php echo model('filemanager')->findId($media)?>")' href=''><i class='la la-times'></i></a>
+                                <?php if(!isImage($media)):?>
+                                    <div class="video-content" style="width:100%;height:100%;overflow: hidden;position:relative;">
+                                        <video src="<?php echo assetUrl($media)?>" playsinline muted loop></video>
+                                    </div>
+                                <?php endif?>
+
+                                <input type="hidden"
+                                       data-url="<?php echo assetUrl($media)?>"
+                                       data-type="<?php echo (isImage($media)) ? 'image': 'video'?>" value="<?php echo $media?>"
+                                       name="val[media][]" class="selected-media-file selected-media-<?php echo model('filemanager')->findId($media)?>">
+
+                            </div>
+                        <?php endforeach;?>
+                    <?php endif?>
+                </div>
+                <div class="individual-forms-bottom">
+                    <div class="form-group link-input hide extra-form">
+                        <input onchange="return doLinkPreview(this)" type="text" value="<?php echo ($editPost) ? $link : null?>" placeholder="<?php _l('link')?>" class="form-control" name="val[link]"/>
+                    </div>
+                    <div class="form-group title-input hide extra-form">
+                        <input type="text" value="<?php echo ($editPost) ? $title : null?>" placeholder="<?php _l('title')?>" class="form-control" name="val[title]"/>
+                    </div>
+                    <div class="form-group youtube-categories hide extra-form">
+                        <select name="val[category]" class="form-control">
+                            <option value="0"><?php _l('select-category')?></option>
+                            <option value="1"><?php _l('film-animation')?></option>
+                            <option value="2"><?php _l('auto-vehicles')?></option>
+                            <option value="10"><?php _l('music')?></option>
+                            <option value="15"><?php _l('pet-animals')?></option>
+                            <option value="17"><?php _l('sports')?></option>
+                            <option value="19"><?php _l('travel-events')?></option>
+                            <option value="20"><?php _l('gaming')?></option>
+                            <option value="22"><?php _l('people-blogs')?></option>
+                            <option value="23"><?php _l('comedy')?></option>
+                            <option value="24"><?php _l('entertaiment')?></option>
+                            <option value="25"><?php _l('news-politics')?></option>
+                            <option value="26"><?php _l('howto-style')?></option>
+                            <option value="27"><?php _l('education')?></option>
+                            <option value="28"><?php _l('science-tech')?></option>
+                            <option value="29"><?php _l('nonprofit-activ')?></option>
+                        </select>
+                    </div>
+
+
+
+                </div>
+                <div class="post-text">
+                    <a href="" onclick="return saveCaptions()" class="save-caption-btn mtitle" title="<?php _l('save-caption')?>"><i class="las la-save"></i></a>
+
+                    <?php Hook::getInstance()->fire('post-editor.input')?>
+                    <textarea class="emoji-text form-control" name="val[text]" rows="5"><?php echo ($editPost) ? $caption : null?></textarea>
+                </div>
+
+                <a href="" class="btn btn-outline-secondary btn-block post-use-caption" onclick="return loadCaptions()"><?php _l('use-caption')?></a>
+
+                <div class="individual-forms-bottom mt-3">
+                    <div class="pane pinterest-form-bottom extra-form mb-2 hide ">
+                        <input type="text" value="<?php echo ($editPost) ? $postData['url'] : null?>" placeholder="<?php _l('url-pin-link-to')?>" class="form-control pink-link-input" name="val[url]"/>
+                    </div>
+
+                    <div class="pane youtube-form-bottom extra-form mb-2 hide ">
+                        <input type="text" value="<?php echo ($editPost) ? $postData['youtube_tags'] : null?>" placeholder="<?php _l('enter-video-tags')?>" class="form-control youtube-tags" name="val[youtube_tag]"/>
+                    </div>
+                    <div class="instagram-post-form extra-form pane hide">
+                        <div class="story-form  hide pb-2">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <input type="text" value="<?php echo ($editPost) ? $postData['story_link'] : null?>" class="form-control story-link-input" name="val[story_link]" placeholder="<?php _l('add-link-for-story')?>"/>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="hidden"  name="val[friend_story]" value="0"/>
+                                        <input type="checkbox" <?php echo ($editPost and $postData['friend_story']) ? 'checked' : 0?> class="custom-control-input" value="1" name="val[friend_story]" id="friendsStory">
+                                        <label class="custom-control-label" for="friendsStory"><?php _l('friends-story')?></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input onkeyup="fetchLocations(this)" value="<?php echo ($editPost) ? $postData['location'] : null?>" type="text" name="val[location]" placeholder="<?php _l('add-location')?>" class="form-control location-input"/>
+                        </div>
+                        <div class="instagram-locations-container">
+
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="val[first_comment]" value="<?php echo ($editPost) ? $postData['first_comment'] : null?>" placeholder="<?php _l('add-first-comment')?>" class="form-control instagram-first-comment"/>
+                        </div>
+                    </div>
+                    <div class="google-form-bottom extra-form pane hide">
+                        <div class="form-group">
+                            <label><?php _l('call-to-action')?></label>
+                            <select name="val[action]" class="form-control">
+                                <option value="LEARN_MORE"><?php _l('learn-more')?></option>
+                                <option value="BOOK"><?php _l('book')?></option>
+                                <option value="ORDER"><?php _l('order-online')?></option>
+                                <option value="SHOP"><?php _l('shop')?></option>
+                                <option value="SIGN_UP"><?php _l('signup')?></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group ">
+                            <input type="text" value="<?php echo ($editPost) ? $postData['call_link'] : null?>" placeholder="<?php _l('enter-link')?>" class="form-control call-link-input" name="val[call_link]"/>
+                        </div>
+                    </div>
+
+                    <div class="watermark-form extra-form pane hide">
+                        <h6><?php _l('watermark')?></h6>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" checked id="customRadioInline0" onclick="changeWaterMark(this)" name="val[watermark]" value="0" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline0"><?php _l('no-dont-use')?></label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline1" onclick="changeWaterMark(this)" name="val[watermark]" value="1" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline1"><?php _l('your-default')?></label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline2" onclick="changeWaterMark(this)" name="val[watermark]" value="2" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline2"><?php _l('use-text')?></label>
+                        </div>
+
+
+                        <div class="form-group watermark-text" style="">
+                            <label><?php _l('text')?></label>
+                            <input type="text" name="val[watermark_text]" class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label><?php _l('position')?></label>
+                            <select name="val[watermark_position]" class="form-control">
+                                <option value="top_left"><?php _l('top-left')?></option>
+                                <option value="top_right"><?php _l('top-right')?></option>
+                                <option value="bottom_left"><?php _l('bottom-left')?></option>
+                                <option value="bottom_right"><?php _l('bottom-right')?></option>
+                                <option value="top_center"><?php _l('top-center')?></option>
+                                <option value="bottom_center"><?php _l('bottom-center')?></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-post mt-3">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="las la-calendar"></i></div>
+                        </div>
+                        <?php
+                            $date = null;
+                            if ($C->request->input('date')) {
+                                $dateObj = DateTime::createFromFormat('m/d/Y', $C->request->input('date'));
+                                $date = $dateObj->format(getAdminDateFormat().' h:i A');
+
+                            }
+
+                            if ($editPost and $editPost['is_scheduled']) {
+                                $date = date(getAdminDateFormat().' h:i A', strtotime($editPost['schedule_date']));
+
+                            }
+
+                        ?>
+                        <input type="text" <?php echo (!$date) ? 'disabled="disabled"': null?> autocomplete="off" name="val[post_time]" class="form-control datepicker-input-time form-control-sm" style="height: 35px;"  value="<?php echo $date ? $date : date(getAdminDateFormat().' h:i a')?>">
+                    </div>
+                    <div class="schedule-more-form <?php echo (!$date) ? 'hide':null?>">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label><?php _l('repeat-frequency')?></label>
+                                <select class="form-control" name="val[repeat_freq]">
+                                    <option value=""><?php _l('no-repeat')?></option>
+                                    <option value="once"><?php _l('once')?></option>
+                                    <option value="everyday"><?php _l('everyday')?></option>
+                                    <?php for($i=2;$i<=60;$i++):?>
+                                        <option value="<?php echo $i?>"><?php _l('every')?> <?php echo $i?> <?php _l('days')?></option>
+                                    <?php endfor?>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label><?php _l('repeat-ends-on')?></label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"><i class="las la-calendar"></i></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" name="val[repeat_end]" class="form-control datepicker-input-time form-control-sm" style="height: 35px;"  placeholder="<?php echo date(getAdminDateFormat().' h:i A')?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-control custom-switch mb-4">
+                        <input type="hidden" name="val[schedule]" value="0"/>
+                        <input name="val[schedule]" value="1" <?php echo ($date) ? 'checked':null?> onchange="initPostSchedule(this)" type="checkbox" class="custom-control-input schedule-input " id="customSwitch1">
+                        <label class="custom-control-label" for="customSwitch1"><?php _l('schedule')?></label>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+            <?php if(model('user')->hasPermission('drafts')):?>
+                <div class="post-botton-container clearfix" id="post-botton-container">
+                    <button type="button" onclick="return openSaveDraft()" class="btn btn-outline-primary btn-lg post-btn-border"  style="float: left;width:50%"><?php _l('save-as-draft')?></button>
+                    <button type="submit" class="btn btn-primary btn-lg post-submit-btn post-btn-border" style="float: left;width:50%"><?php echo ($editPost and (!isset($draft)  or $draft['userid'] == model('user')->authId)) ? l('Save Post') : l('Publish')?></button>
+                </div>
+                <div class="modal" tabindex="-1" id="saveAsDraftModal" role="dialog" style="background: rgba(255,255,255,0.9)">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+
+                            <div class="modal-body">
+                                <input type="hidden" name="val[is_draft]" value="0" id="isDraftInput"/>
+                                <div class="draft-options clearfix">
+                                    <a href="" onclick="return changeSaveDraftOption(1)" class="option ">
+                                        <h5><?php _l('new')?></h5>
+                                        <h6><?php _l('draft-collection')?></h6>
+                                    </a>
+                                    <a class="option " href="" onclick="return changeSaveDraftOption(2)">
+                                        <h5><?php _l('select')?></h5>
+                                        <h6><?php _l('draft-collection')?></h6>
+                                    </a>
+                                </div>
+
+                                <div class="form-group " style="display: none;" id="new-draft-collection">
+                                    <label><?php _l('new-draft-collection')?></label>
+                                    <input type="text" placeholder="<?php _l('collection-title')?>" id="draft-title-input" name="val[draft_title]" class="form-control"/>
+                                    <div class="mt-3">
+                                        <button type="button" class="btn btn-light" onclick="return goBackSaveDraftOption()"><i class="las la-angle-left"></i></button>
+                                        <button type="button" onclick="return validateDraftPosting()" class="btn btn-primary"><?php _l('save-as-draft')?></button>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group" style="display: none;" id="select-draft-collection">
+                                    <label><?php _l('save-to-collection')?></label>
+                                    <select id="draft-select-input" name="val[draft_collection]" class="form-control">
+                                        <option value=""><?php _l('select-collection')?></option>
+                                        <?php $originalDraft = isset($draft) ? $draft : null; foreach(model('post')->getMyDrafts() as $draft):?>
+                                            <option <?php echo ($originalDraft and $originalDraft['id'] == $draft['id']) ? 'selected' : null?>  value="<?php echo $draft['id']?>"><?php echo $draft['title']?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                    <div class="mt-3">
+                                        <button type="button" class="btn btn-light" onclick="return goBackSaveDraftOption()"><i class="las la-angle-left"></i></button>
+                                        <button onclick="return validateDraftPosting()" type="button" class="btn btn-primary"><?php _l('save-as-draft')?></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            <?php else:?>
+                <div class="post-botton-container clearfix" id="post-botton-container">
+                    <button type="submit" class="btn btn-outline-primary btn-lg post-submit-btn post-btn-border" style="float: left;width:100%"><?php echo ($editPost) ? l('Save Post') : l('post-now')?></button>
+                </div>
+            <?php endif?>
+        </form>
+    </div>
+    <div class="right modern-scroll" id="post-preview-right">
+        <h5 class="title"><?php _l('preview')?></h5>
+        <div class="preview-container">
+            <div class="top">
+                <div id="horizontal-menu">
+                    <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+                    <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+                    <div class="menu-container">
+                        <div class="menu " role="tablist">
+                            <a style="display: inline-block" href="#general" id="general-preview-toggle" data-toggle="tab" class="menu-item active"><span><i class="las la-icons"></i></span></a>
+                            <a href="#instagram-preview" id="instagram-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-instagram"></i></span></a>
+                            <a href="#facebook-preview" id="facebook-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-facebook-f"></i></span></a>
+                            <a href="#google-preview" id="google-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-google"></i></span></a>
+                            <a href="#youtube-preview" id="youtube-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-youtube"></i></span></a>
+                            <a href="#vk-preview" id="vk-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-vk"></i></span></a>
+                            <a href="#twitter-preview" id="twitter-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-twitter"></i></span></a>
+                            <a href="#linkedin-preview" id="linkedin-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-linkedin"></i></span></a>
+                            <a href="#tumblr-preview" id="tumblr-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-tumblr"></i></span></a>
+                            <a href="#pinterest-preview" id="pinterest-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-pinterest"></i></span></a>
+
+                            <a href="#reddit-preview" id="reddit-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-reddit"></i></span></a>
+                            <a href="#vimeo-preview" id="vimeo-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-vimeo"></i></span></a>
+                            <a href="#telegram-preview" id="telegram-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="lab la-telegram"></i></span></a>
+                            <a href="#dailymotion-preview" id="dailymotion-preview-toggle" data-toggle="tab" class="menu-item  hide"><span><i class="las la-video"></i></span></a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active preview" id="general-preview" role="tabpanel" >
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="link-preview clearfix">
+
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-thumbs-up"></i> <?php _l('like')?></li>
+                            <li><i class="las la-comment-alt"></i> <?php _l('comments')?></li>
+                            <li><i class="las la-share"></i> <?php _l('share')?></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane fade show preview" id="instagram-preview" role="tabpanel" >
+                    <div class="instagram-story hide">
+                        <div class="media-preview">
+                            <div class="media-preview-template">
+                                <img src="<?php echo assetUrl('assets/images/instagram-logo.png')?>"/>
+                            </div>
+                            <div class="media-preview-main"></div>
+                        </div>
+                    </div>
+                    <div class="instagram-livestream hide">
+                        <div class="media-preview">
+                            <div class="media-preview-template">
+                                <img src="<?php echo assetUrl('assets/images/instagram-logo.png')?>"/>
+                                <div class="info clearfix">
+                                    <div class="media float-left">
+                                        <img src="<?php echo assetUrl('assets/images/user-avatar.png')?>"/>
+                                        <span><?php _l('username')?></span>
+                                    </div>
+                                    <div class="float-right">
+                                        <button class="live-btn btn"><?php echo strtoupper(l('live'))?></button>
+                                        <span><i class="las la-eye"></i> 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="media-preview-main"></div>
+                        </div>
+                    </div>
+                    <div class="instagram-normal" id="instagram-normal-preview">
+                        <div class="user-container">
+                            <div class="avatar"></div>
+                            <div class="user-info">
+                                <div></div>
+                                <div style="width: 150px;"></div>
+                            </div>
+                        </div>
+                        <div class="media-preview">
+                            <div class="media-preview-template"></div>
+                            <div class="media-preview-main"></div>
+                        </div>
+                        <div class="text-container-template">
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <div class="text-container">
+                        </div>
+                        <div class="preview-footer">
+                            <ul class="clearfix">
+                                <li><i class="las la-heart"></i></li>
+                                <li><i class="las la-comment-alt"></i> </li>
+                                <li class="float-right"><i class="las la-share"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade show preview " id="facebook-preview" role="tabpanel" >
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="media-preview">
+                        <div class="media-preview-template">
+                            <button class="live-btn btn m-3 hide fb-live-btn"><?php echo strtoupper(l('live'))?></button>
+                        </div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="link-preview clearfix">
+
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-thumbs-up"></i> <?php _l('like')?></li>
+                            <li><i class="las la-comment-alt"></i> <?php _l('comments')?></li>
+                            <li><i class="las la-share"></i> <?php _l('share')?></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane fade show  preview" id="google-preview" role="tabpanel" >
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-heart"></i></li>
+                            <li><i class="las la-comment-alt"></i> </li>
+                            <li><i class="las la-share"></i> </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade show preview " id="youtube-preview" role="tabpanel" >
+
+                    <div class="media-preview">
+                        <div class="media-preview-template">
+                            <button class="live-btn btn m-3 hide fb-live-btn"><?php echo strtoupper(l('live'))?></button>
+                        </div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+
+                </div>
+
+                <div class="tab-pane fade show preview " id="dailymotion-preview" role="tabpanel" >
+
+                    <div class="media-preview">
+                        <div class="media-preview-template">
+                        </div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+
+                </div>
+
+                <div class="tab-pane fade show preview " id="vimeo-preview" role="tabpanel" >
+
+                    <div class="media-preview">
+                        <div class="media-preview-template">
+                        </div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+
+                </div>
+
+                <div class="tab-pane fade show  preview" id="vk-preview" role="tabpanel" >
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="link-preview clearfix">
+
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-heart-o"></i></li>
+                            <li><i class="las la-comment-alt"></i> </li>
+                            <li><i class="las la-share"></i> </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane fade show preview" id="twitter-preview" role="tabpanel" >
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="link-preview clearfix">
+
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-heart"></i></li>
+                            <li><i class="las la-comment-alt"></i> </li>
+                            <li><i class="las la-share"></i> </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane fade show preview" id="linkedin-preview" role="tabpanel" >
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="link-preview clearfix">
+
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-thumbs-up"></i> <?php _l('like')?></li>
+                            <li><i class="las la-comment-alt"></i> <?php _l('comments')?></li>
+                            <li><i class="las la-share"></i> <?php _l('share')?></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane fade show preview " id="tumblr-preview" role="tabpanel" >
+
+
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="link-preview clearfix">
+
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-heart"></i></li>
+                            <li><i class="las la-comment-alt"></i> </li>
+                            <li><i class="las la-share"></i> </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade show preview " id="reddit-preview" role="tabpanel" >
+
+
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="link-preview clearfix">
+
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-heart"></i></li>
+                            <li><i class="las la-comment-alt"></i> </li>
+                            <li><i class="las la-share"></i> </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane fade show preview " id="telegram-preview" role="tabpanel" >
+
+
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                    <div class="link-preview clearfix">
+
+                    </div>
+                    <div class="preview-footer">
+                        <ul class="clearfix">
+                            <li><i class="las la-heart"></i></li>
+                            <li><i class="las la-comment-alt"></i> </li>
+                            <li><i class="las la-share"></i> </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade show preview" id="pinterest-preview" role="tabpanel" >
+
+                    <div class="media-preview">
+                        <div class="media-preview-template"></div>
+                        <div class="media-preview-main"></div>
+                    </div>
+                    <div class="user-container">
+                        <div class="avatar"></div>
+                        <div class="user-info">
+                            <div></div>
+                            <div style="width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-container-template">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="text-container">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="left" id="post-left-pane">
+        <div class="top clearfix">
+            <div class="float-left">
+                <h6><a  id="goback-folder-toggle" onclick="return goBackFolder(1)" href="" style="display: inline-block;top:3px;position:relative;color:#000;display: none"><i class="las la-long-arrow-alt-left"></i></a> <?php _l('upload-media')?></h6>
+            </div>
+            <div class="float-right">
+                <a href="" data-toggle="modal" data-target="#newFolderModal" class="btn  mtitle" title="<?php _l('create-a-folder')?>"><i class="las la-folder-plus"></i></a>
+
+                <a href="javascript:void(0)" class="btn filemaager-upload-btn" >
+                    <form method="post" data-no-loader="true" data-upload="#upload-progress" action="<?php echo url('file-manager')?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
+                        <input type="hidden" name="val[upload]" value="1"/>
+                        <input type="hidden" name="val[folder_id]" value="0" class="file-folder-id-input"/>
+                        <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
+                        <i class="las la-tv"></i>
+                    </form>
+                </a>
+
+                <?php if(config('google-api-key') and model('user')->hasPermission('google-drive')):?>
+                    <a href="" onclick="return openGoogleDrivePicker()" class="btn"><i class="lab la-google-drive"></i></a>
+                <?php endif?>
+                <?php if(config('dropbox-api-key') and model('user')->hasPermission('dropbox')):?>
+                    <a href="" onclick="return openDropboxPicker()" class="btn"><i class="la la-dropbox"></i></a>
+                <?php endif?>
+                <?php if(config('onedrive-client-id') and model('user')->hasPermission('one-drive')):?>
+                    <a href="" onclick="return launchOneDrivePicker()" class="btn "><i class="la la-cloud"></i></a>
+                <?php endif?>
+            </div>
+        </div>
+
+        <div id="upload-progress">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+ 
+        <form id="filemanager-container" action="<?php echo url('file-manager')?>" method="post" class="general-form">
+            <input class="action" type="hidden" name="val[action]" value="1"/>
+            <div data-upload-url="<?php echo url('file-manager', array('dragged' => true))?>" class="uploads-files-container clearfix modern-scroll"
+                 data-paginate="true"
+                 data-container=".uploads-files-container"
+                 data-offset="40"
+                 data-url="<?php echo url('file-manager')?>"
+                 style="overflow: auto !important;"
+            >
+                <div class="the-content">
+                    <?php $folders = model('filemanager')->getFolders(); $i=0; foreach($folders as $file):?>
+                        <?php echo view('filemanager/display-folder', array('file' => $file, 'isLast' => $i == count($folders)-1))?>
+                        <?php $i++; endforeach?>
+                    <?php foreach($files as $file):?>
+                        <?php echo view('filemanager/display', array('file' => $file, 'selected' => (in_array($file['id'], $mediasIds))))?>
+                    <?php endforeach;?>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="modal" id="addAccountModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <select onchange="openAccountSelector()">
+                    <option value="all"><?php _l('all-accounts')?></option>
+                    <?php foreach(model('user')->getAvailableSocials() as $social):?>
+                        <option value="<?php echo $social?>"><?php echo ucwords($social)?></option>
+                    <?php endforeach;?>
+
+                </select>
+                <select id="groups-select-input" onchange="loadGroupSelector()">
+                    <option value=""><?php _l('select-from-group')?></option>
+                    <?php foreach(model('group')->lists() as $group):?>
+                        <option value="<?php echo $group['id']?>"><?php echo $group['title']?></option>
+                    <?php endforeach;?>
+
+                </select>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body account-lists"></div>
+            <div class="modal-footer">
+                <button type="button" onclick="renderSelectedAccounts()" class="btn btn-primary btn-sm"><?php _l('continue')?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="newFolderModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?php _l('create-a-folder')?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="<?php echo url('file-manager')?>" method="post" class="general-form">
+                <input type="hidden" name="val[folder]" value="1"/>
+                <input type="hidden" name="val[folder_id]" value="0" class="file-folder-id-input"/>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label><?php _l('folder-name')?></label>
+                        <input type="text" class="form-control" name="val[name]"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><?php _l('create')?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

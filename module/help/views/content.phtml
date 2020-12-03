@@ -1,0 +1,15 @@
+<a href="" onclick="return closeHelpModal('<?php echo $url?>')" class="help-close-button"><i class="la la-long-arrow-alt-left"></i></a>
+
+<div class="help-content-container">
+    <h4><?php echo $tutorial['name']?></h4>
+
+    <div class="image" style="background-image:url(<?php echo assetUrl($tutorial['image'])?>)">
+        <?php if($tutorial['video']):?>
+            <a href="" onclick="return helpPlayVideo(this,'<?php echo $tutorial['video']?>')"><i class="la la-play"></i></a>
+        <?php endif?>
+    </div>
+
+    <p class="its-content">
+        <?php echo $tutorial['content']?>
+    </p>
+</div>

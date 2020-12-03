@@ -1,0 +1,25 @@
+<a href="" onclick="return closeHelpModal()" class="help-close-button"><i class="la la-times"></i></a>
+
+<div class="tutorial-lists-container scroll-paginate" data-container=".scheduled-posts-grid"
+     data-offset="10"
+     data-url="<?php echo url('help/load?term='.$C->request->input('term'))?>">
+    <form  action="" onsubmit="return doHelpSearch(this)" class="">
+        <input   value="<?php echo $C->request->input('term')?>"  type="text" placeholder="<?php _l('search-for-tutorials')?>...." name="term"/>
+        <button type="submit" style="background: none;border:none"><i class="la la-search"></i></button>
+    </form>
+
+    <div class="the-content">
+        <div class="grid-container clearfix scheduled-posts-grid">
+            <?php foreach($tutorials as $tutorial):?>
+                <?php echo view('help::display', array('tutorial' => $tutorial))?>
+            <?php endforeach?>
+        </div>
+
+        <?php if(count($tutorials) < 1):?>
+            <div class="empty-content">
+                <i class="la la-fill"></i>
+                <span><?php _l('no-contents-show')?></span>
+            </div>
+        <?php endif?>
+    </div>
+</div>

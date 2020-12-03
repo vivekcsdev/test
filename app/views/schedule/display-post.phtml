@@ -1,0 +1,62 @@
+<?php
+autoLoadVendor();
+$postData = perfectUnserialize($post['type_data']);
+$caption    = $postData['text'];
+$link = ($postData['link']) ? $postData['link'] : '';
+$title = ($postData['title']) ? $postData['title'] : '';
+
+$emojione = new \Emojione\Client(new \Emojione\Ruleset());
+$caption = $emojione->shortnameToUnicode($caption);
+$medias = (isset($postData['media']) ) ? $postData['media'] : array();
+$account = model('account')->find($post['account']);
+?>
+<div class="each-container">
+    <div class="each">
+        <div id="postCarousel<?php echo $post['id']?>" class="carousel slide" data-interval="false">
+
+            <ol class="carousel-indicators">
+                    <?php $i = 0; foreach($medias as $media):?>
+                        <li data-target="#postCarousel<?php echo $post['id']?>" data-slide-to="<?php echo $i?>" class="<?php echo ($i == 0) ? 'active':null?>"></li>
+                        <?php $i++; endforeach?>
+
+            </ol>
+            <div class="carousel-inner">
+                <?php $i=0; foreach($medias as $media):?>
+
+                    <?php if(isImage($media)):?>
+                        <div class="carousel-item <?php echo ($i == 0) ? 'active':null?> " style="background-image: url(<?php echo assetUrl($media)?>)">
+                        </div>
+                    <?php else:?>
+                        <div class="carousel-item <?php echo ($i == 0) ? 'active':null?>  each">
+                            <video  playsinline loop muted src='<?php echo assetUrl($media)?>' ></video>
+                        </div>
+                    <?php endif?>
+
+                    <?php $i++; endforeach;?>
+            </div>
+        </div>
+
+        <div class="info-content">
+
+            <div class="info-social">
+                <a class="btn btn-light btn-sm <?php echo $post['social_type']?>-link " style="border-radius:5px;"><i class="la la-<?php echo $post['social_type']?>"></i> <?php echo ucwords($post['social_type'])?></a>
+                - <?php echo str_limit($account['username'], 15)?>
+            </div>
+
+            <div class="info-time">
+                <i class="las la-clock"></i>
+                <?php _l('this-post-sent')?> <strong><?php echo date('F jS  ', strtotime($post['schedule_date']))?></strong>
+                <span style="font-weight: lighter"><?php _l('at')?></span> <strong><?php echo date('h:i A', strtotime($post['schedule_date']))?></strong>
+            </div>
+        </div>
+
+        <div class="info-footer clearfix">
+            <div class="float-left">
+                <a class="btn btn-white btn-sm confirm" data-ajax-action="true" href="<?php echo url('post/action',array('action' => 'delete','id' => $post['id']))?>"><i class="la la-trash"></i></a>
+            </div>
+            <div class="float-right">
+                <a class="btn btn-primary btn-sm mtitle" title="<?php _l('edit-post')?>" data-ajax="true" href="<?php echo url('post',array('id' => $post['id']))?>"><i class="la la-pencil"></i> <?php _l('edit')?></a>
+            </div>
+        </div>
+    </div>
+</div>

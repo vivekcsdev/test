@@ -1,0 +1,360 @@
+<div class="content">
+   <div class="dashboard-container dashboard-container-main">
+
+      <div class="row row-main">
+
+
+         <div class="col-main">
+            <div class="row">
+               <div class="col-md-3 d-none">
+                  <div class="each user-welcome">
+                     <div class="avatar">
+                        <?php echo model('user')->getNameLetters()?>
+                     </div>
+                     <h5><span style="font-weight:lighter"><?php _l('welcome-back')?></span><br/> <?php echo model('user')->authUser['full_name']?></h5>
+                     <a href="<?php echo url('profile')?>" data-ajax="true" class="btn btn-primary btn-sm"><?php _l('update-profile')?></a>
+                  </div>
+               </div>
+               <div class="col-md-12">
+                  <div class="each ">
+                     <div class="welcome-head">
+                        <h6><?php _l('Activity summery')?></h6>
+                     </div>
+                     <div class="row welcome-stat">
+                        <div class="col">
+                           <div class="summery-box">
+                              <?php _l('total-posts')?>
+                              <span class="count"><?php echo model('dashboard::dashboard')->count('total-posts')?></span>
+                           </div>
+                        </div>
+                        <div class="col">
+                           <div class="summery-box">
+                              <?php _l('scheduled')?>
+                              <span class="count"><?php echo model('dashboard::dashboard')->count('scheduled')?></span>
+                           </div>
+                        </div>
+                        <div class="col">
+                           <div class="summery-box">
+                              <?php _l('completed')?>
+                              <span class="count"><?php echo model('dashboard::dashboard')->count('completed')?></span>
+                           </div>
+                        </div>
+                        <div class="col">
+                           <div class="summery-box">
+                              <?php _l('successful')?>
+                              <span class="count"><?php echo model('dashboard::dashboard')->count('success')?></span> 
+                           </div>
+                        </div>
+                        <div class="col">
+                           <div class="summery-box">
+                              <?php _l('failed')?>
+                              <span class="count"><?php echo model('dashboard::dashboard')->count('failed')?></span> 
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 d-none">
+                  <div class="each">
+                     <div class="welcome-head">
+                        <i class="las la-folder-open colored"></i>
+                        <h6><?php _l('collection-summary')?></h6>
+                     </div>
+                     <div class="row welcome-stat">
+                        <div class="col">
+                           <span class="count colored"><?php echo model('dashboard::dashboard')->count('accounts')?></span> <?php _l('accounts')?>
+                        </div>
+                        <div class="col">
+                           <span class="count colored"><?php echo model('dashboard::dashboard')->count('files')?></span> <?php _l('files')?>
+                        </div>
+                        <?php if(moduleExists('party')):?>
+                        <div class="col">
+                           <span class="count colored"><?php echo model('dashboard::dashboard')->count('all-parties')?></span> <?php _l('all-parties')?>
+                        </div>
+                        <div class="col">
+                           <span class="count colored"><?php echo model('dashboard::dashboard')->count('scheduled-parties')?></span> <?php _l('parties')?><br/><?php _l('scheduled')?>
+                        </div>
+                        <?php else:?>
+                        <div class="col">
+                           <span class="count colored"><?php echo model('dashboard::dashboard')->count('captions')?></span> <?php _l('captions')?>
+                        </div>
+                        <?php endif?>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row mt-3 d-none">
+               <div class="col-md-3">
+                   <div class="each-menu">
+                     <i class="las la-edit colored"></i>
+                     <h6><?php _l('schedule-a-post')?></h6>
+                     <span class="info"><?php _l('schedule-a-post-note')?></span>
+                     <a href="<?php echo url('post')?>" data-ajax="true" class="btn btn-outline-dark"><?php _l('add-post')?></a>
+                  </div> 
+               </div>
+               <div class="col-md-3">
+                  <div class="each-menu">
+                      <i class="las la-chart-bar colored"></i>
+                     <h6><?php _l('reports')?></h6>
+                     <span class="info"><?php _l('reports-note')?></span>
+                     <a href="<?php echo url('reports')?>" data-ajax="true" class="btn btn-outline-dark"><?php _l('see-reports')?></a> 
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="each-menu">
+                      <i class="las la-user-friends colored"></i>
+                     <h6><?php _l('accounts')?></h6>
+                     <span class="info"><?php _l('accounts-note')?></span>
+                     <a href="<?php echo url('accounts')?>" data-ajax="true" class="btn btn-outline-dark"><?php _l('manage-accounts')?></a> 
+                  </div>
+               </div>
+               <div class="col-md-3">
+                   <div class="each-menu">
+                     <i class="las la-calendar colored"></i>
+                     <h6><?php _l('calender')?></h6>
+                     <span class="info"><?php _l('calender-note')?></span>
+                     <a href="<?php echo url('schedules')?>" data-ajax="true" class="btn btn-outline-dark"><?php _l('open-calender')?></a>
+                  </div> 
+               </div>
+            </div>
+            <hr/>
+            <div class="row mt-3 d-none">
+               <div class="col-md-3">
+                  <div class="each-menu">
+                      <i class="las la-grip-horizontal colored"></i>
+                     <h6><?php _l('captions')?></h6>
+                     <span class="info"><?php _l('captions-note')?></span>
+                     <a href="<?php echo url('captions')?>" data-ajax="true" class="btn btn-outline-dark"><?php _l('add-caption')?></a> 
+                  </div>
+               </div>
+               <div class="col-md-3">
+                   <div class="each-menu">
+                     <i class="la la-folder colored"></i>
+                     <h6><?php _l('file-manager')?></h6>
+                     <span class="info"><?php _l('file-manager-note')?></span>
+                     <a href="<?php echo url('file-manager')?>" data-ajax="true" class="btn btn-outline-dark"><?php _l('upload-photo-videos')?></a>
+                  </div> 
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-12">
+                  <div class="row">
+                     <div class="col-12">
+                        
+                     </div>
+                  </div>
+                  <div class="row row-s-panel-min">
+                     <div class="col-spec">
+                        <div class="s-panel-min mb-4 bg-white">
+                           <h5 class="mb-2">Christmas Eve Wishes</h5>
+                           <div class="d-flex align-items-center mb-3">
+                              <div class="w-50">
+                                 <small>Account</small>
+                                 <p class="mb-0">Silverline</p>
+                              </div>
+                              <div class="w-50">
+                                 <small>Channel</small>
+                                 <p class="mb-0">Facebook</p>
+                              </div>
+                           </div>
+                           <div class="d-flex align-items-center">
+                              <div class="w-50">
+                                 <small>Scheduled Date</small>
+                                 <p class="mb-0">25 Jul 2020</p>
+                              </div>
+                              <div class="w-50">
+                                 <small>Time</small>
+                                 <p class="mb-0">11:00 - 12:00</p>
+                              </div>
+                           </div>
+                           <hr>
+                           <div class="d-flex align-items-center">
+                              <div class="w-50">
+                                 <button class="btn btn-primary">Publish Early</button>
+                              </div>
+                              <div class="w-50 text-right">
+                                 <button class="btn btn-secondary">Cancel</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-spec">
+                        <div class="s-panel-min mb-4 bg-white">
+                           <h5 class="mb-2">Christmas Eve Wishes</h5>
+                           <div class="d-flex align-items-center mb-3">
+                              <div class="w-50">
+                                 <small>Account</small>
+                                 <p class="mb-0">Silverline</p>
+                              </div>
+                              <div class="w-50">
+                                 <small>Channel</small>
+                                 <p class="mb-0">Facebook</p>
+                              </div>
+                           </div>
+                           <div class="d-flex align-items-center">
+                              <div class="w-50">
+                                 <small>Scheduled Date</small>
+                                 <p class="mb-0">25 Jul 2020</p>
+                              </div>
+                              <div class="w-50">
+                                 <small>Time</small>
+                                 <p class="mb-0">11:00 - 12:00</p>
+                              </div>
+                           </div>
+                           <hr>
+                           <div class="d-flex align-items-center">
+                              <div class="w-50">
+                                 <button class="btn btn-primary">Publish Early</button>
+                              </div>
+                              <div class="w-50 text-right">
+                                 <button class="btn btn-secondary">Cancel</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-spec">
+                        <div class="s-panel-min mb-4 bg-white">
+                           <h5 class="mb-2">Christmas Eve Wishes</h5>
+                           <div class="d-flex align-items-center mb-3">
+                              <div class="w-50">
+                                 <small>Account</small>
+                                 <p class="mb-0">Silverline</p>
+                              </div>
+                              <div class="w-50">
+                                 <small>Channel</small>
+                                 <p class="mb-0">Facebook</p>
+                              </div>
+                           </div>
+                           <div class="d-flex align-items-center">
+                              <div class="w-50">
+                                 <small>Scheduled Date</small>
+                                 <p class="mb-0">25 Jul 2020</p>
+                              </div>
+                              <div class="w-50">
+                                 <small>Time</small>
+                                 <p class="mb-0">11:00 - 12:00</p>
+                              </div>
+                           </div>
+                           <hr>
+                           <div class="d-flex align-items-center">
+                              <div class="w-50">
+                                 <button class="btn btn-primary">Publish Early</button>
+                              </div>
+                              <div class="w-50 text-right">
+                                 <button class="btn btn-secondary">Cancel</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-spec">
+                        <div class="s-panel-min mb-4 bg-white">
+                           <h5 class="mb-2">Christmas Eve Wishes</h5>
+                           <div class="d-flex align-items-center mb-3">
+                              <div class="w-50">
+                                 <small>Account</small>
+                                 <p class="mb-0">Silverline</p>
+                              </div>
+                              <div class="w-50">
+                                 <small>Channel</small>
+                                 <p class="mb-0">Facebook</p>
+                              </div>
+                           </div>
+                           <div class="d-flex align-items-center">
+                              <div class="w-50">
+                                 <small>Scheduled Date</small>
+                                 <p class="mb-0">25 Jul 2020</p>
+                              </div>
+                              <div class="w-50">
+                                 <small>Time</small>
+                                 <p class="mb-0">11:00 - 12:00</p>
+                              </div>
+                           </div>
+                           <hr>
+                           <div class="d-flex align-items-center">
+                              <div class="w-50">
+                                 <button class="btn btn-primary">Publish Early</button>
+                              </div>
+                              <div class="w-50 text-right">
+                                 <button class="btn btn-secondary">Cancel</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+
+
+         <div class="col-aside">
+            <div class="admin-box-frame">
+               
+               <div class="admin-box-quick-access">
+                  <div class="admin-box-quick-profile">
+                     <div class="pr-4">
+                        <h5><?php _l('Hello')?> <br><strong><?php echo model('user')->authUser['full_name']?></strong></h5>
+                        <p>Your activity dashboard is ready to be Viewed you have 190 post submissions</p>
+                     </div>
+                     <img src="assets/images/admin-access-user.png" class="float-right" alt="media">
+                  </div>
+                  <div class="admin-box-quick-access-header">
+                     <h4 class="mb-0">Quick Access</h4>
+                     <a href="#" class="btn-link">View All<i class="las la-angle-right"></i></a>
+                  </div>
+                  <ul class="admin-box-quick-access-list">
+                     <li>
+                        <a href="<?php echo url('post')?>" data-ajax="true">
+                           <i class="las la-edit"></i>
+                           <h6><?php _l('schedule-a-post')?></h6>
+                           <p><?php _l('schedule-a-post-note')?></p>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="<?php echo url('reports')?>" data-ajax="true">
+                           <i class="las la-chart-bar"></i>
+                           <h6><?php _l('reports')?></h6>
+                           <p><?php _l('reports-note')?></p>
+                        </a>
+                     </li>  
+                     <li>
+                        <a href="<?php echo url('accounts')?>" data-ajax="true">
+                           <i class="las la-user-friends"></i>
+                           <h6><?php _l('accounts')?></h6>
+                           <p><?php _l('accounts-note')?></p>
+                        </a>
+                     </li>  
+                     <li>
+                        <a href="<?php echo url('schedules')?>" data-ajax="true">
+                           <i class="las la-calendar"></i>
+                           <h6><?php _l('calender')?></h6>
+                           <p><?php _l('calender-note')?></p>
+                        </a>
+                     </li>  
+                     <li>
+                        <a href="<?php echo url('captions')?>" data-ajax="true">
+                           <i class="las la-grip-horizontal"></i>
+                           <h6><?php _l('captions')?></h6>
+                           <p><?php _l('captions-note')?></p>
+                        </a>
+                     </li>  
+                     <li>
+                        <a href="<?php echo url('file-manager')?>" data-ajax="true">
+                           <i class="la la-folder"></i>
+                           <h6><?php _l('file-manager')?></h6>
+                           <p><?php _l('file-manager-note')?></p>
+                        </a>
+                     </li>                    
+                  </ul>   
+               </div>
+
+            </div>
+         </div>
+
+
+      </div>
+
+      
+   </div>
+</div>

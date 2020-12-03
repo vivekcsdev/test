@@ -1,0 +1,12 @@
+<?php
+autoLoadVendor();
+$emojione = new \Emojione\Client(new \Emojione\Ruleset());
+foreach($captions as $caption):?>
+    <a href="" onclick='return useCaption(this)' data-content="" class="each">
+        <div style="display: none" class="value"><?php echo $emojione->shortnameToUnicode($caption['caption'])?></div>
+        <h6><?php echo $caption['title']?></h6>
+        <p>
+            <?php echo  $emojione->shortnameToUnicode($caption['caption'])?>
+        </p>
+    </a>
+<?php endforeach?>

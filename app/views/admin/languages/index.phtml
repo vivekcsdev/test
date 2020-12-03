@@ -1,0 +1,64 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#languages" data-toggle="tab" class="menu-item  <?php echo (!$page) ? 'active' : null?>"><span><?php _l('languages')?></span></a>
+            <a href="#new" data-toggle="tab" class="menu-item   <?php echo ($page == 'new') ? 'active' : null?>"><span><?php _l('add-new-language')?></span></a>
+
+        </div>
+    </div>
+
+    <div class="actions-pane">
+        <ul class="clearfix">
+            <li>
+                <form action="<?php echo getFullUrl()?>" data-container="#languages" method="post" class="search-form">
+                    <div class="input-group">
+
+                        <input placeholder="<?php _l('enter-a-keyword')?>" value="<?php echo $C->request->input('term')?>" type="text" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>
+                        <div class="input-group-append">
+                            <button class="input-group-text btn btn-primary" id="inputGroupPrepend2"><i class="la la-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show <?php echo (!$page) ? 'active' : null?>" id="languages" role="tabpanel" >
+            <?php echo view('admin/languages/display-languages', array('languages' => $languages))?>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page == 'new') ? 'active' : null?>" id="new" role="tabpanel" >
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                <input type="hidden" name="val[create]" value="1"/>
+                <div class="form-group">
+                    <label><?php _l('name')?></label>
+                    <input type="text" class="form-control" name="val[name]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('code')?></label>
+                    <input type="text" class="form-control" name="val[code]"/>
+                    <span class="text-muted"><?php _l('language-code-info')?></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox mb-4">
+                        <input type="hidden" name="val[is_default]" value="0"/>
+                        <input type="checkbox" name="val[is_default]" value="1"  class="custom-control-input" id="customCheck3sdsd">
+                        <label class="custom-control-label" for="customCheck3sdsd"><?php _l('is_default')?></label>
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary btn-lg"><?php _l('submit')?></button>
+
+            </form>
+        </div>
+
+    </div>
+</div>

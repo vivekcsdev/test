@@ -1,0 +1,30 @@
+<!DOCTYPE>
+<html>
+<head>
+    <style>
+        body{
+            background: #F6F6F6;
+            margin: 0;
+            padding: 0;
+        }
+        a {
+            font-size: 15px;
+            font-weight: bolder;
+            color: #F78018;
+        }
+        .error-container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <img style="width: 100%;max-width: 400px;margin:20px auto;" src="<?php echo assetUrl('assets/images/404.gif')?>"/>
+        <h1><?php _l('page-not-found')?></h1>
+        <a href="<?php echo url()?>"><?php _l('go-home')?></a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<input type="hidden" name="val[token]" value="<?php echo $token?>"/>
+<h5><?php _l('your-account')?></h5>
+<hr/>
+<?php $already = model('account')->findAccountBySID($user->id, 'vk', 'profile')?>
+    <div class="clearfix" style="margin-bottom: 10px;">
+        <div class="float-left">
+            <?php
+            $pageAvatar = $user->photo_big;
+            ?>
+            <img src="<?php echo $pageAvatar?>" style="width:40px;height:40px;border-radius:100px"/>
+
+            <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $user->first_name.' '.$user->last_name?></span>
+        </div>
+        <div class="float-right">
+            <div class="switch">
+                <?php if($already):?>
+                    <input type="hidden" name="val[user]" value="<?php echo $user->id?>"/>
+                <?php endif?>
+                <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?> id="cmn-toggle-user<?php echo $user->id?>" value="<?php echo $user->id?>" name="val[user]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                <label for="cmn-toggle-user<?php echo $user->id?>"></label>
+            </div>
+        </div>
+    </div>
+
+<?php if(!empty($groups) && $groups->count != 0):?>
+    <hr/>
+    <h5><?php _l('your-groups')?></h5>
+
+    <?php foreach($groups->items as $group):?>
+        <?php $already = model('account')->findAccountBySID($group->id, 'vk', $group->type)?>
+        <div class="clearfix" style="margin-bottom: 10px;">
+            <div class="float-left">
+                <?php
+                $pageAvatar = $group->photo_100;
+                ?>
+                <img src="<?php echo $pageAvatar?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $group->name?></span>
+            </div>
+            <div class="float-right">
+                <div class="switch">
+                    <?php if($already):?>
+                        <input type="hidden" name="val[groups][]" value="<?php echo $group->id?>"/>
+                    <?php endif?>
+                    <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?> id="cmn-toggle-group<?php echo $group->id?>" value="group-<?php echo $group->id?>" name="val[groups][]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                    <label for="cmn-toggle-group<?php echo $group->id?>"></label>
+                </div>
+            </div>
+        </div>
+    <?php endforeach?>
+<?php endif?>
+

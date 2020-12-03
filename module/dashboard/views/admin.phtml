@@ -1,0 +1,101 @@
+<div class="content statistics-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="each" >
+                        <div class="icon"><i class="la la-user"></i></div>
+                        <div class="count">
+                            <span class="color"><?php echo $stats['total-users']?></span>
+                            <?php _l('total-users')?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="each">
+                        <div class="icon"><i class="la la-user"></i></div>
+                        <div class="count">
+                            <span class="color-green"><?php echo $stats['total-active-users']?></span>
+                            <div ><?php _l('active-users')?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="each">
+                        <div class="icon"><i class="la la-user"></i></div>
+                        <div class="count">
+                            <span class="colored-red"><?php echo $stats['total-inactive-users']?></span>
+                            <div ><?php _l('inactive-users')?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mt-3">
+            <hr/>
+            <div class="row">
+                <div class="col-md-6 dashboard-container">
+                    <div class="each" style="min-height: 250px">
+                        <div class="welcome-head" style="margin: 0;">
+                            <i class="las la-chart-pie colored"></i>
+                            <h6><?php _l('overall-summary')?></h6>
+                        </div>
+                        <div class="row welcome-stat" style="margin: 0;">
+
+                            <div class="col">
+                                <span class="count colored"><?php echo model('dashboard::dashboard')->count('all-posts')?></span> <?php _l('total-posts')?>
+                            </div>
+                            <div class="col">
+                                <span class="count colored"><?php echo model('dashboard::dashboard')->count('scheduled', true)?></span> <?php _l('scheduled')?>
+                            </div>
+                            <div class="col">
+                                <span class="count colored"><?php echo model('dashboard::dashboard')->count('completed', true)?></span> <?php _l('completed')?>
+                            </div>
+                            <div class="col">
+                                <span class="count colored"><?php echo model('dashboard::dashboard')->count('success', true)?></span> <?php _l('successful')?>
+                            </div>
+                            <div class="col">
+                                <span class="count colored"><?php echo model('dashboard::dashboard')->count('failed', true)?></span> <?php _l('failed')?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <h3 class="color-grey-font-15"><?php _l('today')?></h3>
+                            <h1><?php echo $stats['total-users-today']?> <span style="color: grey;font-size:12px;font-weight: lighter"><?php _l('users')?></span></h1>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <h3 class="color-grey-font-15"><?php _l('this-week')?></h3>
+                            <h1><?php echo $stats['total-users-this-week']?> <span style="color: grey;font-size:12px;font-weight: lighter"><?php _l('users')?></span></h1>
+                        </div>
+                        <div class="col-md-6 mt-5">
+                            <h3 class="color-grey-font-15"><?php _l('this-month')?></h3>
+                            <h1><?php echo $stats['total-users-this-month']?> <span style="color: grey;font-size:12px;font-weight: lighter"><?php _l('users')?></span></h1>
+                        </div>
+                        <div class="col-md-6 mt-5">
+                            <h3 class="color-grey-font-15"><?php _l('this-year')?></h3>
+                            <h1><?php echo $stats['total-users-this-year']?> <span style="color: grey;font-size:12px;font-weight: lighter"><?php _l('users')?></span></h1>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="row mt-4">
+        <div class="col-md-5">
+            <canvas class="chartjs" id="chartjs-doughnut-users" data-content='{"type":"doughnut","data":{"labels":["<?php _l('active-users')?>","<?php _l('inactive-users')?>"],"datasets":[{"label":"","data":[<?php echo $stats['total-active-users']?>,<?php echo $stats['total-inactive-users']?>],"backgroundColor":["rgb(255, 99, 132)","rgb(54, 162, 235)"]}]}}' width="undefined" height="290"></canvas>
+        </div>
+        <div class="col-md-7" >
+            <canvas  id="chartjs-bars-user" data-content='{"type":"line","data":{"labels":["January","February","March","April","May","June","July","August","September","October","November","December"],"datasets":[{"label":"<?php _l('users')?>","data":[<?php echo implode(',', $stats['total-monthly-users'])?>],"fill":false,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],"borderColor":["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],"borderWidth":1}]},"options":{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+        </div>
+
+    </div>
+    <hr/>
+</div>

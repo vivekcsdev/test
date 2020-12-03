@@ -1,0 +1,133 @@
+<div class="">
+   <div class="page-title-panel">
+      <h2>Schedules</h2>
+   </div>
+
+   <div class="" style="position: relative;">
+
+      <div class="inner-pane">
+         <div style="width:100%;height: 100%;position:relative;">
+            <div class="view-schedule-modal modern-scroll">
+            </div>
+            <div id="horizontal-menu" class=" d-none">
+               <div class="menu-container">
+                  <div class="menu " role="tablist">
+                     <a href="<?php echo url('schedules')?>" data-ajax="true" class="menu-item  <?php echo ($page == 'queue') ? 'active': null?>"><span><?php _l('scheduled')?></span></a>
+                     <a href="<?php echo url('schedules/published')?>" data-ajax="true" class="menu-item  <?php echo ($page =='published') ? 'active': null?>"><span><?php _l('published')?></span></a>
+                     <a href="<?php echo url('schedules/unpublished')?>" data-ajax="true" class="menu-item  <?php echo ($page =='unpublished') ? 'active': null?>"><span><?php _l('unpublished')?></span></a>
+                  </div>
+               </div>
+            </div>
+            <div class="content  campaign-content" style="padding: 0;">
+               <div id="horizontal-menu">
+                  <div class="menu-container">
+                        <div class="menu " role="tablist">
+                           <a href="#schedules" id="schedule" data-toggle="tab" class="menu-item  active"><span>Scheduled</span></a>
+                           <a href="#published" id="publish" data-toggle="tab" class="menu-item"><span>Published</span></a>
+                           <a href="#unpublished" id="unpublish" data-toggle="tab" class="menu-item"><span>Unpublished</span></a>
+                        </div>
+                  </div>
+               </div>
+               <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active col-md-12 mt-3" id="schedules" role="tabpanel" >
+                     <div class="row col-md-12">
+                        <div class=" col-md-4">
+                           <div class="col-md-12 fb-budget">
+                              <div class="col-md-12 pt-3 pb-2 pl-0 ">Black Friday Campaign</div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6"><h5>20K</h5></div>
+                                    <div class="col-md-6 text-right p-0"><h5>200AED</h5></div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 text-primary"><h5>Reach</h5></div>
+                                    <div class="col-md-6 text-primary text-right pr-0"><h5>Spent</h5></div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 text-muted">From Date</div>
+                                    <div class="col-md-6 text-muted">To Date</div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 "><h7>25 Nov 2020</h7></div>
+                                    <div class="col-md-6"><h7>25 Dec 2020</h7></div>
+                              </div>
+                              <div class="col-md-12 pl-0 pt-3">
+                                    <div class="border-top pt-2 pb-2 p-0">
+                                       <a class="bluev">Publish Early</a>
+                                       <a class="float-right text-muted">Cancel</a>
+                                    </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="tab-pane fade col-md-12 mt-3" id="published" role="tabpanel" >
+                     <div class="row col-md-12">
+                        <div class=" col-md-4">
+                           <div class="col-md-12 fb-budget">
+                              <div class="col-md-12 pt-3 pb-2 pl-0 ">Diwali Campaign</div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6"><h5>20K</h5></div>
+                                    <div class="col-md-6 text-right p-0"><h5>200AED</h5></div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 text-primary"><h5>Reach</h5></div>
+                                    <div class="col-md-6 text-primary text-right pr-0"><h5>Spent</h5></div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 text-muted">From Date</div>
+                                    <div class="col-md-6 text-muted">To Date</div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 "><h7>20 Oct 2020</h7></div>
+                                    <div class="col-md-6"><h7>20 Nov 2020</h7></div>
+                              </div>
+                              <div class="col-md-12 pl-0 pt-3">
+                                    <div class="border-top pt-2 pb-2 p-0">
+                                       <a class="bluev">Publish Early</a>
+                                       <a class="float-right text-muted">Cancel</a>
+                                    </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="tab-pane fade col-md-12 mt-3" id="unpublished" role="tabpanel" >
+                     <div class="row col-md-12">
+                        <div class=" col-md-4">
+                           <div class="col-md-12 fb-budget">
+                              <div class="col-md-12 pt-3 pb-2 pl-0 ">Special Festival Campaign</div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6"><h5>20K</h5></div>
+                                    <div class="col-md-6 text-right p-0"><h5>200AED</h5></div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 text-primary"><h5>Reach</h5></div>
+                                    <div class="col-md-6 text-primary text-right pr-0"><h5>Spent</h5></div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 text-muted">From Date</div>
+                                    <div class="col-md-6 text-muted">To Date</div>
+                              </div>
+                              <div class="col-md-12 row p-0">
+                                    <div class="col-md-6 "><h7>25 Aug 2020</h7></div>
+                                    <div class="col-md-6"><h7>25 Sep 2020</h7></div>
+                              </div>
+                              <div class="col-md-12 pl-0 pt-3">
+                                    <div class="border-top pt-2 pb-2 p-0">
+                                       <a class="bluev">Publish Early</a>
+                                       <a class="float-right text-muted">Cancel</a>
+                                    </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!-- <div class="monthly" id="schedule-calender" data-url="<?php echo $url?>"></div> -->
+            </div>
+         </div>
+      </div>
+
+   </div>
+
+</div>

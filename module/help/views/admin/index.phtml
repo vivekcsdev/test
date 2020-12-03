@@ -1,0 +1,77 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#pages" data-toggle="tab" class="menu-item  <?php echo (!$page) ? 'active' : null?>"><span><?php _l('tutorials')?></span></a>
+            <a href="#new"  data-toggle="tab"  class="menu-item   <?php echo ($page == 'new') ? 'active' : null?>"><span><?php _l('add-new-tutorial')?></span></a>
+
+        </div>
+    </div>
+
+    <div class="actions-pane">
+        <ul class="clearfix">
+            <li>
+                <form action="<?php echo getFullUrl()?>" data-container="#languages" method="post" class="search-form">
+                    <div class="input-group">
+
+                        <input placeholder="<?php _l('enter-a-keyword')?>" value="<?php echo $C->request->input('term')?>" type="text" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>
+                        <div class="input-group-append">
+                            <button class="input-group-text btn btn-primary" id="inputGroupPrepend2"><i class="la la-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </li>
+
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="pages" role="tabpanel" >
+            <?php echo view('help::admin/display', array('tutorials' => $tutorials))?>
+        </div>
+
+        <div class="tab-pane fade show " id="new" role="tabpanel" >
+            <form enctype="multipart/form-data" action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form form-max-width" >
+                <input type="hidden" name="val[create]" value="1"/>
+                <div class="form-group">
+                    <label><?php _l('title')?></label>
+                    <input type="text" class="form-control" required name="val[name]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('description')?></label>
+                    <input type="text" class="form-control" required name="val[description]"/>
+                </div>
+
+
+                <hr/>
+                <h6><?php _l('media-file')?></h6>
+
+                <div class="form-group">
+                    <label><?php _l('preview-image')?></label>
+                    <input type="file" class="form-control" name="image"/>
+                </div>
+
+                <h5><?php _l('or')?></h5>
+                <div class="form-group">
+                    <label><?php _l('youtube-video-url')?></label>
+                    <input type="text" class="form-control"  name="val[video]"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="mb-2"><?php _l('content')?></label>
+
+                    <div class="">
+                        <textarea id="text-editor" name="val[content]" ></textarea>
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary btn-lg"><?php _l('submit')?></button>
+
+            </form>
+        </div>
+
+    </div>
+</div>

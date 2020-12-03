@@ -1,0 +1,82 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#accounts" data-toggle="tab" class="menu-item  active"><span>VK <?php echo strtolower(l('accounts'))?></span></a>
+            <?php if(model('user')->isAdmin()):?>
+                <a href="<?php echo url('admin/social/integration', array('page' => 'vk'))?>" data-ajax="true"  class="menu-item  hide-mobile-sm"><span><?php echo l('settings')?></span></a>
+            <?php endif?>
+            <a href="" onclick="return openVK(this)"  class="menu-item  "><span><?php _l('add-new-account')?></span></a>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="accounts" role="tabpanel" >
+            <div class="grid-container clearfix">
+                <div class="each-container">
+                    <a  href="" onclick="return openVK(this)"   class="each each-add ">
+                        <i class="las la-plus"></i>
+                        <?php _l('add-account')?>
+                    </a>
+                </div>
+
+                <?php foreach ($accounts as $account): ?>
+                    <div class="each-container its-account">
+                        <div class="each">
+                            <div class="info">
+                                <?php if($account['status']):?>
+                                    <span class="badge badge-success"><?php _l('active')?></span>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('not-active')?></span>
+                                <?php endif?>
+                            </div>
+                            <img src=" <?php echo assetUrl($account['avatar'])?>" style="border-radius:100px">
+                            <p>
+                                <?php echo $account['username']?>
+                            </p>
+                            <div class="actions">
+                                <a class="confirm" data-ajax-action="true" href="<?php echo url('account/action',array('action' => 'delete','id' => $account['id']))?>"><i class="las la-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" id="vkCodeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">VK <?php _l('accounts')?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body the-content">
+                    <input type="hidden" name="code_submit" value="1"/>
+                    <div class="form-group">
+                        <label><?php _l('enter-code')?></label>
+                        <input autocomplete="off" type="text" class="form-control" name="code" id="vk-code"/>
+                        <span class="text-muted"><?php _l('enter-vk-code-help')?> https://oauth.vk.com/blank.html#code=<b>a170e1bff22e0d90bd</b></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="return startVk(this)" data-url="<?php echo url('accounts/vk', array('auth' => true))?>" class="btn btn-secondary code-button" ><?php _l('get-code')?></button>
+                    <button type="submit" class="btn btn-primary vk-button" disabled="disabled"><?php _l('continue')?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

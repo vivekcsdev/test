@@ -1,0 +1,55 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#accounts" data-toggle="tab" class="menu-item  active"><span>Tumblr <?php echo strtolower(l('accounts'))?></span></a>
+            <?php if(model('user')->isAdmin()):?>
+                <a href="<?php echo url('admin/social/integration', array('page' => 'tumblr'))?>" data-ajax="true"  class="menu-item  hide-mobile-sm"><span><?php echo l('settings')?></span></a>
+            <?php endif?>
+            <a href="<?php echo url('accounts/tumblr', array('auth' => true))?>"  class="menu-item  ajax-action"><span><?php _l('add-new-account')?></span></a>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="accounts" role="tabpanel" >
+            <div class="grid-container clearfix">
+                <div class="each-container">
+                    <a  href="<?php echo url('accounts/tumblr', array('auth' => true))?>"  class="each each-add ajax-action">
+                        <i class="las la-plus"></i>
+                        <?php _l('add-account')?>
+                    </a>
+                </div>
+
+                <?php foreach ($accounts as $account): ?>
+                    <div class="each-container its-account">
+                        <div class="each">
+                            <div class="info">
+                                <?php if($account['status']):?>
+                                    <span class="badge badge-success"><?php _l('active')?></span>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('not-active')?></span>
+                                <?php endif?>
+                            </div>
+                            <img src=" <?php echo assetUrl($account['avatar'])?>" style="border-radius:100px">
+                            <p>
+                                <?php echo $account['username']?>
+                            </p>
+                            <div class="actions">
+                                <a class="confirm" data-ajax-action="true" href="<?php echo url('account/action',array('action' => 'delete','id' => $account['id']))?>"><i class="las la-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

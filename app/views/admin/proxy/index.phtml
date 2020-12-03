@@ -1,0 +1,69 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#proxies" data-toggle="tab" class="menu-item  <?php echo (!$page) ? 'active' : null?>"><span><?php _l('proxies')?></span></a>
+            <a href="#new" data-toggle="tab" class="menu-item   <?php echo ($page == 'new') ? 'active' : null?>"><span><?php _l('add-new-proxy')?></span></a>
+
+        </div>
+    </div>
+
+    <div class="actions-pane">
+        <ul class="clearfix">
+            <li>
+                <form action="<?php echo getFullUrl()?>" data-container="#proxies" method="post" class="search-form">
+                    <div class="input-group">
+
+                        <input placeholder="<?php _l('enter-a-keyword')?>" type="text" value="<?php echo $C->request->input('term')?>" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>
+                        <div class="input-group-append">
+                            <button class="input-group-text btn btn-primary" id="inputGroupPrepend2"><i class="la la-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show <?php echo (!$page) ? 'active' : null?>" id="proxies" role="tabpanel" >
+            <?php echo view('admin/proxy/display', array('proxies' => $proxies))?>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page == 'new') ? 'active' : null?>" id="new" role="tabpanel" >
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form">
+                <input type="hidden" name="val[create]" value="1"/>
+                <div class="form-group">
+                    <label><?php _l('proxy-address')?></label>
+                    <input type="text" class="form-control" name="val[address]"/>
+
+                    <span class="text-muted"><?php _l('proxy-address-info')?></span>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('usage-limit')?></label>
+                    <input type="number" value="1" class="form-control" name="val[limit]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('location')?></label>
+                    <select class="form-control" name="val[location]">
+                        <option value=""><?php _l('unknown')?></option>
+                        <?php foreach (getCountries() as $country):?>
+                            <option value="<?php echo $country?>"><?php echo $country?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+
+                <?php Hook::getInstance()->fire('proxy.address.add')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('submit')?></button>
+
+            </form>
+        </div>
+
+
+    </div>
+</div>

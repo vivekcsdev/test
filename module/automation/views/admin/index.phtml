@@ -1,0 +1,495 @@
+<div id="horizontal-menu">
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#instagram" data-toggle="tab" class="menu-item  active"><span>Instagram</span></a>
+            <!--<a href="#pinterest" data-toggle="tab" class="menu-item  "><span>Pinterest</span></a>-->
+
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="instagram" role="tabpanel" >
+            <form class="general-form " action="<?php echo getFullUrl(true)?>" method="post">
+
+                <div class="short-form">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <label><?php _l('enable')?></label>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="switch">
+                                <input type="hidden" value="0" name="val[enable-instagram-activity]"/>
+                                <input name="val[enable-instagram-activity]"  <?php echo (config('enable-instagram-activity', true)) ? 'checked': null?>  id="cmn-toggle-enable-instagram-activity" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                <label for="cmn-toggle-enable-instagram-activity"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('how-long-activity-log')?></label>
+                        <input type="number" class="form-control" name="val[instagram_log_limit]" value="<?php echo config('instagram_log_limit', 7)?>"/>
+                        <span class="text-muted"><?php _l('how-long-activity-log-note')?></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-comments')?></label>
+                        <input type="text" class="input-tags " name="val[instagram-default-comments]"
+                               value="<?php echo config('instagram-default-comments', "That's nice, Very sweet, Good day,that's cool, made my day")?>"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-repost-caption')?></label>
+                        <textarea class="form-control " name="val[instagram-default-repost-caption]"
+                                  ><?php echo config('instagram-default-repost-caption', "{originalcaption}")?></textarea>
+                        <span class="text-muted"><?php _l('default-repost-caption-note')?></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-direct-message')?></label>
+                        <input type="text" class="input-tags " name="val[instagram-default-direct-message]"
+                               value="<?php echo config('instagram-default-direct-message', "Hi {username}, Hi {username} how are you?, Hi {username} good day")?>"/>
+                        <span class="text-muted"><?php _l('default-direct-message-note')?></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-tags')?></label>
+                        <input type="text" class="input-tags " name="val[instagram-default-tags]"
+                               value="<?php echo config('instagram-default-tags', "nature,games,actor,actress,movies,football,volleyball")?>"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-blacklist-tags')?></label>
+                        <input type="text" class="input-tags " name="val[instagram-default-blacklist-tags]"
+                               value="<?php echo config('instagram-default-blacklist-tags', "fuck,sex,xxx,nude")?>"/>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label><?php _l('default-blacklist-keywords')?></label>
+                        <input type="text" class="input-tags " name="val[instagram-default-blacklist-keywords]"
+                               value="<?php echo config('instagram-default-blacklist-keywords', "fuck,sex,xxx,nude")?>"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-speed')?></label>
+                        <select name="val[instagram_activity_speed]" class="form-control">
+                            <option <?php echo (config('instagram_activity_speed', 'slow') == 'slow') ? 'selected':null?> value="slow"><?php _l('slow')?></option>
+                            <option  <?php echo (config('instagram_activity_speed', 'slow') == 'very-slow') ? 'selected':null?> value="very-slow"><?php _l('very-slow')?></option>
+                            <option  <?php echo (config('instagram_activity_speed', 'slow') == 'medium') ? 'selected':null?> value="medium"><?php _l('medium')?></option>
+                            <option  <?php echo (config('instagram_activity_speed', 'slow') == 'fast') ? 'selected':null?> value="fast"><?php _l('fast')?></option>
+                            <option  <?php echo (config('instagram_activity_speed', 'slow') == 'very-fast') ? 'selected':null?> value="very-fast"><?php _l('very-fast')?></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('how-many-time-each-action-completed-per-run')?></label>
+                        <input type="number" class="form-control" name="val[instagram--action-per-run]" value="<?php echo config('instagram--action-per-run', 2)?>"/>
+                        <span class="text-muted"><?php _l('how-many-time-each-action-completed-per-run-note')?></span>
+                    </div>
+
+
+                </div>
+                <h6><?php _l('speed-configuration')?></h6>
+
+                <hr/>
+                <div class="row">
+                    <div class="col-md-2">
+                        <h6><?php _l('setting')?></h6>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('likes-per-hour')?></label style="font-size: 10px;">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('comment-per-hour')?></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('follow-per-hour')?></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('unfollow-per-hour')?></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('direct-message-per-hour')?></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('repost-per-day')?></label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('slow')?></h6>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('likes-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_like]" value="<?php echo config('instagram_slow_like', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_comment]" value="<?php echo config('instagram_slow_comment', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_follow]" value="<?php echo config('instagram_slow_follow', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_unfollow]" value="<?php echo config('instagram_slow_unfollow', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_message]" value="<?php echo config('instagram_slow_message', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_repost]" value="<?php echo config('instagram_slow_repost', 2)?>"/>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('very-slow')?></h6>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('likes-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_slow_like]" value="<?php echo config('instagram_very_slow_like', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_slow_comment]" value="<?php echo config('instagram_very_slow_comment', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_slow_follow]" value="<?php echo config('instagram_very_slow_follow', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_slow_unfollow]" value="<?php echo config('instagram_very_slow_unfollow', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_slow_message]" value="<?php echo config('instagram_very_slow_message', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_slow_repost]" value="<?php echo config('instagram_very_slow_repost', 1)?>"/>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('medium')?></h6>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('likes-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_medium_like]" value="<?php echo config('instagram_medium_like', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_medium_comment]" value="<?php echo config('instagram_medium_comment', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_medium_follow]" value="<?php echo config('instagram_medium_follow', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_medium_unfollow]" value="<?php echo config('instagram_medium_unfollow', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_medium_message]" value="<?php echo config('instagram_medium_message', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_medium_repost]" value="<?php echo config('instagram_medium_repost', 3)?>"/>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('fast')?></h6>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('likes-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_fast_like]" value="<?php echo config('instagram_fast_like', 5)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_fast_comment]" value="<?php echo config('instagram_fast_comment', 4)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_fast_follow]" value="<?php echo config('instagram_fast_follow', 6)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_fast_unfollow]" value="<?php echo config('instagram_fast_unfollow', 6)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_fast_message]" value="<?php echo config('instagram_fast_message', 6)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_fast_repost]" value="<?php echo config('instagram_fast_repost', 4)?>"/>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('very-fast')?></h6>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('likes-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_fast_like]" value="<?php echo config('instagram_slow_like', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_fast_comment]" value="<?php echo config('instagram_slow_comment', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_fast_follow]" value="<?php echo config('instagram_slow_follow', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_fast_unfollow]" value="<?php echo config('instagram_slow_unfollow', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_fast_message]" value="<?php echo config('instagram_slow_message', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_very_fast_repost]" value="<?php echo config('instagram_slow_repost', 6)?>"/>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+            </form>
+        </div>
+        <div class="tab-pane fade " id="pinterest" role="tabpanel" >
+            <form class="general-form" action="<?php echo getFullUrl(true)?>" method="post">
+
+                <div class="short-form">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <label><?php _l('enable')?></label>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="switch">
+                                <input type="hidden" value="0" name="val[enable-pinterest-activity]"/>
+                                <input name="val[enable-pinterest-activity]"  <?php echo (config('enable-pinterest-activity', true)) ? 'checked': null?>  id="cmn-toggle-enable-pinterest-activity" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                <label for="cmn-toggle-enable-pinterest-activity"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('how-long-activity-log')?></label>
+                        <input type="number" class="form-control" name="val[pinterest_log_limit]" value="7"/>
+                        <span class="text-muted"><?php _l('how-long-activity-log-note')?></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-comments')?></label>
+                        <input type="text" class="input-tags " name="val[pinterest-default-comments]"
+                               value="<?php echo config('pinterest-default-comments', "That's nice, Very sweet, Good day,that's cool, made my day")?>"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-repost-caption')?></label>
+                        <input type="text" class="input-tags " name="val[pinterest-default-repost-caption-note]"
+                               value="<?php echo config('pinterest-default-repost-caption', "{originalcaption}")?>"/>
+                        <span class="text-muted"><?php _l('default-repost-caption-note')?></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-direct-message')?></label>
+                        <input type="text" class="input-tags " name="val[pinterest-default-direct-message]"
+                               value="<?php echo config('pinterest-default-direct-message', "Hi {username}, Hi {username} how are you?, Hi {username} good day")?>"/>
+                        <span class="text-muted"><?php _l('default-direct-message-note')?></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-tags')?></label>
+                        <input type="text" class="input-tags " name="val[pinterest-default-tags]"
+                               value="<?php echo config('pinterest-default-tags', "nature,games,actor,actress,movies,football,volleyball")?>"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-blacklist-tags')?></label>
+                        <input type="text" class="input-tags " name="val[pinterest-default-blacklist-tags]"
+                               value="<?php echo config('pinterest-default-blacklist-tags', "fuck,sex,xxx,nude")?>"/>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label><?php _l('default-blacklist-keywords')?></label>
+                        <input type="text" class="input-tags " name="val[pinterest-default-blacklist-keywords]"
+                               value="<?php echo config('pinterest-default-blacklist-keywords', "fuck,sex,xxx,nude")?>"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php _l('default-speed')?></label>
+                        <select name="val[pinterest_activity_speed]" class="form-control">
+                            <option value="slow"><?php _l('slow')?></option>
+                            <option value="very-slow"><?php _l('very-slow')?></option>
+                            <option value="medium"><?php _l('medium')?></option>
+                            <option value="fast"><?php _l('fast')?></option>
+                            <option value="very-fast"><?php _l('very-fast')?></option>
+                        </select>
+                    </div>
+
+                </div>
+                <h6><?php _l('speed-configuration')?></h6>
+
+                <hr/>
+                <div class="row">
+                    <div class="col-md-2">
+                        <h6><?php _l('setting')?></h6>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('comment-per-hour')?></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('follow-per-hour')?></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('unfollow-per-hour')?></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('direct-message-per-hour')?></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 10px;"><?php _l('repost-per-day')?></label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('slow')?></h6>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_comment]" value="<?php echo config('pinterest_slow_comment', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_follow]" value="<?php echo config('pinterest_slow_follow', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_unfollow]" value="<?php echo config('pinterest_slow_unfollow', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_message]" value="<?php echo config('pinterest_slow_message', 2)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_repost]" value="<?php echo config('pinterest_slow_repost', 2)?>"/>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('very-slow')?></h6>
+
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_comment]" value="<?php echo config('pinterest_slow_comment', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_follow]" value="<?php echo config('pinterest_slow_follow', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_unfollow]" value="<?php echo config('pinterest_slow_unfollow', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_message]" value="<?php echo config('pinterest_slow_message', 1)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_repost]" value="<?php echo config('pinterest_slow_repost', 1)?>"/>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('medium')?></h6>
+
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_comment]" value="<?php echo config('pinterest_slow_comment', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_follow]" value="<?php echo config('pinterest_slow_follow', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_unfollow]" value="<?php echo config('pinterest_slow_unfollow', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_message]" value="<?php echo config('pinterest_slow_message', 3)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_repost]" value="<?php echo config('pinterest_slow_repost', 3)?>"/>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('fast')?></h6>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_comment]" value="<?php echo config('pinterest_slow_comment', 4)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_follow]" value="<?php echo config('pinterest_slow_follow', 6)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[instagram_slow_unfollow]" value="<?php echo config('pinterest_slow_unfollow', 6)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_message]" value="<?php echo config('pinterest_slow_message', 6)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_slow_repost]" value="<?php echo config('pinterest_slow_repost', 4)?>"/>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6><?php _l('very-fast')?></h6>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('comment-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_very_fast_comment]" value="<?php echo config('pinterest_slow_comment', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('follow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_very_fast_follow]" value="<?php echo config('pinterest_slow_follow', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"  class="show-mobile"><?php _l('unfollow-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_very_fast_unfollow]" value="<?php echo config('pinterest_slow_unfollow', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label  class="show-mobile"><?php _l('direct-message-per-hour')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_very_fast_message]" value="<?php echo config('pinterest_slow_message', 8)?>"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="show-mobile"><?php _l('repost-per-day')?></label>
+                            <input style="height:25px;" type="number" class="form-control" name="val[pinterest_very_fast_repost]" value="<?php echo config('pinterest_slow_repost', 6)?>"/>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>

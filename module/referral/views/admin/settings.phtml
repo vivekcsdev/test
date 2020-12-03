@@ -1,0 +1,21 @@
+<h6><?php _l('referral-module')?></h6>
+<div class="form-group">
+    <label><?php _l('referral-commission')?></label>
+    <div class="row">
+        <div class="col-sm-5">
+            <select class="form-control" style="height: 45px;" name="val[referral-commission-type]">
+                <option <?php echo config('referral-commission-type', 1) == 1 ? 'selected' : null?> value="1"><?php _l('percent')?></option>
+                <option <?php echo config('referral-commission-type', 1) == 2 ? 'selected' : null?> value="2"><?php _l('amount')?></option>
+            </select>
+        </div>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="val[referral-commission]" value="<?php echo config('referral-commission', 30)?>"/>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label><?php _l('referral-minimum-withdraw')?></label>
+    <input type="text" class="form-control" value="<?php echo config('referral-minimum-withdraw', 25)?>" name="val[referral-minimum-withdraw]"/>
+</div>
+<hr/>

@@ -1,0 +1,20 @@
+<div class="each-container">
+    <a href="" onclick="return openTutorialContent('<?php echo $tutorial['id']?>', '<?php echo getFullUrl(true)?>')" class="each">
+        <div id="postCarousel<?php echo $tutorial['id']?>" class="carousel slide" data-interval="false">
+
+            <div class="carousel-inner">
+                <div class="carousel-item active" style="background-image: url(<?php echo assetUrl($tutorial['image'])?>)">
+                </div>
+            </div>
+        </div>
+
+        <div class="info-content">
+
+            <p>
+                <?php echo str_limit($tutorial['name'], 50)?>
+            </p>
+
+            <p style="font-weight:lighter"><?php echo str_limit($tutorial['description'], 100)?></p>
+        </div>
+    </a>
+</div>

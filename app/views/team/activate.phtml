@@ -1,0 +1,34 @@
+<div class="pane-pages-container">
+    <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+        <div class="container">
+            <div class="package-title">
+                <h5><?php _l('create-a-password')?></h5>
+                <p>
+                    <?php _l('create-a-password-note')?>
+                </p>
+            </div>
+            <div class="content-pane" style="top: 20px;padding: 30px;padding-right: 15%">
+
+
+                <div class="form-group">
+                    <label><?php _l('new-password')?></label>
+                    <input required type="password" name="val[password]" class="form-control"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('confirm-password')?></label>
+                    <input required type="password" name="val[cpassword]" class="form-control"/>
+                </div>
+
+                <select class="form-control select-timezone mb-4" name="val[timezone]">
+                    <option value=""><?php _l('select-timezone')?></option>
+                    <?php foreach(getTimezones() as $key => $name):?>
+                        <option value="<?php echo $key?>"><?php echo $name?></option>
+                    <?php endforeach?>
+                </select>
+
+                <button type="submit" class="btn btn-primary"><?php _l('accept-invitation')?></button>
+            </div>
+        </div>
+    </form>
+</div>

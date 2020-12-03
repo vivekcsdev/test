@@ -1,0 +1,79 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#pages" data-toggle="tab" class="menu-item  <?php echo (!$page) ? 'active' : null?>"><span><?php _l('custom-pages')?></span></a>
+            <a href="#new"  data-toggle="tab"  class="menu-item   <?php echo ($page == 'new') ? 'active' : null?>"><span><?php _l('add-new-page')?></span></a>
+
+        </div>
+    </div>
+
+    <div class="actions-pane">
+        <ul class="clearfix">
+            <li>
+                <form action="<?php echo getFullUrl()?>" data-container="#languages" method="post" class="search-form">
+                    <div class="input-group">
+
+                        <input placeholder="<?php _l('enter-a-keyword')?>" value="<?php echo $C->request->input('term')?>" type="text" class="form-control" id="validationDefaultUsername"  aria-describedby="inputGroupPrepend2" required>
+                        <div class="input-group-append">
+                            <button class="input-group-text btn btn-primary" id="inputGroupPrepend2"><i class="la la-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </li>
+
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show <?php echo (!$page) ? 'active' : null?>" id="pages" role="tabpanel" >
+            <?php echo view('admin/pages/display', array('pages' => $pages))?>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page == 'new') ? 'active' : null?>" id="new" role="tabpanel" >
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form" style="max-width: 800px">
+                <input type="hidden" name="val[create]" value="1"/>
+                <div class="form-group">
+                    <label><?php _l('name')?></label>
+                    <input type="text" class="form-control" name="val[name]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('slug')?></label>
+                    <input type="text" class="form-control" name="val[slug]"/>
+                    <span class="text-muted"><?php _l('slug-note-help')?></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="mb-4"><?php _l('position')?></label>
+                    <div class="">
+
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" value="header" checked  id="customRadioInline1" name="val[position]" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline1"><?php _l('header-menu')?></label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" value="footer" id="customRadioInline2" name="val[position]" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline2"><?php _l('footer-menu')?></label>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="mb-2"><?php _l('page-content')?></label>
+
+                    <div class="">
+                        <textarea id="text-editor" name="val[content]" ></textarea>
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary btn-lg"><?php _l('submit')?></button>
+
+            </form>
+        </div>
+
+    </div>
+</div>

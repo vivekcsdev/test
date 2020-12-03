@@ -1,0 +1,51 @@
+<?php
+$file = model('filemanager')->find($post['file']);
+$caption    = $post['caption'];
+$medias = array($file['file_name']);
+autoLoadVendor();
+$emojione = new \Emojione\Client(new \Emojione\Ruleset());
+$caption = $emojione->shortnameToUnicode($caption);
+$captions = model('caption')->getCaptions();
+?>
+<div class="each-container" style="height: 400px;">
+    <div class="each" id="each-party-post-<?php echo $post['id']?>">
+        <div id="postCarousel<?php echo $post['id']?>" class="carousel slide" data-interval="false">
+
+           
+            <div class="carousel-inner">
+                <?php $i=0; foreach($medias as $media):?>
+
+                    <?php if(isImage($media)):?>
+                        <div class="carousel-item <?php echo ($i == 0) ? 'active':null?> " style="background-image: url(<?php echo assetUrl($media)?>)">
+                        </div>
+                    <?php else:?>
+                        <div class="carousel-item <?php echo ($i == 0) ? 'active':null?>  each">
+                            <video  playsinline loop muted src='<?php echo assetUrl($media)?>' ></video>
+                        </div>
+                    <?php endif?>
+
+                    <?php $i++; endforeach;?>
+            </div>
+        </div>
+
+        <form action="<?php echo getFullUrl()?>" class="general-form" method="post" id="this-post-form-<?php echo $post['id']?>">
+            <input type="hidden" value="edit-post" name="val[action]"/>
+            <input type="hidden" value="<?php echo $post['id']?>" name="val[id]"/>
+            <div class="info-content" style="height: 125px">
+
+                <textarea name="val[caption]"  class=" emoji-text " ><?php echo $caption?></textarea>
+
+            </div>
+
+            <div class="info-footer clearfix">
+                <div class="float-left">
+                    <a class="btn btn-white btn-sm confirm" data-ajax-action="true" href="<?php echo url('party/'.$C->request->segment(1),array('action' => 'delete-post','id' => $post['id']))?>"><i class="la la-trash"></i></a>
+                </div>
+                <div class="float-right">
+                    <button type="submit" class="btn btn-white"><?php _l('save')?></button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

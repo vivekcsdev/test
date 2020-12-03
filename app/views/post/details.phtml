@@ -1,0 +1,333 @@
+<div class="campaign-div">
+    <div id="horizontal-menu">
+        <div class="menu-container">
+            <div class="menu " role="tablist">
+                <a href="#details" id="camp-detls" data-toggle="tab" class="menu-item  active"><span>General Details</span></a>
+                <a href="#adformat" id="camp-format" data-toggle="tab" class="menu-item"><span>Ad Format</span></a>
+                <a href="#audience" id="camp-aud" data-toggle="tab" class="menu-item"><span>Audience</span></a>
+                <!-- <a href="#budget" id="camp-bdgt" data-toggle="tab" class="menu-item"><span>Budget</span></a> -->
+                <a href="#estimation" id="camp-estmtn" data-toggle="tab" class="menu-item"><span>Estimation</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content campaign-content">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active col-md-12 " id="details" role="tabpanel" >
+                <!-- <form class="general-form short-form" action="<?php //echo getFullUrl(true)?>" method="post"> -->
+                <div class="col-md-12 row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Ad Name" name="val[camp_name]"/>
+                        </div>
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <textarea class="form-control with_icon" rows="5"  placeholder="Objective" name="val[camp-objective]"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="ad_types p-3 m-2">
+                            <input type="radio" name="val[camp_ad]" value="filter"> Filter
+                        </div>
+                        <div class="ad_types p-3 m-2">
+                            <input type="radio" name="val[camp_ad]" value="single image"> Single Image / Video
+                        </div>
+                        <div class="ad_types p-3 m-2">
+                            <input type="radio" name="val[camp_ad]" value="story"> Story AD
+                        </div>
+                        <div class="ad_types p-3 m-2">
+                            <input type="radio" name="val[camp_ad]" value="AR Lens"> AR Lens
+                        </div>
+                        <div class="ad_types p-3 m-2">
+                            <input type="radio" name="val[camp_ad]" value="collection"> Collection AD
+                        </div>
+                        <div class="ad_types p-3 m-2">
+                            <input type="radio" name="val[camp_ad]" value="text"> Text AD
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        
+                    </div>
+                </div>
+                <div class="col-md-2 float-right">
+                    <a class="btn btn-block campaign-buttons" onclick="return clickButton('#camp-format')" >NEXT</a>
+                </div>
+
+                <!-- </form> -->
+            </div>
+
+            <div class="tab-pane fade col-md-12 " id="adformat" role="tabpanel" >
+                <!-- <form class="general-form short-form" action="<?php //echo getFullUrl(true)?>" method="post"> -->
+                <div class="col-md-12 row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Country" name="val[camp_region]"/>
+                        </div>
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Regions" name="val[camp_region]"/>
+                        </div>
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Select from Map" name="val[camp_map]"/>
+                        </div>
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Gender" name="val[camp_gender]"/>
+                        </div>
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Age" name="val[camp_age]"/>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Language" name="val[camp_language]"/>
+                        </div>
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Interests" name="val[camp_interest]"/>
+                        </div>
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Operating System" name="val[camp_os]"/>
+                        </div>
+                        <div class="form-group">
+                            <i class="las la-edit la-lg edit_icon"></i>
+                            <input type="text" class="form-control with_icon" placeholder="Device Make" name="val[camp_device]"/>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-0">
+                        <div class="col-md-12 bg-white d-flex justify-content-center">
+                            <div class="col-md-6 mt-4">
+                                <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                <div class="col-md-12 text-primary mb-2">Audience</div>
+                                <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <canvas  id="chartjs-area-1" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-12 bg-white d-flex justify-content-center pt-2">
+                            <div class="col-md-6 mt-4">
+                                <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                <div class="col-md-12 text-primary mb-2">Audience</div>
+                                <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                            <canvas  id="chartjs-area-2" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-12 bg-white d-flex justify-content-center pt-2">
+                            <div class="col-md-6 mt-4">
+                                <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                <div class="col-md-12 text-primary mb-2">Audience</div>
+                                <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                            <canvas  id="chartjs-area-3" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-12 bg-white d-flex justify-content-center pt-2 pb-2">
+                            <div class="col-md-6 mt-4">
+                                <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                <div class="col-md-12 text-primary mb-2">Audience</div>
+                                <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                            <canvas  id="chartjs-area-4" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 float-right m-4">
+                    <a class="btn btn-block campaign-buttons" onclick="return clickButton('#camp-aud')">NEXT</a>
+                    <!-- <button class="btn btn-block campaign-buttons">NEXT</button> -->
+                </div>
+
+                <!-- </form> -->
+            </div>
+
+            <div class="tab-pane fade col-md-12 " id="audience" role="tabpanel" >
+                <!-- <form class="general-form short-form" action="<?php //echo getFullUrl(true)?>" method="post"> -->
+                <div class="col-md-12 row mb-2">
+                    <div class="col-md-4">Ad Details</div>
+                    <div class="col-md-8">Objectives</div>
+                </div>
+                <div class="col-md-12 row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control with_icon" placeholder="Ad Type" name="val[camp_type]"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control with_icon" placeholder="Budget Selection" name="val[camp_budget]"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control with_icon" placeholder="Start Date" name="val[camp_start]"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control with_icon" placeholder="End Date" name="val[camp_end]"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control with_icon" placeholder="Ad Duration" name="val[camp_duration]"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control with_icon" placeholder="Total Cost" name="val[camp_cost]"/>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 top-margin">
+                        <div class="col-md-12  bg-white justify-content-center text-primary">
+                            <div class="col-md-12 text-center m-3 pt-3">YOUR TOTAL COST APPROXIMATE</div>
+                            <div class="col-md-12 d-flex justify-content-center text-dark align-items-end"><h3 class="mb-0">205</h3><h6 class="mb-1">AED</h6></div>
+                            <div class="col-md-12 text-center m-3">YOUR AD WILL BE RUNNING FOR</div>
+                            <div class="col-md-12 text-center">7 DAYS</div>
+                            <div class="col-md-12  d-flex justify-content-center"><image src="<?php echo assetUrl('assets/images/details.png')?>"></image></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-0">
+                        <div class="col-md-12 bg-white d-flex justify-content-center">
+                            <div class="col-md-6 mt-4">
+                                <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                <div class="col-md-12 text-primary mb-2">Audience</div>
+                                <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                            <canvas  id="chartjs-area-8" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-12 bg-white d-flex justify-content-center pt-2">
+                            <div class="col-md-6 mt-4">
+                                <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                <div class="col-md-12 text-primary mb-2">Audience</div>
+                                <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                            <canvas  id="chartjs-area-9" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-12 bg-white d-flex justify-content-center pt-2">
+                            <div class="col-md-6 mt-4">
+                                <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                <div class="col-md-12 text-primary mb-2">Audience</div>
+                                <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                            <canvas  id="chartjs-area-10" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-12 bg-white d-flex justify-content-center pt-2 pb-2">
+                            <div class="col-md-6 mt-4">
+                                <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                <div class="col-md-12 text-primary mb-2">Audience</div>
+                                <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                            <canvas  id="chartjs-area-11" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 float-right m-4">
+                    <a class="btn btn-block campaign-buttons" onclick="return clickButton('#camp-estmtn')" >NEXT</a>
+                    <!-- <button class="btn btn-block campaign-buttons">NEXT</button> -->
+                </div>
+
+                <!-- </form> -->
+            </div>
+            <div class="tab-pane fade col-md-12" id="estimation" role="tabpanel" >
+                <div class="col-md-12 m-3"><b>Estimations</b></div>
+                <div class="col-md-12 d-flex justify-content-center pr-0">
+                    <div class="col-md-4 text-dark">
+                        <div class="col-md-12 bg-white">
+                            <div class="col-md-12 pb-3 pl-0 pr-0 pt-3 d-flex justify-content-center  ">
+                                <div class="col-md-6"><b>Audience</b></div>
+                                <div class="col-md-6 text-right"><b>1.9M-2.0M</b></div>
+                            </div>
+                            <div class="col-md-12 pb-3 pl-0 pr-0 pt-3 d-flex justify-content-center  ">
+                                <div class="col-md-6"><b>Reach</b></div>
+                                <div class="col-md-6 text-right"><b>140K-180K</b></div>
+                            </div>
+                            <div class="col-md-12 pb-3 pl-0 pr-0 pt-3 d-flex justify-content-center  ">
+                                <div class="col-md-6"><b>Impressions</b></div>
+                                <div class="col-md-6 text-right"><b>65K-190K</b></div>
+                            </div>
+                            <div class="col-md-12 pb-3 pl-0 pr-0 pt-3 d-flex justify-content-center  ">
+                                <div class="col-md-6"><b>Swipes</b></div>
+                                <div class="col-md-6 text-right"><b>7.1K-10K</b></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 bg-white text-dark p-2">
+                        <div class="border m-1">
+                            <div class="col-md-12 bg-white pl-0 pr-0 mt-2">
+                                <div class="col-md-12 d-flex justify-content-center pl-0 pr-0">
+                                    <div class="col-md-4 pr-0 pl-0 d-flex justify-content-center">
+                                        <div class="col-md-4 pl-0 pr-0 mt-4">
+                                            <div class="col-md-12 text-dark"><h5>32,451</h5></div>
+                                            <div class="col-md-12 text-primary mb-2">Visits</div>
+                                            <div class="col-md-12 text-muted">+14.00(+0.50%)</div>
+                                        </div>
+                                        <div class="col-md-8 p-0 ">
+                                        <canvas  id="chartjs-area-16" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 pr-0 pl-0 d-flex justify-content-center">
+                                        <div class="col-md-4 pl-0 pr-0 mt-4">
+                                            <div class="col-md-12 text-dark pl-1"><h5>15,236</h5></div>
+                                            <div class="col-md-12 text-primary mb-2 pl-1">Impressions</div>
+                                            <div class="col-md-12 text-muted pl-1">+138.97(+0.54%)</div>
+                                        </div>
+                                        <div class="col-md-8 p-0 ">
+                                        <canvas  id="chartjs-area-17" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 pr-0 pl-0 d-flex justify-content-center">
+                                        <div class="col-md-4 pl-0 pr-0 mt-4">
+                                            <div class="col-md-12 text-dark pl-1"><h5>7,688</h5></div>
+                                            <div class="col-md-12 text-primary mb-2 pl-1">Conversation</div>
+                                            <div class="col-md-12 text-muted pl-1">+57.62(+0.76%)</div>
+                                        </div>
+                                        <div class="col-md-8 p-0 ">
+                                        <canvas  id="chartjs-area-18" data-content='{"type":"line","data":{"labels":["","","","","",""],"datasets":[{"label":[],"data":[92,100,90,105,77,88],"fill":true,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"]}]},"options":{"elements":{"line":{"tension":0},"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="col-md-4 mt-4">
+                                <div class="col-md-12 text-muted">Ext.Customer Sales</div>
+                                <div class="col-md-12 text-muted d-flex"><h4>48,352</h4><h5></h5></div>
+                                <div class="col-md-12 text-dark"><b>-10,2</b></div>
+                                <canvas  id="chartjs-area-12" data-content='{"type":"line","data":{"labels":["","","","","","",""],"datasets":[{"label":[],"data":[2,3,4,3.5,4.5,5,5],"fill":true,"backgroundColor":["darkgrey"],"borderWidth":0}]},"options":{"elements":{"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                            <div class="col-md-4 mt-4">
+                                <div class="col-md-12 text-muted">Sales Growth</div>
+                                <div class="col-md-12 text-muted d-flex"><h4>23,4%</h4><h5></h5></div>
+                                <div class="col-md-12 d-flex"><div class="text-muted p-0">Quarter </div><div class="text-dark"><b>+7,3</b></div></div>
+                                <canvas  id="chartjs-area-13" data-content='{"type":"line","data":{"labels":["","","","","","",""],"datasets":[{"label":"","data":[6,4.5,3,4,3.75,4,5.2],"fill":true,"backgroundColor":["#7a7ad8"],"borderWidth":0}]},"options":{"elements":{"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                            <div class="col-md-4 mt-4">
+                                <div class="col-md-12 text-muted">Ext.Customer Sales</div>
+                                <div class="col-md-12 text-muted d-flex"><h4>48,352</h4><h5></h5></div>
+                                <div class="col-md-12 text-dark"><b>-10,2</b></div>
+                                <canvas  id="chartjs-area-14" data-content='{"type":"line","data":{"labels":["","","","","","",""],"datasets":[{"label":"","data":[2,3,4,3.5,4.5,5,5],"fill":true,"backgroundColor":["darkgrey"],"borderWidth":0}]},"options":{"elements":{"point":{"radius":0}},"scales":{"yAxes":[{"display":false}],"xAxes":[{"gridLines":{"display":false}}]},"legend":{"display":false},"tooltips":{"callbacks":{"label":"function(tooltipItem){return tooltipItem.yLabel}"}}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 float-right mt-3 p-0">
+                    <a class="btn btn-block campaign-buttons"  href="<?php echo url('post')?>">NEXT</a>
+                    <!-- <button class="btn btn-block campaign-buttons">NEXT</button> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

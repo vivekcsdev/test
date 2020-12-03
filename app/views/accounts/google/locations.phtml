@@ -1,0 +1,28 @@
+<?php if(count($locations->getLocations()) > 0):?>
+    <h5><?php _l('your-business-lacations')?></h5>
+    <hr/>
+    <?php foreach($locations->getLocations() as $location):$already = model('account')->findAccountBySID($location->name, 'google', 'location')?>
+        <div class="clearfix" style="margin-bottom: 10px;">
+            <div class="float-left">
+                <?php
+                $avatar = $C->api('google')->getAvatar();
+                ?>
+                <img src="<?php echo assetUrl($avatar)?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><?php echo $location->locationName?></span>
+            </div>
+            <div class="float-right">
+                <div class="switch">
+                    <?php if($already):?>
+                        <input type="hidden" name="val[locations][]" value="<?php echo $location->name?>"/>
+                    <?php endif?>
+                    <input <?php echo ($already) ? 'checked' : null?> <?php echo ($already) ? 'disabled' : null?> id="cmn-toggle-group<?php echo $location->name?>" value="<?php echo $location->name?>" name="val[locations][]" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                    <label for="cmn-toggle-group<?php echo $location->name?>"></label>
+                </div>
+            </div>
+        </div>
+        <hr/>
+    <?php endforeach?>
+<?php else:?>
+    <div class="alert alert-warning"><?php _l('no-business-locations-found')?></div>
+<?php endif?>

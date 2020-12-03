@@ -1,0 +1,65 @@
+<div class="inner-container bulk-container">
+
+   <div class="page-title-panel d-flex align-items-center">
+      <h2><?php _l('bulk-schedule')?></h2>
+   </div>
+
+   <div class="clearfix" style="position: relative;">
+      <div class="inner-left-pane modern-scroll">
+         <div class="action-pane" style="height: 49px;position: relative;">
+            <h6><?php _l('bulk-schedule')?></h6>
+            <a href="" data-toggle="modal" data-target="#newBulkModal" class="btn btn-primary" style="position:absolute;top: 5px;right: 10px;"><?php _l('new')?></a>
+         </div>
+         <div class="each-side-list">
+            <?php $bulks = model('bulk::bulk')->getBulks(); foreach($bulks as $bulk):?>
+            <a href="<?php echo url('bulk/schedule/'.$bulk['id'])?>" data-ajax="true" class="list" >
+               <?php $colors = array('#FF9800','#000','#F44336','#3F51B5','#FF5722','#4CAF50','#FFEB3B','#2196F3','#F320DB','#673AB7');$color = $colors[rand(0, count($colors) - 1)]?>
+               <div class="avatar" style="background: <?php echo $color?>;"><?php echo mb_substr($bulk['title'], 0, 1)?></div>
+               <div class="info">
+                  <h6><?php echo $bulk['title']?></h6>
+                  <span class="count"><?php echo model('bulk::bulk')->countPosts($bulk['id'])?> <?php _l('posts')?></span>
+               </div>
+            </a>
+            <?php endforeach;?>
+            <?php if(count($bulks) < 1):?>
+            <div class="empty-content">
+               <i class="la la-fill"></i>
+               <span style="font-size: 14px"><?php _l('no-bulk-schedule-show')?></span>
+            </div>
+            <?php endif?>
+         </div>
+      </div>
+      <div class="inner-right-pane">
+         <div class="content" style="height:calc(100vh - 50px);padding: 0;">
+            <div class="monthly" id="schedule-calender" data-url="<?php echo getFullUrl()?>"></div>
+         </div>
+      </div>
+   </div>
+
+
+
+</div>
+<div class="modal" tabindex="-1" id="newBulkModal" role="dialog">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title"><?php _l('new-bulk-schedule')?></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+            <div class="modal-body">
+               <div class="form-group">
+                  <label><?php _l('title')?></label>
+                  <input required type="text" class="form-control" name="val[title]"/>
+                  <span class="muted"><?php _l('new-bulk-title-note')?></span>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="submit" class="btn btn-primary"><?php _l('continue')?></button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>

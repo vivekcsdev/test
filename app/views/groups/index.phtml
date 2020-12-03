@@ -1,0 +1,59 @@
+<div class="group-account-container">
+    
+    <div class="page-title-panel d-flex align-items-center">
+      <div><h2><?php _l('group-your-accounts')?></h2></div>
+   </div>
+
+    <div class="content content-big">
+        <h5 class="d-none"><?php _l('group-your-accounts')?></h5>
+        <h6 class="d-none" style="font-weight: lighter;color: grey;"><?php _l('group-your-accounts-info')?></h6>
+
+        <div class="grid-container clearfix">
+            <div class="each-container">
+                <a href="" onclick="return openGroupModal('<?php echo url('groups', array('action' => 'add'))?>')" class="each each-add">
+                    <i class="las la-plus"></i>
+                    <?php _l('add-group')?>
+                </a>
+            </div>
+            <?php foreach (model('group')->lists() as $group): $accounts = perfectUnserialize($group['accounts'])?>
+                <div class="each-container">
+                    <div class="each">
+                        <span class="count"><?php echo count($accounts)?></span>
+                        <p>
+                            <?php echo $group['title']?>
+                        </p>
+                        <div class="actions">
+                            <a href="<?php echo url('groups', array('delete' => $group['id']))?>" data-ajax-action="true" class=" confirm"><i class="lar la-trash-alt"></i></a>
+                            <a href="" onclick="return openGroupModal('<?php echo url('groups', array('action' => $group['id']))?>')"><i class="las la-pen"></i></a>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach;?>
+
+
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" id="groupModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?php _l('group')?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-primary"><?php _l('save')?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

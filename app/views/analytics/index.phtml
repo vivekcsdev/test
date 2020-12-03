@@ -1,0 +1,17 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#accounts" data-toggle="tab" class="menu-item  active"><span>Instagram <?php echo strtolower(l('analytics'))?></span></a>
+
+            <a href="<?php echo url('accounts/instagram')?>" data-ajax="true"  class="menu-item  "><span><?php _l('back-to-account')?></span></a>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="content" style="padding: 0">
+    <div class="instagram-analytics-container" data-url="<?php echo getFullUrl()?>?load=true"></div>
+</div>

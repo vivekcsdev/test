@@ -1,0 +1,130 @@
+<div class="file-manager-container">
+
+   <div class="page-title-panel d-flex align-items-center">
+      <div><h2><?php _l('file-manager')?></h2></div>
+      <div class="ml-auto">
+         <a href="" data-selected="false" onclick="return selectedFiles(this)" class="btn btn-outline-light hide-mobile mr-3"><?php _l('select-all')?></a>
+         <a href="javascript:void(0)" class="btn btn-outline-light" style="position:relative;overflow: hidden">
+            <form method="post" data-no-loader="true" data-upload="#upload-progress" action="<?php echo getFullUrl()?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
+               <input type="hidden" name="val[upload]" value="1"/>
+               <input type="hidden" name="val[folder_id]" value="0" class="file-folder-id-input"/>
+               <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
+                <?php _l('upload')?>
+            </form>
+         </a>
+      </div>
+   </div>
+
+   <div id="horizontal-menu" class="d-none">
+      <?php $page = $C->request->input('p')?>
+      <div class="menu-container">
+         <div class="menu hide-mobile" role="tablist">
+            <a href="" id="goback-folder-toggle"  class="menu-item  " style="padding-right:0 !important;display: none;" onclick="return goBackFolder(0)"><span><i class="las la-long-arrow-alt-left"></i></span></a>
+            <a href="#files" data-toggle="tab" class="menu-item  <?php echo (!$page) ? 'active' : null?>"><span><?php _l('file-manager')?></span></a>
+            <a  class="menu-item  hide-mobile"><span>
+            <?php
+               $used = model('user')->getUsedSize();
+               $total = model('user')->getTotalSize();
+               ?>
+            Storage:
+            <strong class="color-black"><?php echo $used?>MB</strong> / <strong class="colored"><?php echo (is_numeric($total)) ? $total.'MB' : l('unlimited')?></strong>
+            </span></a>
+         </div>
+      </div>
+      <div class="actions-pane">
+         <ul class="clearfix">
+            <li class="btn-group">
+               <a href="" onclick="return deleteSelectFiles()" class="btn btn-outline-light"><i class="la la-trash"></i></a>
+               <a href=""
+                  data-selected="false"
+                  onclick="return selectedFiles(this)"
+                  class="btn btn-outline-light hide-mobile"><?php _l('select-all')?></a>
+            </li>
+            <li class="btn-group">
+               <a href="" data-toggle="modal" data-target="#newFolderModal" class="btn btn-outline-light mtitle" title="<?php _l('create-a-folder')?>"><i class="las la-folder-plus"></i></a>
+               <a href="javascript:void(0)" class="btn btn-outline-light" style="position:relative;overflow: hidden">
+                  <form method="post" data-no-loader="true" data-upload="#upload-progress" action="<?php echo getFullUrl()?>" enctype="multipart/form-data" class="general-form filemanager-uploader">
+                     <input type="hidden" name="val[upload]" value="1"/>
+                     <input type="hidden" name="val[folder_id]" value="0" class="file-folder-id-input"/>
+                     <input multiple onchange="validate_file_size(this, 'image-video','submit_file_upload')" type="file" name="file[]" style="position:absolute;top: 0;width: 100%;height: 100%;opacity: 0;z-index: 99;cursor: pointer">
+                     <i class="la la-plus"></i> <?php _l('upload')?>
+                  </form>
+               </a>
+            </li>
+            <li class="btn-group">
+               <?php if(config('google-api-key') and model('user')->hasPermission('google-drive')):?>
+               <a href="" onclick="return openGoogleDrivePicker()" class="btn btn-outline-light"><i class="lab la-google-drive"></i></a>
+               <?php endif?>
+               <?php if(config('dropbox-api-key') and model('user')->hasPermission('dropbox')):?>
+               <a href="" onclick="return openDropboxPicker()" class="btn btn-outline-light"><i class="la la-dropbox"></i></a>
+               <?php endif?>
+               <?php if(config('onedrive-client-id') and model('user')->hasPermission('one-drive')):?>
+               <a href="" onclick="return launchOneDrivePicker()" class="btn btn-outline-light"><i class="la la-cloud"></i></a>
+               <?php endif?>
+            </li>
+         </ul>
+      </div>
+   </div>
+
+   <div id="upload-progress">
+      <div class="progress">
+         <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+   </div>
+
+   <div class="modal" tabindex="-1" id="newFolderModal" role="dialog">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title"><?php _l('create-a-folder')?></h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form">
+               <input type="hidden" name="val[folder]" value="1"/>
+               <input type="hidden" name="val[folder_id]" value="0" class="file-folder-id-input"/>
+               <div class="modal-body">
+                  <div class="form-group">
+                     <label><?php _l('folder-name')?></label>
+                     <input type="text" class="form-control" name="val[name]"/>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary"><?php _l('create')?></button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+   <div id="filemanager-container">
+      <div class="content scroll-paginate"
+         data-container=".uploads-files-container"
+         data-offset="40"
+         data-url="<?php echo url('file-manager')?>"
+         >
+         <div class="tab-content the-content" id="myTabContent">
+            <div class="tab-pane fade show <?php echo (!$page) ? 'active' : null?>" id="files" role="tabpanel" >
+               <form id="files-form-container" action="<?php echo getFullUrl()?>" method="post" class="general-form">
+                  <input class="action" type="hidden" name="val[action]" value="1"/>
+                  <div data-upload-url="<?php echo url('file-manager', array('dragged' => true))?>" class="uploads-files-container clearfix">
+                     <?php $folders = model('filemanager')->getFolders(); $i=0; foreach($folders as $file):?>
+                     <?php echo view('filemanager/display-folder', array('file' => $file, 'isLast' => $i == count($folders)-1))?>
+                     <?php $i++; endforeach?>
+                     <?php foreach($files as $file):?>
+                     <?php echo view('filemanager/display', array('file' => $file))?>
+                     <?php endforeach;?>
+                     <?php if(count($files) < 1):?>
+                     <div class="empty-content" id="file-upload-empty">
+                        <i class="la la-fill"></i>
+                        <span><?php _l('no-contents-show')?></span>
+                     </div>
+                     <?php endif?>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

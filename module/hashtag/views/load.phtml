@@ -1,0 +1,10 @@
+<?php
+foreach($hashtags as $hashtag):?>
+    <a href="" onclick='return useHashtag(this)' data-content="" class="each">
+        <div style="display: none" class="value"><?php echo $hashtag['content']?></div>
+        <h6><?php echo $hashtag['title']?></h6>
+        <p>
+            <?php echo  $hashtag['content']?>
+        </p>
+    </a>
+<?php endforeach?>

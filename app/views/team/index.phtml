@@ -1,0 +1,276 @@
+<div class="team-container">
+
+    <div class="page-title-panel d-flex align-items-center">
+      <div><h2><?php _l('manage-team')?></h2></div>
+      <div class="ml-auto">
+          <a data-toggle="modal" data-target="#newMemberModal" href="" class="btn btn-primary"><?php _l('invite-new-member')?></a>
+      </div>
+   </div>
+
+    <div class="content content-big">
+        <h5 class="d-none">
+            <?php _l('manage-team')?> 
+            <a data-toggle="modal" data-target="#newMemberModal" href="" class="btn btn-primary"><?php _l('invite-new-member')?></a>
+        </h5>
+        <h6 class="d-none" style="font-weight: lighter;color: grey;"><?php _l('manage-team-info')?></h6>
+
+
+        <div class="modern-table">
+            <div class="table-head clearfix">
+                <div class="each" style="width:5%;">
+                    <a href="javascript:void(0)"  class="btn btn-light"><i class="la la-trash"></i></a>
+                </div>
+                <div class="each" style="width: 20%;">
+                    <?php _l('name')?>
+                </div>
+                <div class="each" style="width: 25%;">
+                    <?php _l('email-address')?>
+                </div>
+                <div class="each" style="width: 10%;">
+                    <?php _l('status')?>
+                </div>
+                <div class="each" style="width: 20%;">
+                    <?php _l('last-active-time')?>
+                </div>
+                <div class="each" style="width: 10%;">
+                    <?php _l('actions')?>
+                </div>
+            </div>
+
+
+            <div class="table-body" >
+
+                <?php foreach($users as $user):?>
+                    <div class="table-row clearfix">
+                        <div class="each clearfix" style="width: 5%;">
+                            <div class="left">
+
+                            </div>
+                            <div class="right">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="val[id][]" value="<?php echo $user['id']?>" class="custom-control-input" id="customCheck<?php echo $user['id']?>">
+                                    <label class="custom-control-label" for="customCheck<?php echo $user['id']?>"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="each clearfix" style="width: 20%;">
+                            <div class="left">
+                                <?php _l('name')?>
+                            </div>
+                            <div class="right">
+                                <?php echo $user['name']?>
+                            </div>
+                        </div>
+                        <div class="each clearfix" style="width: 25%;">
+                            <div class="left">
+                                <?php _l('email-address')?>
+                            </div>
+                            <div class="right">
+                                <?php echo $user['email']?>
+                            </div>
+                        </div>
+                        <div class="each clearfix" style="width: 10%;">
+                            <div class="left">
+                                <?php _l('status')?>
+                            </div>
+                            <div class="right">
+                                <?php if($user['status']):?>
+                                    <span class="badge badge-success"><?php _l('active')?></span>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('pending')?></span>
+                                <?php endif?>
+                            </div>
+                        </div>
+                        <div class="each clearfix" style="width: 20%;">
+                            <div class="left">
+                                <?php _l('last-active-time')?>
+                            </div>
+                            <div class="right">
+                                <?php if($user['status']):?>
+                                    <?php echo date('M d, Y', $user['last_active_time'])?>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('Nil')?></span>
+                                <?php endif?>
+
+                            </div>
+                        </div>
+                        <div class="each clearfix" style="width: 20%;">
+                            <div class="left">
+                                <?php _l('actions')?>
+                            </div>
+                            <div class="right">
+                                <?php if(!$user['status']):?>
+                                    <a href="<?php echo url('manage/team', array('action' => 'resend','id' => $user['id']))?>" class="btn btn-light mtitle ajax-action" title="<?php _l('resend-invitation')?>"><i class="las la-sync"></i></a>
+                                <?php endif?>
+                                <a href="" data-toggle="modal" data-target="#editMemberModal<?php echo $user['id']?>" class="btn btn-light mtitle" title="<?php _l('edit-permission')?>"><i class="la la-pencil"></i></a>
+                                <a href="<?php echo url('manage/team', array('action' => 'delete','id' => $user['id']))?>" class="btn btn-light mtitle confirm" data-ajax-action="true" title="<?php _l('delete-user')?>"><i class="la la-times"></i></a>
+
+                                <div class="modal" tabindex="-1" id="editMemberModal<?php echo $user['id']?>" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+                                            <input type="hidden" name="val[action]" value="edit"/>
+                                            <input type="hidden" name="val[id]" value="<?php echo $user['id']?>"/>
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"><?php _l('edit-member')?></h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+
+
+                                                    <h6><?php _l('permissions')?></h6>
+                                                    <?php
+                                                        $permissions = perfectUnserialize($user['permissions']);
+                                                        if (!$permissions) $permissions = array(
+                                                                'captions' => 0,
+                                                            'manage-accounts' => 0,
+                                                            'rss' => 0,
+                                                            'filemanager'=> 0,
+                                                            'watermark' => 0
+                                                        );
+                                                    ?>
+                                                    <hr/>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <div class="custom-control custom-checkbox ">
+                                                                <input type="hidden" name="val[permission][captions]" value="0"/>
+                                                                <input type="checkbox" <?php echo ($permissions['captions']) ? 'checked':null?>  value="1" name="val[permission][captions]"  class="custom-control-input" id="customCheckcaptions<?php echo $user['id']?>">
+                                                                <label class="custom-control-label" for="customCheckcaptions<?php echo $user['id']?>"><?php _l('captions')?></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="hidden" name="val[permission][manage-accounts]" value="0"/>
+                                                                <input type="checkbox" <?php echo ($permissions['manage-accounts']) ? 'checked':null?>  value="1" name="val[permission][manage-accounts]"  class="custom-control-input" id="customCheckmanage-accounts<?php echo $user['id']?>">
+                                                                <label class="custom-control-label" for="customCheckmanage-accounts<?php echo $user['id']?>"><?php _l('manage-accounts')?></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="hidden" name="val[permission][rss]" value="0"/>
+                                                                <input type="checkbox" <?php echo ($permissions['rss']) ? 'checked':null?>  value="1" name="val[permission][rss]"  class="custom-control-input" id="customCheckrss<?php echo $user['id']?>">
+                                                                <label class="custom-control-label" for="customCheckrss<?php echo $user['id']?>"><?php _l('rss-feeds')?></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+
+                                                        <div class="col-md-4">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="hidden" name="val[permission][filemanager]" value="0"/>
+                                                                <input type="checkbox" <?php echo ($permissions['filemanager']) ? 'checked':null?>  value="1" name="val[permission][filemanager]"  class="custom-control-input" id="customCheckfilemanager<?php echo $user['id']?>">
+                                                                <label class="custom-control-label" for="customCheckfilemanager<?php echo $user['id']?>"><?php _l('filemanager')?></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="hidden" name="val[permission][watermark]" value="0"/>
+                                                                <input type="checkbox" <?php echo ($permissions['watermark']) ? 'checked':null?>  value="1" name="val[permission][watermark]"  class="custom-control-input" id="customCheckwatermark<?php echo $user['id']?>">
+                                                                <label class="custom-control-label" for="customCheckwatermark<?php echo $user['id']?>"><?php _l('watermark')?></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+
+                                                    <button type="submit" class="btn btn-primary"><?php _l('save')?></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+            </div>
+        </div>
+
+        <?php if(count($users) < 1):?>
+            <div class="empty-content">
+                <i class="la la-fill"></i>
+                <span><?php _l('no-contents-show')?></span>
+            </div>
+        <?php endif?>
+    </div>
+
+    <div class="modal" tabindex="-1" id="newMemberModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+                <input type="hidden" name="val[action]" value="add"/>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?php _l('new-member')?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label><?php _l('full-name')?></label>
+                            <input type="text" required class="form-control" name="val[name]"/>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('email-address')?></label>
+                            <input type="text" required class="form-control" name="val[email]"/>
+                        </div>
+
+                        <hr/>
+                        <h6><?php _l('permissions')?></h6>
+                        <hr/>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="custom-control custom-checkbox ">
+                                    <input type="hidden" name="val[permission][captions]" value="0"/>
+                                    <input type="checkbox"  value="1" name="val[permission][captions]"  class="custom-control-input" id="customCheckcaptions">
+                                    <label class="custom-control-label" for="customCheckcaptions"><?php _l('captions')?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="hidden" name="val[permission][manage-accounts]" value="0"/>
+                                    <input type="checkbox"  value="1" name="val[permission][manage-accounts]"  class="custom-control-input" id="customCheckmanage-accounts">
+                                    <label class="custom-control-label" for="customCheckmanage-accounts"><?php _l('manage-accounts')?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="hidden" name="val[permission][rss]" value="0"/>
+                                    <input type="checkbox"  value="1" name="val[permission][rss]"  class="custom-control-input" id="customCheckrss">
+                                    <label class="custom-control-label" for="customCheckrss"><?php _l('rss-feeds')?></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+
+                            <div class="col-md-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="hidden" name="val[permission][filemanager]" value="0"/>
+                                    <input type="checkbox"  value="1" name="val[permission][filemanager]"  class="custom-control-input" id="customCheckfilemanager">
+                                    <label class="custom-control-label" for="customCheckfilemanager"><?php _l('filemanager')?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="hidden" name="val[permission][watermark]" value="0"/>
+                                    <input type="checkbox"  value="1" name="val[permission][watermark]"  class="custom-control-input" id="customCheckwatermark">
+                                    <label class="custom-control-label" for="customCheckwatermark"><?php _l('watermark')?></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-primary"><?php _l('invite')?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>

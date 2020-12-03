@@ -1,0 +1,57 @@
+<div id="horizontal-menu">
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#page" data-toggle="tab" class="menu-item  active"><span><?php _l('edit')?></span></a>
+            <a href="<?php echo url('admin/tutorials')?>" data-ajax="true"  class="menu-item  "><span><?php _l('tutorials')?></span></a>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="page" role="tabpanel" >
+            <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form short-form" >
+                <input type="hidden" name="val[create]" value="1"/>
+                <div class="form-group">
+                    <label><?php _l('title')?></label>
+                    <input type="text" value="<?php echo $tutorial['name']?>" class="form-control" required name="val[name]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('description')?></label>
+                    <input type="text" value="<?php echo $tutorial['description']?>" class="form-control" required name="val[description]"/>
+                </div>
+
+
+                <hr/>
+                <h6><?php _l('media-file')?></h6>
+
+                <div class="form-group">
+                    <label><?php _l('preview-image')?></label>
+                    <input type="file" class="form-control" name="image"/>
+                </div>
+
+                <h5><?php _l('or')?></h5>
+                <div class="form-group">
+                    <label><?php _l('youtube-video-url')?></label>
+                    <input type="text" value="<?php echo ($tutorial['video']) ? 'https://www.youtube.com/watch?v='.$tutorial['video'] : ''?>" class="form-control"  name="val[video]"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="mb-2"><?php _l('content')?></label>
+
+                    <div class="">
+                        <textarea id="text-editor" name="val[content]" ><?php echo $tutorial['content']?></textarea>
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+            </form
+        </div>
+    </div>
+</div>

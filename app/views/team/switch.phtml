@@ -1,0 +1,20 @@
+<div class="pane-pages-container">
+    <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+        <div class="container">
+            <div class="package-title">
+                <h5><?php _l('switch-account')?></h5>
+                <p>
+                    <?php _l('switch-account-note')?>
+                </p>
+            </div>
+            <div class="content-pane switchaccount" style="top: 20px;padding: 0">
+
+                <?php foreach(model('user')->getSwitchAccounts() as $user):?>
+                    <a href="<?php echo url('switch/account', array('id' => $user['id']))?>" >
+                        <div class="avatar"><?php echo model('user')->getNameLetters($user)?></div>
+                        <div class="name"><?php echo ($user['id'] == model('user')->authId) ? l('your-own-account') : $user['full_name']?></div></a>
+                <?php endforeach;?>
+            </div>
+        </div>
+    </form>
+</div>

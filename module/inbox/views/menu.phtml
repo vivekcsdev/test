@@ -1,0 +1,14 @@
+
+<li ><a style="position:relative;" data-ajax="true" href="<?php echo url('inbox')?>" title="<?php _l('inbox')?>"
+        class="mtitle-right  <?php echo ($C->activeIconMenu == 'inbox')  ? 'active' : null?>">
+        <i class="las la-sms"></i> <span><?php _l('inbox')?></span>
+
+        <?php $count = model('inbox::inbox')->countUnread()?>
+
+        <?php if($count > 0):?>
+            <div
+                    style="position:absolute;background:red;color: #ffffff;padding:2px 7px;border-radius:100px;right: 10px;top: 0;"
+            ><?php echo $count?></div>
+
+        <?php endif ?>
+    </a> </li>

@@ -1,0 +1,146 @@
+<form action="<?php echo getFullUrl(true)?>" class="general-form" method="post" id="language-list-form">
+    <input type="hidden" value="1" name="val[bulk_action]"/>
+    <div class="modern-table">
+        <div class="table-head clearfix">
+            <div class="each" style="width:5%;">
+                <a href="javascript:void(0)" onclick="submitForm('#language-list-form', 'bulk')" class="btn btn-light"><i class="la la-trash"></i></a>
+            </div>
+            <div class="each" style="width: 15%;">
+                <?php _l('options')?>
+            </div>
+            <div class="each" style="width: 40%;">
+                <?php _l('name')?>
+            </div>
+            <div class="each" style="width: 30%;">
+                <?php _l('code')?>
+            </div>
+            <div class="each" style="width: 10%;">
+                <?php _l('is_default')?>
+            </div>
+            
+        </div>
+
+        <?php
+        $modalContent = '';
+        ?>
+
+
+        <div class="table-body" >
+
+            <?php foreach($languages as $language):?>
+                <?php
+                $active = ($language['is_default']) ? 'checked' : '';
+                $modalContent .= '<div class="modal" tabindex="-1" role="dialog" id="languageEditModal'.$language['id'].'">
+                    <form action="'.getFullUrl(true).'" class="general-form" method="post" >
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">'.l('edit-language').'</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" style="padding: 10px 50px;">
+                                <input type="hidden" name="val[edit]" value="'.$language['id'].'"/>
+                <div class="form-group">
+                    <label>'.l('name').'</label>
+                    <input type="text" class="form-control" name="val[name]" value="'.$language['name'].'"/>
+
+                    
+                </div>
+
+                <div class="form-group">
+                    <label>'.l('code').'</label>
+                    <input type="text"  class="form-control" name="val[code]" value="'.$language['id'].'"/>
+                    <span class="text-muted">'.l('language-code-info').'</span>
+                </div>
+
+                <div class="form-group">
+                   <div class="custom-control custom-checkbox mb-4">
+                        <input type="hidden" name="val[is_default]" value="0"/>
+                        <input '.$active.' type="checkbox" name="val[is_default]" value="1"  class="custom-control-input" id="customCheck'.$language['id'].'lang">
+                        <label class="custom-control-label" for="customCheck'.$language['id'].'lang">'.l('is_default').'</label>
+                    </div>
+                </div>
+
+                
+
+                            </div>
+                            <div class="modal-footer">
+                                
+                                <button  class="btn btn-primary">'.l('save-changes').'</button>
+                            </div>
+                        </div>
+                    </div></form>
+                </div>';
+                ?>
+                <div class="table-row clearfix">
+                    <div class="each" style="width: 5%;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name="val[id][]" value="<?php echo $language['id']?>" class="custom-control-input" id="customCheck<?php echo $language['id']?>">
+                            <label class="custom-control-label" for="customCheck<?php echo $language['id']?>"></label>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 15%;">
+                        <div class="left">
+                            <?php _l('options')?>
+                        </div>
+                        <div class="right">
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                <a href="<?php echo url('admin/language/'.$language['id'])?>" data-ajax="true"  title="<?php _l('manage-translations')?>" class="btn btn-dark mtitle"><i class="la la-edit"></i></a>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item " href="" data-toggle="modal" data-target="#languageEditModal<?php echo $language['id']?>" ><?php _l('edit-language')?></a>
+                                        <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('admin/languages', array('action' => 'delete','id' => $language['id']))?>"><?php _l('delete')?></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="each" style="width: 40%;">
+                        <div class="left">
+                            <?php _l('name')?>
+                        </div>
+                        <div class="right">
+                            <?php echo $language['name']?>
+                        </div>
+                    </div>
+                    <div class="each" style="width: 30%;">
+                        <div class="left">
+                            <?php _l('code')?>
+                        </div>
+                        <div class="right">
+                            <?php echo $language['id']?>
+                        </div>
+                    </div>
+                    <div class="each" style="width: 10%;">
+                        <div class="left">
+                            <?php _l('is_default')?>
+                        </div>
+                        <div class="right">
+                            <?php if($language['is_default']):?>
+                                <span class="badge badge-success"><?php _l('yes')?></span>
+                            <?php else:?>
+                                <span class="badge badge-secondary"><?php _l('no')?></span>
+                            <?php endif?>
+                        </div>
+                    </div>
+                    
+                </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+</form>
+
+<?php if(count($languages) < 1):?>
+    <div class="empty-content">
+        <i class="la la-fill"></i>
+        <span><?php _l('no-contents-show')?></span>
+    </div>
+<?php endif?>
+
+<?php echo $modalContent?>

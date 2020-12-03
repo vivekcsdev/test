@@ -1,0 +1,108 @@
+<div id="horizontal-menu">
+    <?php $page = $C->request->input('p')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#accounts" data-toggle="tab" class="menu-item  active"><span>Instagram <?php echo strtolower(l('accounts'))?></span></a>
+            <?php if(model('user')->isAdmin()):?>
+                <a href="<?php echo url('admin/social/integration', array('page' => 'instagram'))?>" data-ajax="true"  class="menu-item hide-mobile-sm"><span><?php echo l('settings')?></span></a>
+            <?php endif?>
+            <a href="#new" id="new-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('add-new-account')?></span></a>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="accounts" role="tabpanel" >
+            <div class="grid-container clearfix">
+                <div class="each-container">
+                    <a  href=""  onclick="return clickButton('#new-toggle-button')" class="each each-add ">
+                        <i class="las la-plus"></i>
+                        <?php _l('add-account')?>
+                    </a>
+                </div>
+                <?php foreach ($accounts as $account): ?>
+                    <div class="each-container its-account">
+                        <div class="each">
+                            <div class="info">
+                                <?php if($account['status']):?>
+                                    <span class="badge badge-success"><?php _l('active')?></span>
+                                <?php else:?>
+                                    <span class="badge badge-secondary"><?php _l('not-active')?></span>
+                                <?php endif?>
+                                <?php if(model('user')->hasPermission('instagram-analytics')):?>
+                                    <a  data-ajax="true" href="<?php echo url('analytics/'.$account['id'])?>" class="analytics-link"><?php _l('analytics')?></a>
+                                <?php endif?>
+                            </div>
+                            <img src=" <?php echo assetUrl($account['avatar'])?>" style="border-radius:100px">
+                            <p>
+                                <?php echo $account['username']?>
+                            </p>
+                            <div class="actions">
+                                <a class="confirm" data-ajax-action="true" href="<?php echo url('account/action',array('action' => 'delete','id' => $account['id']))?>"><i class="las la-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+
+
+
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade show " id="new" role="tabpanel" >
+
+            <form action="<?php echo getFullUrl(true)?>" method="post" id="instagramAccountForm" class="general-form short-form">
+                <input type="hidden" name="val[create]" value="1"/>
+                <input type="hidden" name="val[scode]" id="scode"/>
+                <input type="hidden" name="val[vcode]" id="vcode"/>
+                <div class="form-group">
+                    <label>Instagram <?php _l('username')?></label>
+                    <input autocomplete="off" type="text" name="val[username]" class="form-control"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Instagram <?php _l('password')?></label>
+                    <input type="password" name="val[password]" class="form-control"/>
+                </div>
+
+                <?php if(config('users-can-add-own-proxies', true)):?>
+                    <div class="form-group">
+                        <label> <?php _l('proxy')?></label>
+                        <input type="text" name="val[proxy]" class="form-control"/>
+                    </div>
+                <?php endif?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('add-account')?></button>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="verificationModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label></label>
+                    <input type="text" required class="form-control" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="return continueInstagramLogin()" class="btn btn-primary"><?php _l('continue')?></button>
+            </div>
+        </div>
+    </div>
+</div>

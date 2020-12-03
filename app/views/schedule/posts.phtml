@@ -1,0 +1,40 @@
+<div id="horizontal-menu">
+
+
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+
+            <a href="" onclick="return hideViewSchedulePosts()" class="menu-item  active "><span><i style="font-size: 20px;" class="las la-angle-left"></i></span></a>
+        </div>
+    </div>
+
+    <div class="actions-pane">
+        <ul class="clearfix">
+            <li class="btn-group">
+                <a href="<?php echo getFullUrl()?>?action=delete&date=<?php echo $C->request->input('date')?>" data-ajax-action="true"  class="btn btn-outline-light confirm"><i class="la la-trash"></i> <?php _l('delete-all-post')?></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="content scroll-paginate"
+     data-container=".scheduled-posts-grid"
+     data-offset="10"
+     data-url="<?php echo url('schedule/posts/'.$C->request->segment(2).'/'.$C->request->segment(3), array('date' => $C->request->input('date')))?>">
+
+    <div class="the-content">
+        <div class="grid-container clearfix scheduled-posts-grid">
+            <?php  foreach($posts as $post):?>
+                <?php echo view('schedule/display-post', array('post' => $post))?>
+            <?php endforeach;?>
+        </div>
+
+
+        <?php if(count($posts) < 1):?>
+            <div class="empty-content">
+                <i class="la la-fill"></i>
+                <span><?php _l('no-contents-show')?></span>
+            </div>
+        <?php endif?>
+    </div>
+</div>

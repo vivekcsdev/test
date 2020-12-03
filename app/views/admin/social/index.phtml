@@ -1,0 +1,454 @@
+<div id="horizontal-menu">
+    <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+    <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+    <?php $page = $C->request->input('page')?>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#instagram" data-toggle="tab" class="menu-item  <?php echo (!$page or $page == 'instagram') ? 'active': null?>"><span>Instagram</span></a>
+            <a href="#facebook" data-toggle="tab" class="menu-item  <?php echo ($page =='facebook') ? 'active': null?>"><span>Facebook</span></a>
+            <a href="#twitter" data-toggle="tab" class="menu-item  <?php echo ($page =='twitter') ? 'active': null?>"><span>Twitter</span></a>
+            <a href="#pinterest" data-toggle="tab" class="menu-item  <?php echo ($page =='pinterest') ? 'active': null?>"><span>Pinterest</span></a>
+            <a href="#linkedin" data-toggle="tab" class="menu-item <?php echo ($page =='linkedin') ? 'active': null?>"><span>LinkedIn</span></a>
+            <a href="#youtube" data-toggle="tab" class="menu-item  <?php echo ($page =='youtube') ? 'active': null?>"><span>Youtube</span></a>
+            <a href="#google" data-toggle="tab" class="menu-item  <?php echo ($page =='google') ? 'active': null?>"><span>Google</span></a>
+            <a href="#vk" data-toggle="tab" class="menu-item  <?php echo ($page =='vk') ? 'active': null?>"><span>VK</span></a>
+            <a href="#tumblr" data-toggle="tab" class="menu-item  <?php echo ($page =='tumblr') ? 'active': null?>"><span>Tumblr</span></a>
+            <a href="#reddit" data-toggle="tab" class="menu-item  <?php echo ($page =='reddit') ? 'active': null?>"><span>Reddit</span></a>
+            <a href="#telegram" data-toggle="tab" class="menu-item  <?php echo ($page =='telegram') ? 'active': null?>"><span>Telegram</span></a>
+            <a href="#vimeo" data-toggle="tab" class="menu-item  <?php echo ($page =='vimeo') ? 'active': null?>"><span>Vimeo</span></a>
+            <a href="#dailymotion" data-toggle="tab" class="menu-item  <?php echo ($page =='dailymotion') ? 'active': null?>"><span>Dailymotion</span></a>
+            <?php echo Hook::getInstance()->fire('admin.social.tabs')?>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show <?php echo (!$page or $page == 'instagram') ? 'active': null?>" id="instagram" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-instagram-integration]"/>
+                            <input name="val[enable-instagram-integration]"  <?php echo (config('enable-instagram-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-instagram" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-instagram"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label ><?php _l('ffmeg-path')?></label>
+                    <div >
+                        <input type="text"  name="val[ffmeg-path]" class="form-control "  value="<?php echo config('ffmeg-path', '')?>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label ><?php _l('ffprobe-path')?></label>
+                    <div >
+                        <input type="text"  name="val[ffprobe-path]" class="form-control "  value="<?php echo config('ffprobe-path', '')?>">
+                    </div>
+                </div>
+
+                <?php echo Hook::getInstance()->fire('admin.socail.instagram')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page =='facebook') ? 'active': null?>" id="facebook" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-facebook-integration]"/>
+                            <input name="val[enable-facebook-integration]"  <?php echo (config('enable-facebook-integration', true)) ? 'checked': null?>  id="cmn-toggle-enablefacebook" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enablefacebook"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('app-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('facebook-app-id')?>" name="val[facebook-app-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('app-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('facebook-app-secret')?>" name="val[facebook-app-secret]"/>
+                </div>
+
+                <?php echo Hook::getInstance()->fire('admin.socail.facebook')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page =='pinterest') ? 'active': null?>" id="pinterest" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-pinterest-integration]"/>
+                            <input name="val[enable-pinterest-integration]"  <?php echo (config('enable-pinterest-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-pinterest" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-pinterest"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('pinterest-app-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('pinterest-app-id')?>" name="val[pinterest-app-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('pinterest-app-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('pinterest-app-secret')?>" name="val[pinterest-app-secret]"/>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable-unofficial-api')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-pinterest-api]"/>
+                            <input name="val[enable-pinterest-api]"  <?php echo (config('enable-pinterest-api', true)) ? 'checked': null?>  id="cmn-toggle-enable-pinterest-api" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-pinterest-api"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <?php echo Hook::getInstance()->fire('admin.socail.pinterest')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page =='twitter') ? 'active': null?>" id="twitter" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-twitter-integration]"/>
+                            <input name="val[enable-twitter-integration]"  <?php echo (config('enable-twitter-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-twitter" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-twitter"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('consumer-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('twitter-consumer-key')?>" name="val[twitter-consumer-key]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('consumer-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('twitter-consumer-secret')?>" name="val[twitter-consumer-secret]"/>
+                </div>
+
+                <?php echo Hook::getInstance()->fire('admin.socail.twitter')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page =='linkedin') ? 'active': null?>" id="linkedin" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-linkedin-integration]"/>
+                            <input name="val[enable-linkedin-integration]"  <?php echo (config('enable-linkedin-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-linkedin" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-linkedin"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr/>
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable-company-pages')?></label>
+                        <div class="text-muted"><?php _l('enable-company-pages-note')?> <a target="_blank" href="http://prntscr.com/stre1a">http://prntscr.com/stre1a</a></div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-linkedin-page]"/>
+                            <input name="val[enable-linkedin-page]"  <?php echo (config('enable-linkedin-page', false)) ? 'checked': null?>  id="cmn-toggle-enable-enable-linkedin-page" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-enable-linkedin-page"></label>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="form-group">
+                    <label><?php _l('linkedin-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('linkedin-client-id')?>" name="val[linkedin-client-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('linkedin-client-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('linkedin-client-secret')?>" name="val[linkedin-client-secret]"/>
+                </div>
+
+                <?php echo Hook::getInstance()->fire('admin.socail.linkedin')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+        <div class="tab-pane fade show <?php echo ($page =='youtube') ? 'active': null?>" id="youtube" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-youtube-integration]"/>
+                            <input name="val[enable-youtube-integration]"  <?php echo (config('enable-youtube-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-youtube" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-youtube"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('google-api-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('google-youtube-api-key', '')?>" name="val[google-youtube-api-key]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('youtube-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('youtube-client-id', '')?>" name="val[youtube-client-id]"/>
+                </div>
+
+                <div class="form-group">
+                        <label><?php _l('youtube-client-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('youtube-client-secret', '')?>" name="val[youtube-client-secret]"/>
+                </div>
+
+                <?php echo Hook::getInstance()->fire('admin.socail.youtube')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+        <div class="tab-pane fade show <?php echo ($page =='google') ? 'active': null?>" id="google" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-google-integration]"/>
+                            <input name="val[enable-google-integration]"  <?php echo (config('enable-google-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-google" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-google"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('google-api-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('google-b-api-key', '')?>" name="val[google-b-api-key]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('google-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('gb-client-id', '')?>" name="val[gb-client-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('google-client-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('gb-client-secret', '')?>" name="val[gb-client-secret]"/>
+                </div>
+                <?php echo Hook::getInstance()->fire('admin.socail.google')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+        <div class="tab-pane fade show <?php echo ($page =='vk') ? 'active': null?>" id="vk" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-vk-integration]"/>
+                            <input name="val[enable-vk-integration]"  <?php echo (config('enable-vk-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-vk" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-vk"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('vk-application-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('vk-application-id', '')?>" name="val[vk-application-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('vk-secure-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('vk-secure-key', '')?>" name="val[vk-secure-key]"/>
+                </div>
+                <?php echo Hook::getInstance()->fire('admin.socail.vk')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+        <div class="tab-pane fade show <?php echo ($page =='tumblr') ? 'active': null?>" id="tumblr" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-tumblr-integration]"/>
+                            <input name="val[enable-tumblr-integration]"  <?php echo (config('enable-tumblr-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-tumblr" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-tumblr"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('tumblr-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('tumblr-client-id', '')?>" name="val[tumblr-client-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('tumblr-client-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('tumblr-client-secret', '')?>" name="val[tumblr-client-secret]"/>
+                </div>
+                <?php echo Hook::getInstance()->fire('admin.socail.tumblr')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page =='reddit') ? 'active': null?>" id="reddit" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-reddit-integration]"/>
+                            <input name="val[enable-reddit-integration]"  <?php echo (config('enable-reddit-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-reddit" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-reddit"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('reddit-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('reddit-client-id', '')?>" name="val[reddit-client-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('reddit-client-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('reddit-client-secret', '')?>" name="val[reddit-client-secret]"/>
+                </div>
+                <?php echo Hook::getInstance()->fire('admin.socail.reddit')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page =='telegram') ? 'active': null?>" id="telegram" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-telegram-integration]"/>
+                            <input name="val[enable-telegram-integration]"  <?php echo (config('enable-telegram-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-telegram" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-telegram"></label>
+                        </div>
+                    </div>
+                </div>
+                
+                <?php echo Hook::getInstance()->fire('admin.socail.telegram')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page =='vimeo') ? 'active': null?>" id="vimeo" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-vimeo-integration]"/>
+                            <input name="val[enable-vimeo-integration]"  <?php echo (config('enable-vimeo-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-vimeo" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-vimeo"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('vimeo-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('vimeo-client-id', '')?>" name="val[vimeo-client-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('vimeo-client-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('vimeo-client-secret', '')?>" name="val[vimeo-client-secret]"/>
+                </div>
+                <?php echo Hook::getInstance()->fire('admin.socail.vimeo')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show <?php echo ($page =='dailymotion') ? 'active': null?>" id="dailymotion" role="tabpanel" >
+            <form action="<?php echo getFullUrl()?>" method="post" class="general-form short-form">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><?php _l('enable')?></label>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="switch">
+                            <input type="hidden" value="0" name="val[enable-dailymotion-integration]"/>
+                            <input name="val[enable-dailymotion-integration]"  <?php echo (config('enable-dailymotion-integration', true)) ? 'checked': null?>  id="cmn-toggle-enable-dailymotion" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                            <label for="cmn-toggle-enable-dailymotion"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('dailymotion-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('dailymotion-client-id', '')?>" name="val[dailymotion-client-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('dailymotion-client-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('dailymotion-client-secret', '')?>" name="val[dailymotion-client-secret]"/>
+                </div>
+                <?php echo Hook::getInstance()->fire('admin.socail.dailymotion')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+        <?php echo Hook::getInstance()->fire('admin.social.tabs.content')?>
+    </div>
+</div>

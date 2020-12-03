@@ -1,0 +1,12 @@
+<h6><?php _l('automation-bots')?></h6>
+<div class="row mb-3">
+    <div class="col-md-6">
+        <div class="custom-control custom-checkbox ">
+            <input type="hidden" name="val[permission][automations]" value="0"/>
+            <input type="checkbox"  value="1" name="val[permission][automations]" <?php echo isset($permissions['automations']) and $permissions['automations'] ? 'checked': null?>  class="custom-control-input" id="customCheckautomations">
+            <label class="custom-control-label" for="customCheckautomations"><?php _l('enable')?></label>
+        </div>
+    </div>
+
+
+</div>

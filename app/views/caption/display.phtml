@@ -1,0 +1,66 @@
+<div class="" style="padding: 0">
+    <div class="row">
+        <?php
+        autoLoadVendor();
+        $emojione = new \Emojione\Client(new \Emojione\Ruleset());
+        ?>
+        <?php foreach($captions as $caption):?>
+            <div class="modal" tabindex="-1" role="dialog" id="captionEditModal<?php echo $caption['id']?>">
+                <div class="modal-dialog" role="document">
+                    <form action="<?php echo getFullUrl(true)?>" class="general-form" method="post" >
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><?php _l('edit-caption')?></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" style="padding: 10px 50px;">
+                                <input type="hidden" name="val[edit]" value="<?php echo $caption['id']?>"/>
+                                <div class="form-group">
+                                    <label><?php _l('title')?></label>
+                                    <input type="text" class="form-control" value="<?php echo $caption['title']?>" name="val[title]"/>
+                                </div>
+                                <div class="form-group">
+                                    <label><?php _l('caption')?></label>
+                                    <textarea class="emoji-text form-control" name="val[content]" rows="5"><?php echo  $emojione->shortnameToUnicode($caption['caption'])?></textarea>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary"><?php _l('save-changes')?></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card" style="height: 150px;margin-bottom: 25px;">
+                    <div class="dropdown dropleft" style="position:absolute;top: 10px;right: 10px;font-size: 20px;">
+                        <a href="" data-toggle="dropdown" class="dropdown-toggle" style="font-size: 20px !important;color: #000;"><i class="la la-ellipsis-v"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" data-toggle="modal" data-target="#captionEditModal<?php echo $caption['id']?>" href="#"><?php _l('edit')?></a>
+                            <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('captions', array('action' => 'delete','id' => $caption['id']))?>"><?php _l('delete')?></a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <h6 class="card-title"><?php echo str_limit($emojione->shortnameToUnicode($caption['title']), 25)?></h6>
+                        <p class="card-text"><?php echo str_limit($emojione->shortnameToUnicode($caption['caption']), 70)?></p>
+
+                    </div>
+                </div>
+            </div>
+        <?php endforeach;?>
+    </div>
+
+    <?php if(count($captions) < 1):?>
+        <div class="empty-content">
+            <i class="la la-fill"></i>
+            <span><?php _l('no-contents-show')?></span>
+            <br/>
+            <a href="#new" data-toggle="tab" class="btn btn-dark"><?php _l('add-caption')?></a>
+        </div>
+    <?php endif?>
+</div>

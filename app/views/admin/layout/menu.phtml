@@ -1,0 +1,49 @@
+<div class="side-menu">
+    <a href="<?php echo url('admin/update')?>" class="btn btn-primary btn-sm btn-block mb-2 ajax-action"><?php _l('update-system')?></a>
+
+    <ul class="menu nav flex-column">
+
+        <?php if(moduleExists('dashboard')):?>
+            <li class="nav-item <?php echo $C->activeSubMenu == 'dashboard' ? 'active' : null?>">
+                <a class="nav-link " data-ajax="true" href="<?php echo url('admin')?>"><i class="las la-chart-pie"></i> <span><?php _l('dashboard')?></span></a>
+            </li>
+        <?php endif?>
+        <li class="nav-item <?php echo $C->activeSubMenu == 'settings' ? 'active' : null?>">
+            <a class="nav-link " data-ajax="true" href="<?php echo url('admin/settings')?>"><i class="la la-braille"></i> <span><?php _l('settings')?></span></a>
+        </li>
+        <li class="nav-item <?php echo $C->activeSubMenu == 'social' ? 'active' : null?>">
+            <a class="nav-link " data-ajax="true" href="<?php echo url('admin/social/integration')?>"><i class="la la-instagram"></i> <span><?php _l('social-integration')?></span></a>
+        </li>
+
+        <?php Hook::getInstance()->fire('admin.settings.menu')?>
+        <li class="nav-item <?php echo $C->activeSubMenu == 'design' ? 'active' : null?>">
+            <a class="nav-link " data-ajax="true" href="<?php echo url('admin/design')?>"><i class="las la-palette"></i> <span><?php _l('custom-design')?></span></a>
+        </li>
+    </ul>
+
+    <h5 class="menu-title"><?php _l('manage')?></h5>
+    <ul class="menu nav flex-column">
+        <li class="nav-item <?php echo $C->activeSubMenu == 'users-manager' ? 'active' : null?>">
+            <a class="nav-link " data-ajax="true" href="<?php echo url('admin/users')?>"><i class="la la-users"></i> <span><?php _l('users-manager')?></span></a>
+        </li>
+        <?php Hook::getInstance()->fire('admin.manage.menu')?>
+        <li class="nav-item  <?php echo $C->activeSubMenu == 'proxy-manager' ? 'active' : null?>">
+            <a class="nav-link " data-ajax="true" href="<?php echo url('admin/proxy')?>"><i class="la la-shield-alt"></i> <span><?php _l('proxy-manager')?></span></a>
+        </li>
+    </ul>
+
+    <h5 class="menu-title"><?php _l('others')?></h5>
+    <ul class="menu nav flex-column">
+        <li class="nav-item  <?php echo $C->activeSubMenu == 'languages' ? 'active' : null?>">
+            <a class="nav-link " data-ajax="true" href="<?php echo url('admin/languages')?>"><i class="la la-stream"></i> <span><?php _l('languages')?></span></a>
+        </li>
+
+        <li class="nav-item  <?php echo $C->activeSubMenu == 'pages' ? 'active' : null?>">
+            <a class="nav-link " data-ajax="true" href="<?php echo url('admin/pages')?>"><i class="la la-code"></i> <span><?php _l('custom-pages')?></span></a>
+        </li>
+
+        <li class="nav-item  <?php echo $C->activeSubMenu == 'modules' ? 'active' : null?>">
+            <a class="nav-link " data-ajax="true"  href="<?php echo url('admin/modules')?>"><i class="la la-puzzle-piece"></i> <span><?php _l('modules')?></span></a>
+        </li>
+    </ul>
+</div>

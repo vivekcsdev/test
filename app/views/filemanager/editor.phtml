@@ -1,0 +1,128 @@
+<!DOCTYPE>
+<html>
+<head>
+
+    <link rel="stylesheet" type="text/css" href="<?php echo assetUrl('assets/js/tui.image-editor/tui-color-picker.min.css')?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo assetUrl('assets/js/tui.image-editor/tui-image-editor.css')?>">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i);
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif!important;
+        }
+        *{
+            font-family: 'Montserrat', sans-serif!important;
+        }
+        .tui-image-editor-header-buttons{
+            display: none;
+        }
+
+        .save{
+            outline: none;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #FF5739;
+            color: #fff;
+            padding: 10px 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+    </style>
+
+</head>
+
+<script type="text/javascript">
+    var baseUrl = '<?php echo url()?>';
+    var permaLink = <?php echo config('permalink', false) ? 1 : 0?>;
+    </script>
+<div id="tui-image-editor-pane"></div>
+<button type="button" class="save"><?php echo _l('save-image')?></button>
+<script type="text/javascript" src="<?php echo assetUrl('assets/js/plugin.js')?>"></script>
+<script type="text/javascript" src="<?php echo assetUrl('styles/main/js/main.js')?>"></script>
+<script type="text/javascript" src="<?php echo assetUrl('assets/js/tui.image-editor/fabric.js')?>"></script>
+<script type="text/javascript" src="<?php echo assetUrl('assets/js/tui.image-editor/tui-code-snippet.min.js')?>"></script>
+<script type="text/javascript" src="<?php echo assetUrl('assets/js/tui.image-editor/tui-color-picker.min.js')?>"></script>
+<script type="text/javascript" src="<?php echo assetUrl('assets/js/tui.image-editor/FileSaver.min.js')?>"></script>
+<script type="text/javascript" src="<?php echo assetUrl('assets/js/tui.image-editor/tui-image-editor.js')?>"></script>
+<script type="text/javascript" src="<?php echo assetUrl('assets/js/tui.image-editor/theme/black-theme.js')?>"></script>
+
+<script>
+    enableWelcomeStemps = 0;
+    function base64ToBlob(base64, mime)
+    {
+        mime = mime || '';
+        var sliceSize = 1024;
+        var byteChars = window.atob(base64);
+        var byteArrays = [];
+
+        for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+            var slice = byteChars.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        return new Blob(byteArrays, {type: mime});
+    }
+    // Image editor
+    var imageEditor = new tui.ImageEditor('#tui-image-editor-pane', {
+        includeUI: {
+            loadImage: {
+                path: '<?php echo assetUrl($file['file_name'])?>',
+                name: 'SampleImage'
+            },
+            theme: blackTheme,
+            initMenu: 'filter',
+            menuBarPosition: 'bottom'
+        },
+        cssMaxWidth: 700,
+        cssMaxHeight: 500
+    });
+
+    window.onresize = function() {
+    }
+
+    $(function(){
+        $(document).on("click", ".save", function(){
+
+            var dataURL = imageEditor.toDataURL();
+            var base64ImageContent = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+            var blob = base64ToBlob(base64ImageContent, 'image/jpg');
+            var formData = new FormData();
+            formData.append('picture', blob);
+            formData.append('id', '<?php echo $file['id']?>');
+            parent.pageLoader(true);
+            $.ajax({
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                cache: false,
+                url: buildLink('image/editor'),
+                data: formData
+            }).done(function(data) {
+                parent.pageLoaded();
+                var json = jQuery.parseJSON(data);
+                if (json.type === 'success') {
+                    parent.notify(json.message, 'success')
+                    parent.closeImageEditor();
+                } else {
+                    parent.notify(json.message, 'error')
+                }
+
+
+            });
+        });
+    });
+</script>

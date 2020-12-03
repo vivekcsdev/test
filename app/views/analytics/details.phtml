@@ -1,0 +1,415 @@
+
+<div class="user-info-container">
+    <div class="avatar" style="background-image: url(<?php echo $details['userinfo']->profile_pic_url ?>)">
+
+    </div>
+    <div class="user-info">
+        <h4><?php echo $details['userinfo']->username?></h4>
+        <ul class="stats clearfix">
+            <li><span><?php echo number_format($details['userinfo']->media_count)?></span> <?php _l('posts')?></li>
+            <li><span><?php echo number_format($details['userinfo']->follower_count)?></span> <?php _l('followers')?></li>
+            <li><span><?php echo number_format($details['userinfo']->following_count)?></span> <?php _l('following')?></li>
+        </ul>
+
+        <div class="fullname"><?php $details['userinfo']->full_name?></div>
+        <div class="description"><?php $details['userinfo']->biography?></div>
+        <div class="website"><a href="<?php $details['userinfo']->external_url?>" target="_blank"><?php $details['userinfo']->external_url?></a></div>
+    </div>
+</div>
+<ul class="engagement-stats clearfix">
+    <li>
+        <span><?php echo $details['engagement']?>%</span>
+        <?php _l('engagement')?>
+    </li>
+    <li>
+        <span><?php echo $details['average_comments']?></span>
+        <?php _l('average-comments')?>
+    </li>
+    <li>
+        <span><?php echo $details['average_likes']?></span>
+        <?php _l('average-likes')?>
+    </li>
+</ul>
+
+<?php
+
+$top_hashtags = $details['hashtags'];
+$top_mentions = $details['mentions'];
+$feeds = $details['posts'];
+$follower_count = $details['userinfo']->follower_count;
+$media_count = $details['userinfo']->media_count;
+$total_days = $details['total_days'];
+?>
+
+<div class="box">
+    <div class="head">
+        <h3 class="title"><?php _l("profile-growth-discovery")?></h3>
+        <div class="description"><?php _l("profile-growth-note")?></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-container"
+                 data-result1="<?php echo $details['followers_chart']?>"
+                 data-result2=""
+                 data-name1="<?php _l('followers')?>"
+                 data-name2=""
+                 data-label="<?php echo $details['date_chart']?>"
+            >
+                <canvas id="ig-analytics-followers-line-stacked-area" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="title-chart colored"><?php _l("follower-evolution-chart")?></div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-container"
+                 data-result1="<?php echo $details['following_chart']?>"
+                 data-result2=""
+                 data-name1="<?php _l('following')?>"
+                 data-name2=""
+                 data-label="<?php echo $details['date_chart']?>"
+            >
+                <canvas id="ig-analytics-following-line-stacked-area" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="title-chart colored"><?php _l("following-evolution-chart")?></div>
+
+
+</div>
+<hr/>
+<div class="box">
+    <div class="head">
+        <h3 class="title"><?php _l("Account Stats Summary")?></h3>
+        <div class="description"><?php _l("Showing last 15 entries.")?></div>
+    </div>
+    <?php
+    $total_followers_summary = 0;
+    $total_following_summary = 0;
+    $total_posts_summary = 0;
+    $compare_new_followers_value_string = "";
+    $compare_new_following_value_string = "";
+    $compare_total_followers_value_string = "";
+    $compare_total_following_value_string = "";
+    ?>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <td><?php _l('date')?></td>
+            <td colspan="2"><?php _l("Followes")?></td>
+            <td colspan="2"><?php _l("Following")?></td>
+            <td colspan="2"><?php _l("Posts")?></td>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($details['list_summary'] as $key => $row):?>
+        <?php
+            $followers_status = "text-default";
+            $followers_summary = "-";
+            $total_followers_summary += (int)$row->followers_summary;
+            if($row->followers_summary > 0){
+                $followers_summary = "+".$row->followers_summary;
+                $followers_status = "text-success";
+            }else if($row->followers_summary < 0){
+                $followers_summary = $row->followers_summary;
+                $followers_status = "text-danger";
+            }
+
+            $following_status = "text-default";
+            $following_summary = "-";
+            $total_following_summary += (int)$row->following_summary;
+            if($row->following_summary > 0){
+                $following_summary = "+".$row->following_summary;
+                $following_status = "text-success";
+            }else if($row->following_summary < 0){
+                $following_summary = $row->following_summary;
+                $following_status = "text-danger";
+            }
+
+            $posts_status = "text-default";
+            $posts_summary = "-";
+            $total_posts_summary += (int)$row->posts_summary;
+            if($row->posts_summary > 0){
+                $posts_summary = "+".$row->posts_summary;
+                $posts_status = "text-success";
+            }else if($row->posts_summary < 0){
+                $posts_summary = $row->posts_summary;
+                $posts_status = "text-danger";
+            }
+
+            $compare_new_followers_value_string .= (int)$followers_summary.",";
+            $compare_new_following_value_string .= (int)$following_summary.",";
+            $compare_total_followers_value_string .= (int)$row->followers.",";
+            $compare_total_following_value_string .= (int)$row->following.",";
+            ?>
+
+            <tr>
+                <td><?php echo date("D, d M, Y", strtotime($row->date))?></td>
+                <td><?php echo $row->followers?></td>
+                <td><span class="<?php echo $followers_status?>"><? echo $followers_summary?></span></td>
+                <td><?php echo $row->following?></td>
+                <td><span class="<?php echo $following_status?>"><?php echo $following_summary?></span></td>
+                <td><?php echo $row->posts?></td>
+                <td><span class="<?php echo $posts_summary?>"><?php echo $posts_summary?></span></td>
+            </tr>
+        <?php endforeach;?>
+        </tbody>
+        <tfoot>
+        <?php
+        $total_followers_status = "text-default";
+        if($total_followers_summary > 0){
+            $total_followers_summary = "+".$total_followers_summary;
+            $total_followers_status = "text-success";
+        }else if($total_followers_summary < 0){
+            $total_followers_status = "text-danger";
+        }
+
+        $total_following_status = "text-default";
+        if($total_following_summary > 0){
+            $total_following_summary = "+".$total_following_summary;
+            $total_following_status = "text-success";
+        }else if($total_following_summary < 0){
+            $total_following_status = "text-danger";
+        }
+
+        $total_posts_status = "text-default";
+        if($total_posts_summary > 0){
+            $total_posts_summary = "+".$total_posts_summary;
+            $total_posts_status = "text-success";
+        }else if($total_posts_summary < 0){
+            $total_posts_status = "text-danger";
+        }
+        ?>
+
+        <tr>
+            <td><i class="ft-crosshair"></i> <?php _l("total-summary")?></td>
+            <td colspan="2"><span class="<?php echo $total_followers_status?>"><?php echo  ($total_followers_summary!=0)?$total_followers_summary:"-"?></span></td>
+            <td colspan="2"><span class="<?php echo $total_following_status?>"><?php echo  ($total_following_summary!=0)?$total_following_summary:"-"?></span></td>
+            <td colspan="2"><span class="<?php echo $total_posts_status?>"><?php echo  ($total_posts_summary!=0)?$total_posts_summary:"-"?></span></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="box">
+    <?php
+    $compare_new_followers_value_string = "[".substr($compare_new_followers_value_string, 0, -1)."]";
+    $compare_new_following_value_string = "[".substr($compare_new_following_value_string, 0, -1)."]";
+    $compare_total_followers_value_string = "[".substr($compare_total_followers_value_string, 0, -1)."]";
+    $compare_total_following_value_string = "[".substr($compare_total_following_value_string, 0, -1)."]";
+    ?>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="chart-container"
+                 data-result1="<?=$compare_new_followers_value_string!="-"?$compare_new_followers_value_string:"[]"?>"
+                 data-result2="<?=$compare_new_following_value_string!="-"?$compare_new_following_value_string:"[]"?>"
+                 data-name1="<?php _l('followers')?>"
+                 data-name2="<?php _l('following')?>"
+                 data-label="<?php echo $details['date_chart']?>"
+            >
+                <canvas id="ig-analytics-get-followers-following-line-stacked-area" height="300"></canvas>
+            </div>
+            <div class="title-chart colored"><?php echo l("compare-new-follwers-chart")?></div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-container"
+                 data-result1="<?=$compare_total_followers_value_string?>"
+                 data-result2="<?=$compare_total_following_value_string?>"
+                 data-name1="<?php _l('followers')?>"
+                 data-name2="<?php _l('following')?>"
+                 data-label="<?php echo $details['date_chart']?>"
+            >
+                <canvas id="ig-analytics-total-followers-following-line-stacked-area" height="300"></canvas>
+            </div>
+            <div class="title-chart colored"><?php echo l("compare-total-followers-following-chart")?></div>
+        </div>
+    </div>
+
+    <div class="head">
+        <h3 class="title"><?php echo l("average-enagement-rate")?></h3>
+        <div class="description"><?php echo l("average-enagement-rate-note")?></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-container"
+                 data-result1="<?=$details['engagement_chart']?>"
+                 data-result2=""
+                 data-name1="<?php _l('followers')?>"
+                 data-name2=""
+                 data-label="<?php echo l('average-enagement-rate')?>"
+            >
+                <canvas id="ig-analytics-engagement-line-stacked-area" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="title-chart colored"><?php echo l("average-engagement-chart")?></div>
+
+    <div class="head">
+        <h3 class="title"><?php echo l("future-projections")?></h3>
+        <div class="description"><?php echo l("future-projections-note")?></div>
+    </div>
+
+    <?php
+    $average_followers = $total_days>0?(int)ceil($total_followers_summary/$total_days):0;
+    $average_posts = $total_days>0?(int)ceil($total_posts_summary/$total_days):0;
+    ?>
+    <div class="table_sumary">
+        <table class="table">
+            <thead>
+            <tr>
+                <td><?php echo l("time-until")?></td>
+                <td><?php echo l("date")?></td>
+                <td><?php echo l("followers")?></td>
+                <td><?php echo l("posts")?></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><?php echo l("current-stats")?></td>
+                <td><?php echo date("d M, Y", strtotime(reset($details['list_summary'])->date))?></td>
+                <td><?php echo number_format(reset($details['list_summary'])->followers)?></td>
+                <td><?php echo number_format(reset($details['list_summary'])->posts)?></td>
+            </tr>
+            <?php if($total_days > 0){ ?>
+                <tr>
+                    <td>30 <?php echo l("days")?></td>
+                    <td><?php echo  (new \DateTime())->modify('+30 day')->format('Y-m-d') ?></td>
+                    <td><?php echo  number_format($follower_count + ($average_followers * 30)) ?></td>
+                    <td><?php echo  number_format($media_count + ($average_posts * 30)) ?></td>
+                </tr>
+                <tr>
+                    <td>60 <?php echo l("days")?></td>
+                    <td><?php echo  (new \DateTime())->modify('+60 day')->format('Y-m-d') ?></td>
+                    <td><?php echo  number_format($follower_count + ($average_followers * 60)) ?></td>
+                    <td><?php echo  number_format($media_count + ($average_posts * 60)) ?></td>
+                </tr>
+                <tr>
+                    <td>3 <?php echo l("months")?></td>
+                    <td><?php echo  (new \DateTime())->modify('+90 day')->format('Y-m-d') ?></td>
+                    <td><?php echo  number_format($follower_count + ($average_followers * 90)) ?></td>
+                    <td><?php echo  number_format($media_count + ($average_posts * 90)) ?></td>
+                </tr>
+                <tr>
+                    <td>6 <?php echo l("months")?></td>
+                    <td><?php echo  (new \DateTime())->modify('+180 day')->format('Y-m-d') ?></td>
+                    <td><?php echo  number_format($follower_count + ($average_followers * 180)) ?></td>
+                    <td><?php echo  number_format($media_count + ($average_posts * 180)) ?></td>
+                </tr>
+                <tr>
+                    <td>9 <?php echo l("months")?></td>
+                    <td><?php echo  (new \DateTime())->modify('+279 day')->format('Y-m-d') ?></td>
+                    <td><?php echo  number_format($follower_count + ($average_followers * 279)) ?></td>
+                    <td><?php echo  number_format($media_count + ($average_posts * 279)) ?></td>
+                </tr>
+                <tr>
+                    <td>1 <?php echo l("year")?></td>
+                    <td><?php echo  (new \DateTime())->modify('+365 day')->format('Y-m-d') ?></td>
+                    <td><?php echo  number_format($follower_count + ($average_followers * 365)) ?></td>
+                    <td><?php echo  number_format($media_count + ($average_posts * 365)) ?></td>
+                </tr>
+                <tr>
+                    <td>1 <?php echo l("year-half")?></td>
+                    <td><?php echo  (new \DateTime())->modify('+547 day')->format('Y-m-d') ?></td>
+                    <td><?php echo  number_format($follower_count + ($average_followers * 547)) ?></td>
+                    <td><?php echo  number_format($media_count + ($average_posts * 547)) ?></td>
+                </tr>
+                <tr>
+                    <td>2 <?php echo l("years")?></td>
+                    <td><?php echo  (new \DateTime())->modify('+730 day')->format('Y-m-d') ?></td>
+                    <td><?php echo  number_format($follower_count + ($average_followers * 730)) ?></td>
+                    <td><?php echo  number_format($media_count + ($average_posts * 730)) ?></td>
+                </tr>
+            <?php }?>
+            </tbody>
+            <tfoot>
+            <?php if($total_days > 0){ ?>
+                <tr>
+
+                    <?php
+                    $average_followers = "-";
+                    if($average_followers > 0){
+                        $average_followers = "<span class='text-success'>+".number_format($average_followers)."<span>";
+                    }else if($average_followers < 0){
+                        $average_followers = "<span class='text-danger'>".number_format($average_followers)."<span>";
+                    }
+
+                    $average_posts = "-";
+                    if($average_posts > 0){
+                        $average_posts = "<span class='text-success'>+".number_format($average_posts)."<span>";
+                    }else if($average_posts < 0){
+                        $average_posts = "<span class='text-danger'>".number_format($average_posts)."<span>";
+                    }
+                    ?>
+
+                    <td colspan="2"><i class="ft-crosshair"></i> <?php echo l("base-on-average-of")?></td>
+                    <td><?php echo  sprintf(l("%s followers/day"), $average_followers) ?></td>
+                    <td><?php echo  sprintf(l("%s posts/day"), $average_posts) ?></td>
+                </tr>
+            <?php }else{?>
+                <tr>
+                    <td colspan="4" style="font-weight: 400"><?php echo l("there-is-no-enough-data-com-tomorrow")?></td>
+                </tr>
+            <?php }?>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="head none-export" style="display: none;">
+        <h3 class="title"><?php echo l("Top Posts")?></h3>
+        <div class="description"><?php echo l("Top posts from the last 10 posts")?></div>
+    </div>
+
+    <div class="row none-export" style="display: none;">
+        <div class="owl-carousel">
+            <?php if(!empty($feeds)){
+                foreach ($feeds as $key => $row) {
+                    $row = (object)$row;
+                    ?>
+                    <div class="item">
+                        <?php echo $C->api('instagram')->getHtml($row->media)?>
+                    </div>
+                <?php }}?>
+        </div>
+    </div>
+
+    <div class="row">
+        <?php if(!empty($top_mentions)){?>
+            <div class="col-md-6">
+                <div class="head">
+                    <h3 class="title"><?php echo l("top-mentions")?></h3>
+                    <div class="description"><?php echo l("top-mentions-note")?></div>
+
+                </div>
+                <ul class="summary-list-group">
+                    <?php
+                    $count = 1;
+                    foreach ($top_mentions as $key => $value) {
+                        ?>
+                        <li class="item"><a href="https://www.instagram.com/<?php echo $key?>" target="_blank">@<?php echo $key?></a> (<span><?php echo $value?></span>)</li>
+                        <?php $count++; }?>
+                </ul>
+            </div>
+        <?php }?>
+        <?php if(!empty($top_hashtags)){?>
+            <div class="col-md-6">
+                <div class="head">
+                    <h3 class="title"><?php echo l("top-hashtags")?></h3>
+                    <div class="description"><?php echo l("top-hashtags-note")?></div>
+
+                </div>
+                <ul class="summary-list-group">
+                    <?php
+                    $count = 1;
+                    foreach ($top_hashtags as $key => $value) {
+                        ?>
+                        <li class="item"> <a href="https://www.instagram.com/explore/tags/<?php echo $key?>" target="_blank">#<?php echo $key?></a> (<span><?php echo $value?></span>)</li>
+                        <?php $count++; }?>
+                </ul>
+            </div>
+        <?php }?>
+    </div>
+</div> 

@@ -1,0 +1,676 @@
+<div id="horizontal-menu">
+    <a href="" class="toggle-left menu-toggle-left nav-btn"><i class="la la-chevron-circle-left"></i></a>
+    <a href="" class="toggle-right menu-toggle-right nav-btn"><i class="la la-chevron-circle-right"></i></a>
+    <div class="menu-container">
+        <div class="menu " role="tablist">
+            <a href="#general" data-toggle="tab" class="menu-item  active"><span><?php _l('general')?></span></a>
+            <a href="#logopane" data-toggle="tab" class="menu-item"><span><?php _l('logo-type')?></span></a>
+            <a href="#socialauth" data-toggle="tab" class="menu-item"><span><?php _l('registration')?></span></a>
+            <?php if(moduleExists('saas')):?>
+                <a href="#payments" data-toggle="tab" class="menu-item"><span><?php _l('payments')?></span></a>
+            <?php endif?>
+            <a href="#proxy" data-toggle="tab" class="menu-item"><span><?php _l('proxy')?></span></a>
+            <a href="#mail" data-toggle="tab" class="menu-item"><span><?php _l('mail')?></span></a>
+            <a href="#filemanager" data-toggle="tab" class="menu-item"><span><?php _l('file-manager')?></span></a>
+            <a href="#others" data-toggle="tab" class="menu-item"><span><?php _l('others')?></span></a>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="general" role="tabpanel" >
+            <form enctype="multipart/form-data" class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+
+                <div class="form-group">
+                    <label><?php _l('site-name')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('site-title','SmartPost')?>" name="val[site-title]"/>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('server-timezone')?></label>
+                    <select class="form-control select-timezone" name="val[timezone]">
+                        <option value=""><?php _l('select-timezone')?></option>
+                        <?php foreach(getTimezones() as $key => $name):?>
+                            <option <?php echo config('timezone') == $key ? 'selected' : null?> value="<?php echo $key?>"><?php echo $name?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('default-date-format')?></label>
+                    <select class="form-control" name="val[admin-date-format]">
+                        <?php foreach(getDateFormats() as $key => $value):?>
+                            <option <?php echo (config('admin-date-format', 1) == $key) ? 'selected':null?> value="<?php echo $key?>"><?php echo $value?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('Calender Start Day')?></label>
+                    <select class="form-control" name="val[calender-start-day]">
+                        <?php foreach(array('0' => 'Sunday', '1' => 'Monday') as $key => $value):?>
+                            <option <?php echo (config('calender-start-day', 0) == $key) ? 'selected':null?> value="<?php echo $key?>"><?php echo $value?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+
+
+                <hr/>
+                <div class="form-group">
+                    <label><?php _l('site-description')?></label>
+                    <textarea class="form-control" rows="5" name="val[site-description]"><?php echo config('site-description')?></textarea>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('keywords')?></label>
+                    <textarea class="form-control" rows="5" name="val[site-keywords]"><?php echo config('site-keywords')?></textarea>
+                </div>
+
+
+                <?php echo Hook::getInstance()->fire('admin.settings.general')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+            </form>
+        </div>
+        <div class="tab-pane fade" id="logopane" role="tabpanel" >
+
+            <form enctype="multipart/form-data" class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+                <input type="hidden" class="form-control" value="<?php echo config('site-title')?>" name="val[site-title]"/>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <div class="float-left"><label><?php _l('site-logo')?></label></div>
+                        <div class="float-right">
+                            <img src="<?php echo assetUrl(config('site_logo','assets/images/logo.png'))?>" style="width: 100px;"/>
+                        </div>
+                    </div>
+                    <input type="hidden" name="img[site_logo]" value="<?php echo config('site_logo','assets/images/logo.png')?>"/>
+                    <input type="file"  name="site_logo" class="form-control " ">
+                </div>
+
+                <div class="form-group">
+                    <div class="clearfix">
+                        <div class="float-left"><label><?php _l('site-logo-light')?></label></div>
+                        <div class="float-right">
+                            <img src="<?php echo assetUrl(config('site_logo_light','assets/images/logo-light.png'))?>" style="width: 100px;"/>
+                        </div>
+                    </div>
+                    <input type="hidden" name="img[site_logo_light]" value="<?php echo config('site_logo_light','assets/images/logo-light.png')?>"/>
+                    <input type="file"  name="site_logo_light" class="form-control " ">
+                </div>
+
+
+                <div class="form-group">
+
+                    <div class="clearfix">
+                        <div class="float-left"><label><?php _l('site-short-icon')?></label></div>
+                        <div class="float-right">
+                            <img src="<?php echo assetUrl(config('site_short_icon','assets/images/short-logo.png'))?>" style="width: 20px;"/>
+                        </div>
+                    </div>
+                    <input type="hidden" name="img[site_short_icon]" value="<?php echo config('site_short_icon','assets/images/short-logo.png')?>"/>
+                    <input type="file"  name="site_short_icon" class="form-control " ">
+                </div>
+
+                <div class="form-group">
+
+                    <div class="clearfix">
+                        <div class="float-left"><label><?php _l('favicon')?></label></div>
+                        <div class="float-right">
+                            <img src="<?php echo assetUrl(config('favicon','favicon.png'))?>" style="width: 20px;"/>
+                        </div>
+                    </div>
+                    <input type="hidden" name="img[favicon]" value="<?php echo config('favicon','favicon.png')?>"/>
+                    <input type="file"  name="favicon" class="form-control " ">
+                </div>
+
+
+                <?php echo Hook::getInstance()->fire('admin.settings.logo.type')?>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+            </form>
+
+        </div>
+        <div class="tab-pane fade" id="socialauth" role="tabpanel" >
+            <form class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[user-signup]" value="0"/>
+                    <input type="checkbox" name="val[user-signup]" <?php echo config('user-signup', true) ? 'checked' : null?> class="custom-control-input" id="customCheck1">
+                    <label class="custom-control-label" for="customCheck1"><?php _l('enable-signup')?></label>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[email-verification]" value="0"/>
+                    <input type="checkbox" name="val[email-verification]" <?php echo config('email-verification', false) ? 'checked' : null?> class="custom-control-input" id="customCheck2">
+                    <label class="custom-control-label" for="customCheck2"><?php _l('email-verification')?></label>
+                </div>
+
+                <hr/>
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[enable-captcha]" value="0"/>
+                    <input type="checkbox" name="val[enable-captcha]" <?php echo config('enable-captcha', false) ? 'checked' : null?> class="custom-control-input" id="customCheck3">
+                    <label class="custom-control-label" for="customCheck3">Google reCaptcha V2</label>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('captcha-site-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('captcha-site-key')?>" name="val[captcha-site-key]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('captcha-site-secret-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('captcha-site-secret-key')?>" name="val[captcha-site-secret-key]"/>
+                </div>
+                <hr/>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[facebook-login]" value="0"/>
+                    <input type="checkbox" name="val[facebook-login]" <?php echo config('facebook-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck4">
+                    <label class="custom-control-label" for="customCheck4"><?php _l('enable-facebook-login')?></label>
+                </div>
+
+
+                <div class="form-group">
+                    <label><?php _l('app-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('facebook-app-id')?>" name="val[facebook-app-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('app-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('facebook-app-secret')?>" name="val[facebook-app-secret]"/>
+                </div>
+                
+                <hr/>
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[twitter-login]" value="0"/>
+                    <input type="checkbox" name="val[twitter-login]" <?php echo config('twitter-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck5">
+                    <label class="custom-control-label" for="customCheck5"><?php _l('enable-twitter-login')?></label>
+                </div>
+
+
+                <div class="form-group">
+                    <label><?php _l('consumer-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('twitter-consumer-key')?>" name="val[twitter-consumer-key]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('consumer-secret')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('twitter-consumer-secret')?>" name="val[twitter-consumer-secret]"/>
+                </div>
+
+                <hr/>
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[google-login]" value="0"/>
+                    <input type="checkbox" name="val[google-login]" <?php echo config('google-login', false) ? 'checked' : null?> class="custom-control-input" id="customCheck6">
+                    <label class="custom-control-label" for="customCheck6"><?php _l('enable-google-login')?></label>
+                </div>
+
+
+                <div class="form-group">
+                    <label><?php _l('client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('google-client-id')?>" name="val[google-client-id]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('client-secret-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('google-client-secret')?>" name="val[google-client-secret]"/>
+                </div>
+
+                <?php echo Hook::getInstance()->fire('admin.settings.registration')?>
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+            </form>
+
+        </div>
+
+       <?php if(moduleExists('saas')):?>
+           <div class="tab-pane fade" id="payments" role="tabpanel" >
+
+               <form class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+                   <div class="form-group">
+                       <label ><?php _l('payment-mode')?></label>
+                       <select name="val[payment-mode]" class="form-control">
+                           <option <?php echo (config('payment-mode', 1) == 1) ? 'selected':null?> value="1"><?php _l('one-time')?></option>
+                           <option <?php echo (config('payment-mode', 1) == 2) ? 'selected':null?> value="2"><?php _l('recurring')?></option>
+                           <option <?php echo (config('payment-mode', 1) == 3) ? 'selected':null?> value="3"><?php _l('both-one-time-recurring')?></option>
+                       </select>
+                   </div>
+                   <div class="">
+                       <label></label>
+                       <div class="custom-control custom-checkbox mb-4">
+                           <input type="hidden" name="val[force-credit-card]" value="0"/>
+                           <input type="checkbox" name="val[force-credit-card]" <?php echo config('force-credit-card', false) ? 'checked' : null?> class="custom-control-input" id="customCheckforcecredit">
+                           <label class="custom-control-label" for="customCheckforcecredit"><?php _l('force-credit-card-recurring-only')?></label>
+                       </div>
+                   </div>
+                   <hr/>
+                   <div class="form-group">
+                       <label ><?php _l('currency')?></label>
+                       <select name="val[currency]" class="form-control">
+                           <?php $currencies = getRawCurriencies(); foreach($currencies as $curr => $de):?>
+                               <option <?php echo (config('currency','USD') == $curr) ? 'selected' : null?> value="<?php echo $curr?>"><?php echo $curr?> (<?php echo $de['name']?>)</option>
+                           <?php endforeach;?>
+                       </select>
+                   </div>
+
+                   <div class="form-group row">
+                       <label for="staticEmail" class="col-sm-12 col-form-label"><?php _l('decimal-separator')?></label>
+                       <div class="col-sm-12">
+                           <select name="val[decimal-separator]" class="form-control">
+                               <option <?php echo (config('decimal-separator','.') == '.') ? 'selected' : null?> value=".">.</option>
+                               <option <?php echo (config('decimal-separator','.') == ',') ? 'selected' : null?> value=",">,</option>
+                           </select>
+                       </div>
+                   </div>
+
+                   <div class="form-group row">
+                       <label for="staticEmail" class="col-sm-2 col-form-label"><?php _l('thousand-separator')?></label>
+                       <div class="col-sm-12">
+                           <select name="val[thousand-separator]" class="form-control">
+                               <option <?php echo (config('thousand-separator',',') == '.') ? 'selected' : null?> value=".">.</option>
+                               <option <?php echo (config('thousand-separator',',') == ',') ? 'selected' : null?> value=",">,</option>
+                               <option <?php echo (config('thousand-separator',',') == "'") ? 'selected' : null?> value="'">' apostrophe</option>
+                           </select>
+                       </div>
+                   </div>
+
+                   <div class="form-group row">
+                       <label for="staticEmail" class="col-sm-12 col-form-label"><?php _l('currency-placement')?></label>
+                       <div class="col-sm-12">
+                           <select name="val[currency-placement]" class="form-control">
+                               <option <?php echo (config('currency-placement','before') == 'before') ? 'selected' : null?> value="before"><?php _l('before')?> ($30.00)</option>
+                               <option <?php echo (config('currency-placement','before') == 'after') ? 'selected' : null?> value="after"><?php _l('after')?> (30.00$)</option>
+                           </select>
+                       </div>
+                   </div>
+                   <div class="form-group row">
+                       <label for="staticEmail" class="col-sm-6 col-form-label"><?php _l('remove-zero-decimals')?></label>
+                       <div class="col-sm-6">
+                           <input type="hidden" name="val[remove-zero-decimals]" value="0"/>
+                           <div class="switch">
+                               <input id="cmn-toggle-decimal" value="1" name="val[remove-zero-decimals]" <?php echo (config('remove-zero-decimals', true)) ? 'checked': null?> class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                               <label for="cmn-toggle-decimal"></label>
+                           </div>
+
+                           <span class="text-muted"><?php _l('remove-zero-decimals-info')?></span>
+                       </div>
+                   </div>
+
+                   <hr/>
+                   <div class="custom-control custom-checkbox mb-4">
+                       <input type="hidden" name="val[enable-paypal]" value="0"/>
+                       <input type="checkbox" name="val[enable-paypal]" <?php echo config('enable-paypal', false) ? 'checked' : null?> class="custom-control-input" id="customCheck7">
+                       <label class="custom-control-label" for="customCheck7"><?php _l('enable-paypal')?></label>
+                   </div>
+                   <div class="form-group">
+                       <label ><?php _l('paypal-username')?></label>
+                       <div >
+                           <input type="text"  name="val[paypal-username]" class="form-control "  value="<?php echo config('paypal-username', '')?>">
+                       </div>
+                   </div>
+                   <div class="form-group ">
+                       <label><?php _l('paypal-password')?></label>
+                       <div >
+                           <input type="password"  name="val[paypal-password]" class="form-control "  value="<?php echo config('paypal-password', '')?>">
+                       </div>
+                   </div>
+                   <div class="form-group ">
+                       <label><?php _l('paypal-signature')?></label>
+                       <div class="">
+                           <input type="text"  name="val[paypal-signature]" class="form-control "  value="<?php echo config('paypal-signature', '')?>">
+                       </div>
+                   </div>
+
+                   <div class="custom-control custom-checkbox mb-2">
+                       <input type="hidden" name="val[paypal-sandbox]" value="0"/>
+                       <input type="checkbox" name="val[paypal-sandbox]" <?php echo config('paypal-sandbox', false) ? 'checked' : null?> class="custom-control-input" id="customCheck8">
+                       <label class="custom-control-label" for="customCheck8"><?php _l('paypal-sandbox')?></label>
+                   </div>
+
+                   <h6><?php _l('paypal-recurring-setup')?></h6>
+                    <hr/>
+                   <div class="form-group">
+                       <label ><?php _l('paypal-client-id')?></label>
+                       <div >
+                           <input type="text"  name="val[paypal-client-id]" class="form-control "  value="<?php echo config('paypal-client-id', '')?>">
+                       </div>
+                   </div>
+                   <div class="form-group">
+                       <label ><?php _l('paypal-client-secret')?></label>
+                       <div >
+                           <input type="text"  name="val[paypal-client-secret]" class="form-control "  value="<?php echo config('paypal-client-secret', '')?>">
+                       </div>
+                   </div>
+
+
+                   <hr/>
+                   <div class="custom-control custom-checkbox mb-4">
+                       <input type="hidden" name="val[enable-stripe]" value="0"/>
+                       <input type="checkbox" name="val[enable-stripe]" <?php echo config('enable-stripe', false) ? 'checked' : null?> class="custom-control-input" id="customCheck9">
+                       <label class="custom-control-label" for="customCheck9"><?php _l('enable-stripe')?></label>
+                   </div>
+                   <div class="form-group">
+                       <label><?php _l('stripe-secret-key')?></label>
+                       <div>
+                           <input type="text"  name="val[stripe-secret-key]" class="form-control "  value="<?php echo config('stripe-secret-key', '')?>">
+                       </div>
+                   </div>
+                   <div class="form-group ">
+                       <label ><?php _l('stripe-publishable-key')?></label>
+                       <div >
+                           <input type="text"  name="val[stripe-publishable-key]" class="form-control "  value="<?php echo config('stripe-publishable-key', '')?>">
+                       </div>
+                   </div>
+                   <hr/>
+                   <div class="custom-control custom-checkbox mb-4">
+                       <input type="hidden" name="val[enable-mollie]" value="0"/>
+                       <input type="checkbox" name="val[enable-mollie]" <?php echo config('enable-mollie', false) ? 'checked' : null?> class="custom-control-input" id="customCheck10">
+                       <label class="custom-control-label" for="customCheck10"><?php _l('enable-mollie')?></label>
+                   </div>
+                   <div class="form-group">
+                       <label ><?php _l('mollie-api-key')?></label>
+                       <div >
+                           <input type="text"  name="val[mollie-api-key]" class="form-control"  value="<?php echo config('mollie-api-key', '')?>">
+                       </div>
+                   </div>
+
+                   <hr/>
+
+                   <!--<div class="custom-control custom-checkbox mb-4">
+                       <input type="hidden" name="val[enable-paystack]" value="0"/>
+                       <input type="checkbox" name="val[enable-paystack]" <?php echo config('enable-paystack', false) ? 'checked' : null?> class="custom-control-input" id="customCheck11">
+                       <label class="custom-control-label" for="customCheck11"><?php _l('enable-paystack')?></label>
+                   </div>
+
+                   <div class="form-group ">
+                       <label ><?php _l('paystack-public-key')?></label>
+                       <div >
+                           <input type="text"  name="val[paystack-public-key]" class="form-control "  value="<?php echo config('paystack-public-key', '')?>">
+                       </div>
+                   </div>
+                   <div class="form-group">
+                       <label><?php _l('paystack-secret-key')?></label>
+                       <div>
+                           <input type="text"  name="val[paystack-secret-key]" class="form-control "  value="<?php echo config('paystack-secret-key', '')?>">
+                       </div>
+                   </div>-->
+
+                   <?php echo Hook::getInstance()->fire('admin.settings.payments')?>
+
+                   <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+               </form>
+
+           </div>
+        <?php endif?>
+
+
+        <div class="tab-pane fade" id="proxy" role="tabpanel" >
+            <form class="general-form " action="<?php echo getFullUrl(true)?>" method="post">
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[users-can-add-own-proxies]" value="0"/>
+                    <input type="checkbox" name="val[users-can-add-own-proxies]" <?php echo config('users-can-add-own-proxies', true) ? 'checked' : null?> class="custom-control-input" id="customCheck13">
+                    <label class="custom-control-label" for="customCheck13"><?php _l('users-can-add-own-proxies')?></label>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[enable-system-proxies]" value="0"/>
+                    <input type="checkbox" name="val[enable-system-proxies]" <?php echo config('enable-system-proxies', true) ? 'checked' : null?> class="custom-control-input" id="customCheck14">
+                    <label class="custom-control-label" for="customCheck14"><?php _l('enable-system-proxies')?></label>
+                </div>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+            </form>
+        </div>
+        <div class="tab-pane fade" id="mail" role="tabpanel" >
+            <form class="general-form " action="<?php echo getFullUrl(true)?>" method="post">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label><?php _l('email-driver')?></label>
+                            <div >
+                                <select class="form-control" name="val[email-driver]">
+                                    <option <?php echo (config('email-driver',1) == 'mail') ? 'selected' : null?> value="mail"><?php _l('mail')?></option>
+                                    <option <?php echo (config('email-driver',1) == 'smtp') ? 'selected' : null?> value="smtp"><?php _l('smtp')?></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><?php _l('from_name')?></label>
+                            <div>
+                                <input type="text"  name="val[from_name]" class="form-control"  value="<?php echo config('from_name', '')?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><?php _l('from_address')?>(<?php _l('site-email-address')?>)</label>
+                            <div>
+                                <input type="text"  name="val[from_address]" class="form-control"  value="<?php echo config('from_address', '')?>">
+                            </div>
+                        </div>
+
+
+                        <div class="custom-control custom-checkbox mb-4">
+                            <input type="hidden" name="val[enable-welcome-mail]" value="0"/>
+                            <input type="checkbox" name="val[enable-welcome-mail]" <?php echo config('enable-welcome-mail', false) ? 'checked' : null?> class="custom-control-input" id="customCheck12">
+                            <label class="custom-control-label" for="customCheck12"><?php _l('enable-welcome-mail')?></label>
+                        </div>
+
+                        <hr/>
+                        <div class="form-group ">
+                            <label ><?php _l('smtp-host')?></label>
+                            <div >
+                                <input type="text"  name="val[smtp-host]" class="form-control "  value="<?php echo config('smtp-host', '')?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label ><?php _l('smtp-username')?></label>
+                            <div >
+                                <input type="text"  name="val[smtp-username]" class="form-control"  value="<?php echo config('smtp-username', '')?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('smtp-password')?></label>
+                            <div >
+                                <input type="text"  name="val[smtp-password]" class="form-control "  value="<?php echo config('smtp-password', '')?>">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label ><?php _l('smtp-port')?></label>
+                            <div>
+                                <input type="text"  name="val[smtp-port]" class="form-control"  value="<?php echo config('smtp-port', '')?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('email-charset')?></label>
+                            <div>
+                                <input type="text"  name="val[email-charset]" class="form-control"  value="<?php echo config('email-charset', 'utf-8')?>">
+                            </div>
+                        </div>
+
+
+                        <?php echo Hook::getInstance()->fire('admin.settings.email')?>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h6><?php _l('email-templates')?></h6>
+                        <div class="alert alert-dark" role="alert">
+                            <?php _l('you-can-template-info')?>:<br/>
+                            {full_name} - <?php _l('display-user-full-name-info')?>,<br/>
+                            {email} - <?php _l('display-user-email-info')?>,<br/>
+                        </div>
+                        <hr/>
+                        <h6 class="colored"><?php _l('activation-email')?></h6>
+                        <hr/>
+                        <div class="form-group">
+                            <label><?php _l('subject')?></label>
+                            <div>
+                                <input type="text"  name="val[activation-subject]" class="form-control"  value="<?php echo config('activation-subject')?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('content')?></label>
+                            <textarea class="form-control" rows="5" name="val[activation-content]"><?php echo config('activation-content', '')?></textarea>
+                        </div>
+                        <hr/>
+                        <h6 class="colored"><?php _l('reset-password-email')?></h6>
+                        <hr/>
+                        <div class="form-group">
+                            <label><?php _l('subject')?></label>
+                            <div>
+                                <input type="text"  name="val[reset-subject]" class="form-control"  value="<?php echo config('reset-subject')?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('content')?></label>
+                            <textarea class="form-control" rows="5" name="val[reset-content]"><?php echo config('reset-content', '')?></textarea>
+                        </div>
+                        <hr/>
+                        <h6 class="colored"><?php _l('welcome-email')?></h6>
+                        <hr/>
+                        <div class="form-group">
+                            <label><?php _l('subject')?></label>
+                            <div>
+                                <input type="text"  name="val[welcome-subject]" class="form-control"  value="<?php echo config('welcome-subject', '')?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><?php _l('content')?></label>
+                            <textarea class="form-control" rows="5" name="val[welcome-content]"><?php echo config('welcome-content')?></textarea>
+                        </div>
+
+                        <?php echo Hook::getInstance()->fire('admin.settings.email.template')?>
+                    </div>
+                </div>
+
+
+
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade" id="filemanager" role="tabpanel" >
+            <form class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+
+                <h6><?php _l('google-drive')?></h6>
+
+                <div class="form-group">
+                    <label><?php _l('google-drive-api-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('google-api-key', '')?>" name="val[google-api-key]"/>
+                </div>
+
+                <div class="form-group">
+                    <label><?php _l('google-drive-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('google-drive-client-id', '')?>" name="val[google-drive-client-id]"/>
+                </div>
+
+                <hr/>
+                <h6><?php _l('dropbox')?></h6>
+
+                <div class="form-group">
+                    <label><?php _l('dropbox-api-key')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('dropbox-api-key', '')?>" name="val[dropbox-api-key]"/>
+                </div>
+
+                <hr/>
+                <h6><?php _l('onedrive-file-picker')?></h6>
+
+                <div class="form-group">
+                    <label><?php _l('onedrive-client-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('onedrive-client-id', '')?>" name="val[onedrive-client-id]"/>
+                </div>
+
+                <?php echo Hook::getInstance()->fire('admin.settings.filemanger')?>
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+
+            </form>
+        </div>
+
+        <div class="tab-pane fade" id="others" role="tabpanel" >
+            <form class="general-form short-form" action="<?php echo getFullUrl(true)?>" method="post">
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[enable-rss]" value="0"/>
+                    <input type="checkbox" name="val[enable-rss]" <?php echo config('enable-rss', true) ? 'checked' : null?> class="custom-control-input" id="customCheckrss">
+                    <label class="custom-control-label" for="customCheckrss"><?php _l('enable-rss')?></label>
+                </div>
+
+                <hr/>
+                <h6><?php _l('enable-notification-with-beamer')?></h6>
+                <hr/>
+                <div class="form-group">
+                    <label><?php _l('beamer-product-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('beamer-id', '')?>" name="val[beamer-id]"/>
+                </div>
+                <hr/>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[enable-welcome-steps]" value="0"/>
+                    <input type="checkbox" name="val[enable-welcome-steps]" <?php echo config('enable-welcome-steps', true) ? 'checked' : null?> class="custom-control-input" id="customCheckwelcome">
+                    <label class="custom-control-label" for="customCheckwelcome"><?php _l('enable-welcome-steps')?></label>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('last-step-video')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('welcome-last-step-video', '')?>" name="val[welcome-last-step-video]"/>
+                </div>
+                <hr/>
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[enable-gdpr]" value="0"/>
+                    <input type="checkbox" name="val[enable-gdpr]" <?php echo config('enable-gdpr', true) ? 'checked' : null?> class="custom-control-input" id="customCheck15">
+                    <label class="custom-control-label" for="customCheck15"><?php _l('enable-gdpr')?></label>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="hidden" name="val[disable-landing]" value="0"/>
+                    <input type="checkbox" name="val[disable-landing]" <?php echo config('disable-landing', false) ? 'checked' : null?> class="custom-control-input" id="customCheck16">
+                    <label class="custom-control-label" for="customCheck16"><?php _l('disable-landing-page')?></label>
+                </div>
+
+                <hr/>
+
+
+                <div class="form-group">
+                    <label><?php _l('google-analytics-id')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('google-analytics-id', '')?>" name="val[google-analytics-id]"/>
+                </div>
+
+                <hr/>
+                <?php Hook::getInstance()->fire('extend.admin.other.settings')?>
+                <h6><?php _l('social-links')?></h6>
+                <div class="form-group">
+                    <label><?php _l('facebook-page')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('facebook-page', 'https://facebook.com')?>" name="val[facebook-page]"/>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('google-page')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('google-page', 'https://google.com')?>" name="val[google-page]"/>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('twitter-page')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('twitter-page', 'https://twitter.com')?>" name="val[twitter-page]"/>
+                </div>
+                <div class="form-group">
+                    <label><?php _l('pinterest-page')?></label>
+                    <input type="text" class="form-control" value="<?php echo config('pinterest-page', 'https://pinterest.com')?>" name="val[pinterest-page]"/>
+                </div>
+                <hr/>
+
+                <?php echo Hook::getInstance()->fire('admin.settings.others')?>
+
+                <div class="form-group">
+                    <label><?php _l('embed-code')?></label>
+                    <textarea class="form-control" rows="10" name="val[embed-code]"><?php echo config('embed-code')?></textarea>
+                </div>
+
+                <button class="btn btn-primary btn-lg"><?php _l('save-changes')?></button>
+            </form>
+        </div>
+
+
+    </div>
+</div>

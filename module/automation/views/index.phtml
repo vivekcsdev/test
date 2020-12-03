@@ -1,0 +1,70 @@
+<div class="automation-container">
+   <?php if($accountId):?>
+   <?php echo view('automation::page', array('accountId' => $accountId))?>
+   <?php else:?>
+
+   <div class="" style="padding: 10px 30px;">
+      <h5><?php _l('automations-bot')?></h5>
+      <h6 style="font-weight: lighter;color: grey;"><?php _l('automations-bot-info')?></h6>
+   </div>
+
+   <div class="content">
+      <div class="grid-container clearfix ">
+         <div class="each-container">
+            <a href="" data-toggle="modal" data-target="#newBotModal" class="each each-add">
+            <i class="las la-plus"></i>
+            <?php _l('new-bot')?>
+            </a>
+         </div>
+         <?php  foreach(model('automation::automation')->getAutomations() as $automation):$account = model('account')->find($automation['account'])?>
+         <div class="each-container">
+            <a href="<?php echo url('automations/'.$account['id'])?>" data-ajax="true" class="each">
+               <span class="count" style="padding:0;position:relative;">
+               <img style="width:100%;height:100%;border-radius:100px;position:absolute;top: 0;margin:0" src="<?php echo assetUrl($account['avatar'])?>"/>
+               </span>
+               <p>
+                  <?php echo ($account['social_type'] == 'pinterest') ? $account['access_token'] : $account['username']?><br/>
+               </p>
+               <div class="actions">
+                  <span style="font-size:13px;position:relative;bottom:0px;background:<?php echo ($account['social_type'] == 'instagram') ? '#B54B7F' : '#BD0026'?>" class="badge badge-secondary"><?php echo ucwords($account['social_type'])?></span>
+                  <span style="font-size:13px;position:relative;bottom:0px;background:<?php echo ($automation['status'] == 1) ? '#4CAF50' : '#F44336'?>" class="badge badge-secondary"><?php echo ($automation['status']) ? l('running') : l('stopped')?></span>
+               </div>
+            </a>
+         </div>
+         <?php endforeach;?>
+      </div>
+   </div>
+
+   <div class="modal" tabindex="-1" id="newBotModal" role="dialog" style="background: rgba(255,255,255,0.7)">
+      <div class="modal-dialog" role="document">
+         <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title"><?php _l('choose-available-account')?></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body account-lists p-0">
+                  <?php foreach($accounts as $account):?>
+                  <a href="<?php echo url('automations/'.$account['id'])?>" data-ajax="true"
+                     class="clearfix each" style="">
+                     <div class="float-left">
+                        <img src="<?php echo assetUrl($account['avatar'])?>" style="width:40px;height:40px;border-radius:100px"/>
+                        <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><i class='lab la-<?php echo $account['social_type']?>'></i> <?php echo $account['username']?></span><br/>
+                     </div>
+                     <div class="float-right">
+                        <div class="custom-control custom-checkbox">
+                           <input onchange="return selectThisAccount(this, true)" value="<?php echo $account['id']?>" type="checkbox" class="custom-control-input" id="customCheck<?php echo $account['id']?>">
+                           <label class="custom-control-label" for="customCheck<?php echo $account['id']?>"></label>
+                        </div>
+                     </div>
+                  </a>
+                  <?php endforeach;?>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+   <?php endif?>
+</div>

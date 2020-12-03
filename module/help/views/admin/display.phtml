@@ -1,0 +1,91 @@
+<form action="<?php echo getFullUrl(true)?>" class="general-form" method="post" id="pages-list-form">
+    <input type="hidden" value="1" name="val[bulk_action]"/>
+    <div class="modern-table">
+        <div class="table-head clearfix">
+            <div class="each" style="width:5%;">
+                <a href="javascript:void(0)" onclick="submitForm('#pages-list-form', 'bulk')" class="btn btn-light"><i class="la la-trash"></i></a>
+            </div>
+            <div class="each" style="width: 10%;">
+                <?php _l('options')?>
+            </div>
+            <div class="each" style="width: 40%;">
+                <?php _l('title')?>
+            </div>
+            <div class="each" style="width: 25%;">
+                <?php _l('slug')?>
+            </div>
+
+            <div class="each" style="width: 20%;">
+                <?php _l('created')?>
+            </div>
+        </div>
+
+
+        <div class="table-body" >
+
+            <?php foreach($tutorials->results() as $tutorial):?>
+                <div class="table-row clearfix">
+                    <div class="each" style="width: 5%;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name="val[id][]" value="<?php echo $tutorial['id']?>" class="custom-control-input" id="customCheck<?php echo $tutorial['id']?>">
+                            <label class="custom-control-label" for="customCheck<?php echo $tutorial['id']?>"></label>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 10%;">
+                        <div class="left">
+                            <?php _l('options')?>
+                        </div>
+                        <div class="right">
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                <a href="<?php echo url('admin/tutorial/edit/'.$tutorial['id'])?>" data-ajax="true" class="btn btn-light"><i class="la la-pencil-alt"></i></a>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item confirm" data-ajax-action="true" href="<?php echo url('admin/tutorials', array('action' => 'delete','id' => $tutorial['id']))?>"><?php _l('delete')?></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 40%;">
+                        <div class="left">
+                            <?php _l('title')?>
+                        </div>
+                        <div class="right">
+                            <?php echo output_content($tutorial['name'])?>
+                        </div>
+                    </div>
+                    <div class="each clearfix" style="width: 25%;">
+                        <div class="left">
+                            <?php _l('slug')?>
+                        </div>
+                        <div class="right">
+                            <?php echo output_content($tutorial['slug'])?>
+                        </div>
+                    </div>
+
+                    <div class="each clearfix" style="width: 20%;">
+                        <div class="left">
+                            <?php _l('created')?>
+                        </div>
+                        <div class="right">
+                            <?php echo date('M d, Y', $tutorial['created'])?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+</form>
+
+<?php if($tutorials->total < 1):?>
+    <div class="empty-content">
+        <i class="la la-fill"></i>
+        <span><?php _l('no-contents-show')?></span>
+    </div>
+<?php else:?>
+    <?php echo $tutorials->links(array('term' => $C->request->input('term')))?>
+<?php endif?>

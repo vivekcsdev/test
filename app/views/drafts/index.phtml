@@ -1,0 +1,275 @@
+<div class="darft-container">
+
+   
+
+   <?php if($draftPosts or $C->request->segment(1)):?>
+
+   
+
+   <div class="content d-none">
+      <h5><?php echo $draft['title']?> <?php _l('collection')?></h5>
+      <h6 style="font-weight: lighter;color: grey;"><?php _l('draft-collections-info')?></h6>
+      <div class=" scroll-paginate"
+         data-container=".scheduled-posts-grid"
+         data-offset="10"
+         data-url="<?php echo url('drafts/'.$C->request->segment(1))?>">
+         <div class="the-content">
+            <div class="grid-container clearfix scheduled-posts-grid" style="margin: 0">
+               <?php  foreach($draftPosts as $draftPost):?>
+               <?php echo view('drafts/display', array('draftPost' => $draftPost))?>
+               <?php endforeach;?>
+            </div>
+            <?php if(count($draftPosts) < 1):?>
+            <div class="empty-content">
+               <i class="la la-fill"></i>
+               <span><?php _l('no-contents-show')?></span>
+            </div>
+            <?php endif?>
+         </div>
+      </div>
+   </div>
+
+   <?php else:?>
+
+   <div class="d-none" style="padding: 10px 30px;">
+      <h5><?php _l('draft-collections')?></h5>
+      <h6 style="font-weight: lighter;color: grey;"><?php _l('draft-collections-info')?></h6>
+   </div>
+
+   <div class="page-title-panel d-flex align-items-center">
+      <div><h2>Draft Collections</h2></div>
+      <div class="ml-auto">
+         <a href="#collections" data-toggle="tab" class="menu-item btn active"><span><?php _l('collections')?></span></a>
+         <a href="#useraccess" id="new-toggle-button" data-toggle="tab" class="menu-item btn ml-3  "><span><?php _l('user-access')?></span></a>  
+      </div>
+   </div>
+
+   <div id="horizontal-menu">
+      <div class="menu-container d-none">
+         <div class="menu " role="tablist">
+            <a href="#collections" data-toggle="tab" class="menu-item  active"><span><?php _l('collections')?></span></a>
+            <a href="#useraccess" id="new-toggle-button" data-toggle="tab" class="menu-item  "><span><?php _l('user-access')?></span></a>
+         </div>
+      </div>
+      <div class="actions-pane">
+         <ul class="clearfix">
+            <li><a  class="btn btn-primary " data-toggle="modal" data-target="#collectionInviteModal" href=""><?php _l('invite-user')?></a> </li>
+         </ul>
+      </div>
+   </div>
+
+   <div class="tab-content mt-3" id="myTabContent">
+      <div class="tab-pane fade show active" id="collections" role="tabpanel" >
+         <div class="content " style="height: calc(100vh - 200px);">
+            <div class="grid-container clearfix" style="margin:0">
+               <div class="each-container">
+                  <a href="" data-toggle="modal" data-target="#collectionModal" class="each each-add">
+                  <i class="las la-plus"></i>
+                  <?php _l('add-collection')?>
+                  </a>
+               </div>
+               <?php foreach (model('post')->getMyDrafts() as $draft): $posts = model('post')->countDraftPosts($draft['id'])?>
+               <div class="each-container">
+                  <div class="each">
+                     <span class="count"><?php echo $posts?></span>
+                     <p>
+                        <?php echo $draft['title']?><br/>
+                        <a data-ajax="true" href="<?php echo url('drafts/'.$draft['id'])?>" style="text-decoration: none"><i class="la la-eye"></i> <?php _l('see-posts')?></a>
+                     </p>
+                     <div class="actions">
+                        <?php if($draft['sharable']):?>
+                        <span style="position:relative;bottom:5px" class="badge badge-secondary"><?php _l('sharable')?></span>
+                        <?php endif?>
+                        <a href="<?php echo url('drafts', array('id' => $draft['id'],'action' => 'delete'))?>" data-ajax-action="true" class=" confirm"><i class="lar la-trash-alt"></i></a>
+                        <a href="" data-toggle="modal" data-target="#collectionEditModal<?php echo $draft['id']?>" ><i class="las la-pen"></i></a>
+                     </div>
+                  </div>
+               </div>
+               <div class="modal" tabindex="-1" id="collectionEditModal<?php echo $draft['id']?>" role="dialog">
+                  <div class="modal-dialog" role="document">
+                     <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <h5 class="modal-title"><?php _l('collection')?></h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                              </button>
+                           </div>
+                           <div class="modal-body">
+                              <input type="hidden" name="val[action]" value="edit"/>
+                              <input type="hidden" name="val[id]" value="<?php echo $draft['id']?>"/>
+                              <div class="form-group">
+                                 <label><?php _l('title')?></label>
+                                 <input required type="text" class="form-control" value="<?php echo $draft['title']?>" name="val[draft_title]"/>
+                              </div>
+                              <div class="row">
+                                 <div class="col-sm-4">
+                                    <label><?php _l('sharable')?></label>
+                                 </div>
+                                 <div class="col-sm-8">
+                                    <div class="switch">
+                                       <input type="hidden" value="0" name="val[sharable]"/>
+                                       <input name="val[sharable]" <?php echo ($draft['sharable']) ? 'checked' : null?>   id="cmn-toggle-sharable-<?php echo $draft['id']?>" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                                       <label for="cmn-toggle-sharable-<?php echo $draft['id']?>"></label>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary"><?php _l('save')?></button>
+                           </div>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+               <?php endforeach;?>
+            </div>
+            <?php $sharedCollections = model('post')->getSharedCollections()?>
+            <?php if($sharedCollections):?>
+            <hr/>
+            <h6><?php _l('shared-collections')?></h6>
+            <hr/>
+            <div class="grid-container clearfix">
+               <?php foreach ($sharedCollections as $draft): $posts = model('post')->countDraftPosts($draft['id'])?>
+               <div class="each-container">
+                  <div class="each">
+                     <span class="count"><?php echo $posts?></span>
+                     <p>
+                        <?php echo $draft['title']?><br/>
+                        <a data-ajax="true" href="<?php echo url('drafts/'.$draft['id'])?>" style="text-decoration: none"><i class="la la-eye"></i> <?php _l('see-posts')?></a>
+                     </p>
+                  </div>
+               </div>
+               <?php endforeach;?>
+            </div>
+            <?php endif?>
+         </div>
+      </div>
+      <div class="tab-pane fade" id="useraccess" role="tabpanel" >
+         <div class="content">
+            <div class="modern-table">
+               <div class="table-head clearfix">
+                  <div class="each" style="width: 40%;">
+                     <?php _l('full-name')?>
+                  </div>
+                  <div class="each" style="width: 40%;">
+                     <?php _l('email')?>
+                  </div>
+                  <div class="each" style="width: 10%;">
+                     <?php _l('status')?>
+                  </div>
+                  <div class="each" style="width: 10%;">
+                     <?php _l('actions')?>
+                  </div>
+               </div>
+               <div class="table-body" >
+                  <?php foreach(model('post')->getInvitedUsers() as $invite): $user = model('user')->getUser($invite['userid'])?>
+                  <div class="table-row clearfix">
+                     <div class="each clearfix" style="width: 40%;">
+                        <div class="left">
+                           <?php _l('name')?>
+                        </div>
+                        <div class="right">
+                           <?php echo $user['full_name']?>
+                        </div>
+                     </div>
+                     <div class="each clearfix" style="width: 40%;">
+                        <div class="left">
+                           <?php _l('email-address')?>
+                        </div>
+                        <div class="right">
+                           <?php echo $user['email']?>
+                        </div>
+                     </div>
+                     <div class="each clearfix" style="width: 10%;">
+                        <div class="left">
+                           <?php _l('status')?>
+                        </div>
+                        <div class="right">
+                           <?php if($invite['status']):?>
+                           <span class="badge badge-success"><?php _l('active')?></span>
+                           <?php else:?>
+                           <span class="badge badge-secondary"><?php _l('pending')?></span>
+                           <?php endif?>
+                        </div>
+                     </div>
+                     <div class="each clearfix" style="width: 10%;">
+                        <div class="left">
+                           <?php _l('actions')?>
+                        </div>
+                        <div class="right">
+                           <a href="<?php echo url('drafts', array('action' => 'revoke', 'id' => $user['id']))?>" class="btn btn-outline-secondary confirm" data-ajax-action="true"><?php _l('revoke')?></a>
+                        </div>
+                     </div>
+                  </div>
+                  <?php endforeach;?>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="modal" tabindex="-1" id="collectionModal" role="dialog" style="background: rgba(255,255,255,0.7)">
+      <div class="modal-dialog" role="document">
+         <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title"><?php _l('collection')?></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <input type="hidden" name="val[action]" value="add"/>
+                  <div class="form-group">
+                     <label><?php _l('title')?></label>
+                     <input required type="text" class="form-control" name="val[draft_title]"/>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-4">
+                        <label><?php _l('sharable')?></label>
+                     </div>
+                     <div class="col-sm-8">
+                        <div class="switch">
+                           <input type="hidden" value="0" name="val[sharable]"/>
+                           <input name="val[sharable]"   id="cmn-toggle-sharable" value="1"   class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+                           <label for="cmn-toggle-sharable"></label>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary"><?php _l('save')?></button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+
+   <div class="modal" tabindex="-1" id="collectionInviteModal" role="dialog" style="background: rgba(255,255,255,0.7)">
+      <div class="modal-dialog" role="document">
+         <form action="<?php echo getFullUrl(true)?>" method="post" class="general-form">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title"><?php _l('invite-user')?></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <input type="hidden" name="val[action]" value="invite"/>
+                  <div class="form-group">
+                     <label><?php _l('email-address')?></label>
+                     <input required type="text" class="form-control" name="val[email]"/>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary"><?php _l('invite')?></button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+
+   <?php endif?>
+</div>

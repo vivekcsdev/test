@@ -1,0 +1,200 @@
+<div class="inner-container inner-reports-container">
+   <div class="page-title-panel">
+      <h2>Reports</h2>
+   </div>
+   <div class="clearfix" style="position: relative;">
+      <div class="inner-left-pane modern-scroll">
+         <div class="action-pane" style="height: 49px;">
+         </div>
+         <div class="side-menu">
+            <?php
+               $social = $C->request->segment(1, 'all');
+               
+               ?>
+            <h5 class="menu-title"><?php _l('reports')?></h5>
+            <ul class="menu nav flex-column">
+               <li class="nav-item <?php echo $social == 'all' ? 'active' : null?>">
+                  <a class="nav-link " data-ajax="true" href="<?php echo url('reports')?>"><i class="la la-chart-bar"></i> <span><?php _l('system-statistics')?></span></a>
+               </li>
+               <?php foreach(model('user')->getAvailableSocials() as $socialthis):?>
+               <li class="nav-item <?php echo $social == $socialthis ? 'active' : null?>">
+                  <a class="nav-link " data-ajax="true" href="<?php echo url('reports/'.$socialthis)?>">
+                  <?php if($socialthis == 'tiktok'):?>
+                  
+                     <image class="tiktok-size" src="<?php echo assetUrl('assets/images/tik-tok.png')?>"></image>
+                    
+                  <?php else:?>
+                  <i class="la la-<?php echo $socialthis?>"></i>
+                  <?php endif?>
+                  <span><?php echo ucwords($socialthis)?></span></a>
+               </li>
+               <?php endforeach;?>
+            </ul>
+         </div>
+      </div>
+      <div class="inner-right-pane">
+         <div id="horizontal-menu" class="d-none">
+            <div class="menu-container">
+               <div class="menu " role="tablist">
+                  <a  class="menu-item  "><span class="menu-item-span"><?php echo $title?></span></a>
+               </div>
+            </div>
+         </div>
+         <div class="content statistics-container">
+            <?php if($type == 'general'):?>
+            <?php if(model('user')->isAdmin() and !moduleExists('dashboard')):?>
+            <div class="row d-none">
+               <div class="col-md-12">
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div class="each" >
+                           <div class="icon"><i class="la la-user"></i></div>
+                           <div class="count">
+                              <span class="color"><?php echo $stats['total-users']?></span>
+                              <?php _l('total-users')?>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+                        <div class="each">
+                           <div class="icon"><i class="la la-user"></i></div>
+                           <div class="count">
+                              <span class="color-green"><?php echo $stats['total-active-users']?></span>
+                              <div ><?php _l('active-users')?></div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+                        <div class="each">
+                           <div class="icon"><i class="la la-user"></i></div>
+                           <div class="count">
+                              <span class="colored-red"><?php echo $stats['total-inactive-users']?></span>
+                              <div ><?php _l('inactive-users')?></div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12 mt-3">
+                  <div class="row">
+                     <div class="col-md-6">
+                        <h3 class="color-grey-font-15"><?php _l('today')?></h3>
+                        <h1><?php echo $stats['total-users-today']?></h1>
+                     </div>
+                     <div class="col-md-6">
+                        <h3 class="color-grey-font-15"><?php _l('this-week')?></h3>
+                        <h1><?php echo $stats['total-users-this-week']?></h1>
+                     </div>
+                     <div class="col-md-6">
+                        <h3 class="color-grey-font-15"><?php _l('this-month')?></h3>
+                        <h1><?php echo $stats['total-users-this-month']?></h1>
+                     </div>
+                     <div class="col-md-6">
+                        <h3 class="color-grey-font-15"><?php _l('this-year')?></h3>
+                        <h1><?php echo $stats['total-users-this-year']?></h1>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- <hr/> -->
+            <div class="row mt-4">
+               <div class="col-md-5">
+                  <canvas class="chartjs" id="chartjs-doughnut-users" data-content='{"type":"doughnut","data":{"labels":["<?php _l('active-users')?>","<?php _l('inactive-users')?>"],"datasets":[{"label":"","data":[<?php echo $stats['total-active-users']?>,<?php echo $stats['total-inactive-users']?>],"backgroundColor":["rgb(255, 99, 132)","rgb(54, 162, 235)"]}]}}' width="undefined" height="290"></canvas>
+               </div>
+               <div class="col-md-7" >
+                  <canvas  id="chartjs-bars-user" data-content='{"type":"line","data":{"labels":["January","February","March","April","May","June","July","August","September","October","November","December"],"datasets":[{"label":"<?php _l('users')?>","data":[<?php echo implode(',', $stats['total-monthly-users'])?>],"fill":false,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],"borderColor":["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],"borderWidth":1}]},"options":{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]}}}' class="chartjs" width="undefined" height="200" style="height: 300px !important;"></canvas>
+               </div>
+            </div>
+            <!-- <hr/> -->
+            <?php endif?>
+            <div class="row">
+               <div class="col-md-3">
+                  <div class="each" >
+                     <div class="icon"><i class="la la-chart-bar"></i></div>
+                     <div class="count">
+                        <?php _l('total-accounts')?>
+                        <span><?php echo $stats['total-accounts']?></span>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="each">
+                     <div class="icon"><i class="la la-chart-bar"></i></div>
+                     <div class="count">
+                        <div ><?php _l('total-posts')?></div>
+                        <span class="total-post-color"><?php echo $stats['total-posts']?></span>
+                        
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="each">
+                     <div class="icon"><i class="la la-chart-bar"></i></div>
+                     <div class="count">
+                        <div ><?php _l('total-posts-success')?></div>
+
+                        <span><?php echo $stats['total-post-success']?></span>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="each">
+                     <div class="icon"><i class="la la-chart-bar"></i></div>
+                     <div class="count">
+                        <div ><?php _l('total-posts-failed')?></div>
+                        <span><?php echo $stats['total-post-failed']?></span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- <hr/> -->
+            <div class="mt-4" >
+               <canvas  id="chartjs-bars-posts" data-content='{"type":"bar","data":{"labels":["<?php _l('january')?>","<?php _l('february')?>","<?php _l('march')?>","<?php _l('april')?>","<?php _l('may')?>","<?php _l('june')?>","<?php _l('july')?>","<?php _l('august')?>","<?php _l('september')?>","<?php _l('october')?>","<?php _l('november')?>","<?php _l('december')?>"],"datasets":[{"label":"<?php _l('completed-posts')?>","data":[<?php echo implode(',', $stats['completed-posts'])?>],"fill":false,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],"borderColor":["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],"borderWidth":1}]},"options":{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]}}}' class="chartjs" width="undefined" height="200" style="height: 200px !important;"></canvas>
+            </div>
+            <?php else:?>
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="each" >
+                     <div class="icon"><i class="la la-chart-bar"></i></div>
+                     <div class="count">
+                        <?php _l('total-posts-queue')?>
+                        <span><?php echo $stats['post-queue']?></span>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="each">
+                     <div class="icon"><i class="la la-chart-bar"></i></div>
+                     <div class="count">
+                        <div ><?php _l('total-posts-success')?></div>
+                        <span><?php echo $stats['post-success']?></span>
+                        
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="each">
+                     <div class="icon"><i class="la la-chart-bar"></i></div>
+                     <div class="count">
+                        <div ><?php _l('total-posts-failed')?></div>
+                        <span><?php echo $stats['post-failed']?></span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- <hr/> -->
+            <div class="row">
+               <div class="col-md-7">
+                  <div class="mt-4" >
+                     <canvas  id="chartjs-bars-posts" data-content='{"type":"bar","data":{"labels":["<?php _l('january')?>","<?php _l('february')?>","<?php _l('march')?>","<?php _l('april')?>","<?php _l('may')?>","<?php _l('june')?>","<?php _l('july')?>","<?php _l('august')?>","<?php _l('september')?>","<?php _l('october')?>","<?php _l('november')?>","<?php _l('december')?>"],"datasets":[{"label":"<?php _l('completed-posts')?>","data":[<?php echo implode(',', $stats['success-monthy-data'])?>],"fill":false,"backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],"borderColor":["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],"borderWidth":1}]},"options":{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]}}}' class="chartjs" width="undefined" height="200" style="height: 200px !important;"></canvas>
+                  </div>
+               </div>
+               <div class="col-md-5 pt-4">
+                  <canvas class="chartjs" id="chartjs-doughnut-users" data-content='{"type":"doughnut","data":{"labels":["<?php _l('media')?>","<?php _l('link')?>","<?php _l('text')?>"],"datasets":[{"label":"","data":[<?php echo $stats['post-type-media']?>,<?php echo $stats['post-type-link']?>,<?php echo $stats['post-type-text']?>],"backgroundColor":["rgb(255, 99, 132)","rgb(54, 162, 235)", "rgb(0, 188, 212)"]}]}}' width="undefined" height="290"></canvas>
+               </div>
+            </div>
+            <?php endif?>
+         </div>
+      </div>
+   </div>
+</div>

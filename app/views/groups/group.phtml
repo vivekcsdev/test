@@ -1,0 +1,35 @@
+<input type="hidden" name="val[action]" value="<?php echo $action?>"/>
+<div class="form-group">
+    <label><?php _l('group-title')?></label>
+    <input type="text" value="<?php echo ($group) ? $group['title'] : null?>" class="form-control" required name="val[title]"/>
+</div>
+<?php
+    $selectedAccount = array();
+    if(!empty($group)) {
+        $selectedAccount = perfectUnserialize($group['accounts']);
+    }
+?>
+<div class="account-lists" style="width: 100%;height: 400px;overflow: auto;overflow-x: hidden;">
+    <?php $accounts = model('account')->listAccounts('all');?>
+    <?php foreach($accounts as $account):?>
+        <a href="javascript:void(0)" onclick="return selectThisAccount(this)"
+           class="clearfix each" style="">
+            <div class="float-left">
+
+                <img src="<?php echo assetUrl($account['avatar'])?>" style="width:40px;height:40px;border-radius:100px"/>
+
+                <span style="position:relative;bottom: 5px; font-size: 15px;font-weight: lighter;left:14px"><i class='lab la-<?php echo $account['social_type']?>'></i> <?php echo $account['username']?></span><br/>
+
+            </div>
+
+            <div class="float-right">
+                <div class="custom-control custom-checkbox">
+                    <input value="<?php echo $account['id']?>" <?php echo (in_array($account['id'], $selectedAccount)) ? 'checked':null?> name="val[accounts][]" type="checkbox" class="custom-control-input" id="customCheck<?php echo $account['id']?>">
+                    <label class="custom-control-label" for="customCheck<?php echo $account['id']?>"></label>
+                </div>
+            </div>
+        </a>
+
+    <?php endforeach?>
+
+</div>
