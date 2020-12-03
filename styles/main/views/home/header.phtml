@@ -1,0 +1,37 @@
+<div class="header general-header <?php echo (isset($styled)) ? 'header-styled': null?>">
+    <div class="container">
+
+        <a href="<?php echo url()?>" data-ajax="true" class="logo"><img src="<?php echo assetUrl(config('site_logo', 'assets/images/logo.png'))?>"/> </a>
+        <div class="menu">
+            <ul class="clearfix">
+                <li><a class="<?php echo $active == 'home' ? 'active': null?>" href="<?php echo url()?>" data-ajax="true"><?php _l('home')?></a> </li>
+                <li><a  href="<?php echo url()?>#features"><?php _l('features')?></a> </li>
+                <?php if(moduleExists('saas')):?>
+                    <li><a class="<?php echo $active == 'pricing' ? 'active': null?>" href="<?php echo url()?>#pricing" ><?php _l('pricing')?></a> </li>
+                    <li><a class="<?php echo $active == 'blogs' ? 'active': null?>" href="<?php echo url('blogs')?>" data-ajax="true"><?php _l('blogs')?></a> </li>
+                <?php endif?>
+                <?php foreach(model('admin')->getPagesByMenu('header') as $page):?>
+                    <li><a data-ajax="true" href="<?php echo url(''.$page['slug'])?>"><?php _l($page['name'])?></a></li>
+                <?php endforeach?>
+
+            </ul>
+        </div>
+
+        <div class="right dropdown">
+            <?php if(model('user')->isLoggedIn()):?>
+                <a href="<?php echo url('post/accounts')?>"  class="btn btn-outline-primary"><?php _l('dashboard')?></a>
+            <?php else:?>
+                <a href="<?php echo url('login')?>" data-ajax="true" class="btn btn-outline-primary"><?php _l('login')?></a>
+            <?php endif?>
+            <?php $languages = model('admin')->getLanguages()?>
+            <a  data-toggle="dropdown" class="dropdown-toggle language-selector " href="#" >
+                <img style="width:20px" src="<?php echo assetUrl('assets/images/flags/'.Translator::instance()->lang().'.png')?>"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <?php foreach ($languages as $language):?>
+                    <a href="<?php echo url('change/language', array('id' => $language['id']))?>" class="dropdown-item"> <img style="width: 17px;" class="mr-1" src="<?php echo assetUrl('assets/images/flags/'.$language['id'].'.png')?>"/> <span class="pt-1"><?php echo $language['name']?></span></a>
+                <?php endforeach;?>
+            </div>
+        </div>
+    </div>
+</div>

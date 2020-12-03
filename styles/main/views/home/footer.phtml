@@ -1,0 +1,42 @@
+<div class="footer">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-5">
+
+                <img style="width: 50px;" src="<?php echo assetUrl(config('site_short_icon', 'assets/images/short-logo.png'))?>"/>
+                <div class="social-links">
+                    <?php if(config('facebook-page')):?>
+                    <a href="<?php echo config('facebook-page')?>" target="_blank" class="facebook-link"><i class="lab la-facebook-f"></i></a>
+                    <?php endif?>
+                    <?php if(config('twitter-page')):?>
+                    <a href="<?php echo config('twitter-page')?>" target="_blank"  class="twitter-link"><i class="lab la-twitter"></i></a>
+                    <?php endif?>
+                    <?php if(config('google-page')):?>
+                    <a href="<?php echo config('google-page')?>" target="_blank"  class="google-link"><i class="lab la-google"></i></a>
+                   <?php endif?>
+                    <?php if( config('pinterest-page')):?>
+                    <a href="<?php echo config('pinterest-page')?>" target="_blank"  class="pinterest-link"><i class="lab la-pinterest"></i></a>
+                    <?php endif?>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <ul>
+                    <?php if(moduleExists('saas')):?>
+                        <li><a data-ajax="true" href="<?php echo url('blogs')?>"><?php _l('blogs')?></a></li>
+                    <?php endif?>
+                    <?php foreach(model('admin')->getPagesByMenu('footer') as $page):?>
+                        <li><a data-ajax="true" href="<?php echo url(''.$page['slug'])?>"><?php _l($page['name'])?></a></li>
+                    <?php endforeach?>
+                </ul>
+                <p>
+                    <?php _l('copyright')?> © <?php echo date('Y')?>. <?php _l('all-rights-reserved')?>
+                </p>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

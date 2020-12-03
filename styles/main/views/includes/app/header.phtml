@@ -1,0 +1,106 @@
+<div class="app-header">
+   <a href="" class="menu-toggle" onclick="return showFullMenu()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+   </a>
+   <?php if($C->subMenuIcon):?>
+   <a href="" class="sub-menu-toggle" onclick="return openSubMenu()"><i class="<?php echo $C->subMenuIcon?>"></i></a>
+   <?php endif?>
+   <img class="mobile-app-logo" src="<?php echo assetUrl(config('site_logo', 'assets/images/logo.png'))?>"/>
+
+   <div class="nav-left">
+      <h1 class="nav-title">ADSVIATE</h1>
+      <ul class="nav">
+         
+         <li class="nav-item">
+            <a id="top-schedule-menu" class="nav-link <?php echo $C->activeMenu == 'schedules' ? 'active' : null?>" data-ajax="true" href="<?php echo url('schedules')?>"><?php _l('schedules')?></a>
+         </li>
+         <?php if(model('user')->isOriginalOwner() or model('user')->teamCanUse('manage-accounts')):?>
+         <li class="nav-item">
+            <a id="top-acount-menu" class="nav-link <?php echo $C->activeMenu == 'accounts' ? 'active' : null?>" data-ajax="true" href="<?php echo url('accounts')?>"><?php _l('accounts')?></a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link <?php echo $C->activeMenu == 'reports' ? 'active' : null?>" data-ajax="true" href="<?php echo url('reports')?>"><?php _l('reports')?></a>
+         </li>
+         <!-- <li class="nav-item">
+            <a class="btn nav-link <?php echo $C->activeMenu == 'post' ? 'active' : null?>" data-ajax="true" href="<?php echo url('post/accounts')?>"><?php _l('compose')?></a>
+         </li> -->
+         <?php endif?>
+      </ul>
+      <a class="btn btn-primary btn-header-compose <?php echo $C->activeMenu == 'post' ? 'active' : null?>" data-ajax="true" href="<?php echo url('post/accounts')?>"><?php _l('compose')?></a>
+   </div>
+
+   <div class="nav-right">
+      <ul class="nav">
+         <?php if(isset($_SESSION['shadow_userid'])):?>
+         <li class="hide-mobile-lg"><a href="<?php echo url('go/back/admin')?>" class="btn btn-primary ajax-action"><?php _l('go-back-admin')?></a> </li>
+         <?php endif?>
+         <?php if(!moduleExists('recurring')):?>
+         <?php if(moduleExists('saas') and model('saas::saas')->needsUpgrade()):?>
+         <li class="nav-item">
+            <a href="<?php echo url('pricing', array('userid' => model('user')->authOwnerId))?>" class="btn btn-dark mr-2"><?php echo _l('upgrade-now')?></a>
+         </li>
+         <?php endif?>
+         <?php else:?>
+         <li class="nav-item">
+            <a href="<?php echo url('profile')?>" data-ajax="true" class="btn btn-dark mr-2"><?php echo _l('my-subscription')?></a>
+         </li>
+         <?php endif?>
+         <?php Hook::getInstance()->fire('header.icons.extend')?>
+         <?php if(config('beamer-id', '')):?>
+         <li class="nav-item notification-icon">
+            <a   class="beamerTrigger" href="#" >
+            <i class="lar la-bell"></i>
+            </a>
+         </li>
+         <?php endif?>
+         <li class="nav-item dropdown d-none">
+            <?php $languages = model('admin')->getLanguages()?>
+            <a  data-toggle="dropdown" id="change-language-selector" class="dropdown-toggle language-selector " href="#" >
+            <img style="width:20px" src="<?php echo assetUrl('assets/images/flags/'.Translator::instance()->lang().'.png')?>"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+               <?php foreach ($languages as $language):?>
+               <a href="<?php echo url('change/language', array('id' => $language['id']))?>" class="dropdown-item"> <img style="width: 17px;" class="mr-1" src="<?php echo assetUrl('assets/images/flags/'.$language['id'].'.png')?>"/> <span class="pt-1"><?php echo $language['name']?></span></a>
+               <?php endforeach;?>
+            </div>
+         </li>
+         <li>
+            <div class="user float-left">
+               <div class="dropdown">
+                  <a class="dropdown-toggle user-menu clearfix" id="user-account-menu" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <div class="float-left hide-mobile d-none">
+                        <?php echo str_limit(model('user')->userData('full_name'), 15)?> <br/>
+                        <span><?php echo model('user')->userData('email')?></span>
+                     </div>
+                     <div class="avatar-container float-right bg-white">
+                        <div class="avatar">
+                           <?php echo model('user')->getNameLetters()?>
+                        </div>
+                     </div>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <a class="dropdown-item" href="<?php echo url('profile')?>" data-ajax="true"><?php _l('my-profile')?></a>
+                     <div class="dropdown-divider"></div>
+                     <?php if(isset($_SESSION['shadow_userid'])):?>
+                     <a href="<?php echo url('go/back/admin')?>" class="dropdown-item ajax-action"><?php _l('go-back-admin')?></a>
+                     <?php endif?>
+                     <?php if(model('user')->isTeamMEmber()):?>
+                     <a class="dropdown-item" href="<?php echo url('switch/account')?>" ><?php _l('switch-account')?></a>
+                     <div class="dropdown-divider"></div>
+                     <?php endif?>
+                     <a class="dropdown-item" href="<?php echo url('file-manager')?>" data-ajax="true"><?php _l('file-manager')?></a>
+                     <a class="dropdown-item" href="<?php echo url('captions')?>" data-ajax="true"><?php _l('captions')?></a>
+                     <div class="dropdown-divider"></div>
+                     <a class="dropdown-item" href="<?php echo url('logout')?>"><?php _l('logout')?></a>
+                  </div>
+               </div>
+            </div>
+         </li>
+         <li>
+            <span class="new-notification-icon">
+               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </span>
+         </li>
+      </ul>
+   </div>
+</div>

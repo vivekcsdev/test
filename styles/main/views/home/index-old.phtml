@@ -1,0 +1,142 @@
+<?php echo view('home/header', array('active' => 'home'))?>
+<div class="topography">
+
+    <div class="container">
+
+        <div class="content">
+            <h4 data-aos="fade-right" data-aos-duration="1000"><?php _l('home-welcome-title')?></h4>
+            <p data-aos="fade-right" data-aos-duration="1000"><?php _l('home-welcome-title-note')?></p>
+            <?php if(!model('user')->isLoggedIn() and config('user-signup', true)):?>
+                <a  data-aos="fade-up" data-aos-duration="1000" href="<?php echo url('signup')?>" data-ajax="true" class="getstarted-btn btn btn-primary mt-5"><?php _l('getstarted-now')?> <i class="las la-long-arrow-alt-right"></i></a>
+            <?php endif?>
+
+            <img class="topo-image" src="<?php echo assetUrl('styles/main/images/lap-display.png')?>"/>
+        </div>
+    </div>
+    <svg class="topo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polygon fill="#F98F1D" points="0,100 100,0 100,100"></polygon>
+    </svg>
+</div>
+    <div class="section" id="features"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="padding pt-5" >
+                        <div class="title text-center">
+                            <h4>
+                                <?php _l('here-is-features-for-you')?>
+                                <div class="line"></div>
+                            </h4>
+                            <p class="description"><?php _l('here-is-features-for-you-note')?></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+
+                    <div class="row features-list" data-aos="fade-up" data-aos-duration="1000">
+                        <div class="col-3">
+                            <div class="each">
+                                <i  class="la la-layer-group"></i>
+                                <h4><?php _l('unique-design')?> </h4>
+
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="each">
+                                <i class="las la-user-friends"></i>
+                                <h4><?php _l('multiple-accounts')?></h4>
+
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="each">
+                                <i class="la la-share-alt"></i>
+                                <h4><?php _l('multi-social')?></h4>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="each">
+                                <i class="las la-calendar"></i>
+                                <h4><?php _l('schedule-calender')?></h4>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="each">
+                                <i class="las la-lock-open"></i>
+                                <h4><?php _l('safe-to-use')?></h4>
+
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="each">
+                                <i class="las la-mobile-alt"></i>
+                                <h4> <?php _l('mobile-responsive')?></h4>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="each">
+                                <i class="las la-cloud-sun"></i>
+                                <h4><?php _l('import-from-cloud')?></h4>
+
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="each">
+                                <i class="las la-photo-video"></i>
+                                <h4><?php _l('watermark')?></h4>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <svg class="svg-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polygon fill="#fff" points="0,100 100,0 100,100"></polygon>
+    </svg>
+
+    <div class="section p-0" id="feature-section" >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1><?php _l('publish-content-from-blog')?></h1>
+                    <p><?php _l('publish-content-from-blog-note')?></p>
+
+                    <ul>
+                        <li><i class="las la-check"></i> <?php _l('in-simple-way-smart')?></li>
+                        <li><i class="las la-check"></i> <?php _l('easy-scheduling-for-all-social')?></li>
+                        <li> <i class="las la-check"></i> <?php _l('full-reports-scheduling-doing')?></li>
+                    </ul>
+
+                    <?php if(!model('user')->isLoggedIn() and config('user-signup', true)):?>
+                        <a   href="<?php echo url('signup')?>" data-ajax="true" style="background:black" class="getstarted-btn btn btn-primary mt-5"><?php _l('getstarted-now')?> <i class="las la-long-arrow-alt-right"></i></a>
+                    <?php endif?>
+
+                </div>
+                <div class="col-md-6">
+                    <img style="width: 100%;" src="<?php echo assetUrl('styles/main/images/lap-display.gif')?>"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <svg class="section-top-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polygon fill="#F7F7F7" points="0,100 100,0 100,100"></polygon>
+    </svg>
+<div class="section" id="pricing" >
+    <div class="container">
+        <?php if(moduleExists('saas')):?>
+            <?php echo view('saas::pricing/index')?>
+        <?php endif?>
+    </div>
+</div>
+    <svg class="svg-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polygon fill="#fff" points="0,100 100,0 100,100"></polygon>
+    </svg>
+
+
+<?php echo view('home/footer')?>

@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="<?php echo output_content($description)?>">
+    <meta name="keywords" content="<?php echo output_content($keywords)?>">
+    <title><?php echo output_content($title)?></title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo output_content($favicon)?>">
+    <link rel="shortcut icon" href="<?php echo output_content($favicon)?>">
+
+    <link rel="apple-touch-icon-precomposed" href="<?php echo output_content($favicon)?>">
+    <link rel="icon" href="<?php echo output_content($favicon)?>">
+    <link href="<?php echo assetUrl('assets/css/plugin.css')?>?time=<?php echo fileatime(path('assets/css/plugin.css'))?>" rel="stylesheet">
+    <link href="<?php echo assetUrl('assets/js/trumbowyg/ui/trumbowyg.min.css')?>" rel="stylesheet">
+
+    <?php if($pageType == 'frontend'):?>
+
+        <link href="<?php echo assetUrl('styles/main/css/animate.css')?>" rel="stylesheet"/>
+        <link href="<?php echo assetUrl('styles/main/css/frontend.css')?>?time=<?php echo fileatime(path('styles/main/css/frontend.css'))?>" rel="stylesheet">
+    <?php else:?>
+        <link href="<?php echo assetUrl('styles/main/css/backend.css')?>?time=<?php echo fileatime(path('styles/main/css/backend.css'))?>" rel="stylesheet">
+    <?php endif?>
+    <?php echo $header_content?>
+    <meta name="twitter:card" content="<?php echo config('site-title')?>" />
+    <meta property="twitter:site" content="<?php echo url()?>">
+    <meta property="og:site_name" content="<?php echo config('site-title')?>">
+
+    <meta property="twitter:title" content="<?php echo config('site-title')?>">
+    <meta property="twitter:description" content="<?php echo output_content($description)?>">
+    <meta property="twitter:image" content="<?php echo assetUrl(config('site_logo', 'assets/images/logo.png'))?>">
+    <meta property="og:url" content="<?php echo url()?>">
+    <meta property="og:type" content="Website">
+    <meta property="og:title" content="<?php echo config('site-title')?>">
+    <meta property="og:description" content="<?php echo output_content($description)?>">
+    <meta property="og:image" content="<?php echo assetUrl(config('site_logo', 'assets/images/logo.png'))?>">
+    <?php Hook::getInstance()->fire("header.after.css")?>
+
+
+    <?php if(config('google-analytics-id')):?>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo config('google-analytics-id')?>"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '<?php echo config('google-analytics-id')?>');
+        </script>
+
+    <?php endif?>
+
+    <?php if($pageType == 'backend'):$design = model('admin')->getPageDesign();$data = perfectUnserialize($design['data']);?>
+
+    <style>
+        .btn-primary ,input.cmn-toggle-round-flat:checked+label, input.cmn-toggle-round-flat:checked+label:after,
+        .page-item.active .page-link,
+        input.cmn-toggle-round-flat:checked+label, input.cmn-toggle-round-flat:checked+label:after, #top-loading:before,
+        .fc-button, .selectize-control.multi .selectize-input [data-value]{
+            background-color:<?php echo $design['primary_color']?> !important;
+        }
+        .selectize-control.multi .selectize-input [data-value] {
+            background:#fff !important;
+            border-color:#F1F3F4 !important;
+        }
+        .selectize-control.multi .selectize-input>div,.selectize-control.plugin-remove_button [data-value] .remove {
+            color:grey;
+            border-color:#F1F3F4 !important;
+
+        }
+        #app-container .side-menu .active i,
+        .post-container .middle .post-menu a.active,
+        .page-link,
+        .btn-outline-primary,
+        #app-container .side-menu .active span,#horizontal-menu .menu-container .active span,.thin-menu ul a:hover,.thin-menu ul a.active,.colored {
+            color: <?php echo $design['primary_color']?> !important;
+        }
+        .thin-menu ul a.active,.btn-primary,#app-container .app-header .nav-left a.active,
+        .page-item.active .page-link,
+        .preview-container .top #horizontal-menu a.active span,
+        #app-container .form-control:focus,.fc-button,.btn-outline-primary{
+            border-color: <?php echo $design['primary_color']?> !important;
+        }
+
+        .btn-outline-primary:hover {
+            background: none;
+        }
+        #app-container .left-pane {
+            background-color: <?php echo $data['col-menu-bg']?>;
+        }
+        .thin-menu ul a {
+            color: <?php echo $data['col-menu-link-color']?> !important;
+        }
+        #report-icon-color {
+            color: <?php echo $data['report-icon-color']?> !important;
+        }
+
+        #rss-icon-color {
+            color: <?php echo $data['rss-icon-color']?> !important;
+        }
+        #captions-icon-color {
+            color: <?php echo $data['captions-icon-color']?> !important;
+        }
+        #filemanager-icon-color {
+            color: <?php echo $data['filemanager-icon-color']?> !important;
+        }
+        #groups-icon-color {
+            color: <?php echo $data['groups-icon-color']?> !important;
+        }
+        #affiliate-icon-color {
+            color: <?php echo $data['affiliate-icon-color']?> !important;
+        }
+        #app-container .side-menu .active {
+            background-color: <?php echo $data['nav-active-background-color']?> !important;
+        }
+        .opened-menu .left-pane {
+            background-color: <?php echo $data['exp-menu-bg']?> !important;
+        }
+        .opened-menu .thin-menu ul a {
+            color: <?php echo $data['exp-menu-link-color']?> !important;
+        }
+        .menu-toggle, .sub-menu-toggle {
+            color: <?php echo $data['menu-toggle-color']?> !important;
+            border-color:<?php echo $data['menu-toggle-border-color']?> !important;
+            background-color: <?php echo $data['menu-toggle-bg-color']?> !important;
+        }
+        .compose-btn , .opened-menu .left-pane .compose-btn{
+            background: linear-gradient(45deg, <?php echo $data['compose-first']?> 0%,  <?php echo $data['compose-first']?> 40%,  <?php echo $data['compose-second']?> 60%,  <?php echo $data['compose-second']?> 100%)  !important;
+            color: #ffffff !important;
+        }
+
+    </style>
+
+    <?php endif?>
+
+
+</head>
+
+<body>
+    <div id="cover-loader"><img src="<?php echo assetUrl('styles/main/images/loader.gif')?>"/> </div>
+    <div id="top-loading"></div>
+    <div id="page-container">
+        <?php echo $content?>
+    </div>
+    <div id="backtotop"><a href="#"></a></div>
+
+    <?php if(config('enable-gdpr', true)):?>
+        <div class="gdpr-container" data-aos="fade-right" data-aos-duration="1000">
+            <div><?php _l('gdpr-text')?></div>
+            <div class="buttons mt-2">
+                <a href="" onclick="return acceptCookie()" class="btn btn-primary"><?php _l('got-it')?></a>
+            </div>
+        </div>
+    <?php endif?>
+    <?php if ($pageType != 'frontend'):?>
+        <div id="image-editor-overlay">
+            <a href="" onclick="return closeImageEditor()" class="close-btn"><i class="las la-times"></i></a>
+            <div class="content"></div>
+        </div>
+    <?php endif?>
+</body>
+
+<script>
+    var baseUrl = '<?php echo url()?>';
+    var permaLink = <?php echo config('permalink', false) ? 1 : 0?>;
+    var isLoggedIn = <?php echo $C->model('user')->isLoggedIn() ? 'true' : 'false'?>;
+    var locale = '<?php echo Translator::instance()->lang()?>';
+    var strings = {
+        are_your_sure: "<?php _l("are-you-sure")?>",
+        ok : "<?php _l("ok")?>",
+        close : "<?php _l("close")?>",
+        notImageError : "<?php echo l("not-image-error")." : ". config("image-file-types", "jpg,png,gif,jpeg")?>",
+        allowVideoSizeError : "<?php echo l("video-size-error")." : ". config("video-file-size", 55)?>MB",
+        processing : "<?php _l("processing")?>",
+        select_all : "<?php _l('select-all')?>",
+        deselect : "<?php _l('deselect')?>",
+        allowFileSizeError: "<?php _l('allow-upload-file-size-error')?> <?php echo model('user')->getAllowSize()?>MB",
+        notImageVideoError: "<?php _l('not-image-video-file-error')?>",
+        challenge_required: "<?php _l('challenge_required')?>",
+        verification_required: "<?php _l('verification-required')?>",
+        add_account: "<?php _l('add-account')?>",
+        select_an_account_to_continue: "<?php _l('select_an_account_to_continue')?>",
+        please_select_image: "<?php _l('please_select_image')?>",
+        please_select_video: "<?php _l('please_select_video')?>",
+        no_media_allow_for_post: "<?php _l('no_media_allow_for_post')?>",
+        schedule_now: "<?php _l('schedule-now')?>",
+        post_now: "<?php _l('post-now')?>",
+        create_new_post: "<?php _l('create-new-post')?>",
+        you_post_youtube_only: "<?php _l('you_post_youtube_only')?>",
+        today: "<?php _l('today')?>",
+        <?php Hook::getInstance()->fire("js.translation")?>
+    };
+    var supportImagesType = "<?php echo config("image-file-types", "jpg,png,gif,jpeg")?>";
+    var supportVideoType = "<?php echo (config('ffmpeg-path', '') == '') ? 'mp4' : 'mp4'?>";
+    var allowPhotoSize = <?php echo model('user')->getAllowSize() * 1024 * 1000?>;
+    var allowFileSize = <?php echo model('user')->getAllowSize() * 1024 * 1000?>;
+    var lastTime = <?php echo time()?>;
+    var siteTitle = "<?php echo config("site-title")?>";
+    var logo = "<?php echo assetUrl(config('site_short_icon', 'assets/images/short-logo.png'))?>";
+    var loaderImage = "<?php echo assetUrl('styles/main/images/loader.gif')?>";
+    var stripeKey = "<?php echo config("stripe-publishable-key", "")?>";
+    var startDay = <?php echo config('calender-start-day', 0)?>;
+    var enableWelcomeStemps = 0;
+    <?php if($pageType != 'frontend' and config('google-api-key', '') !=''):?>
+        var googleDriveDeveloperKey = "<?php echo config('google-api-key', '')?>";
+        var googleDriveClientId = "<?php echo config('google-drive-client-id', '')?>";
+        var scope = ['https://www.googleapis.com/auth/drive.file'];
+        var pickerApiLoaded = false;
+    <?php endif?>
+
+    <?php if($pageType != 'frontend'):?>
+        // The Client ID obtained from the Google Developers Console. Replace with your own Client ID.
+
+        var dateFormat = '<?php echo getAdminDateFormat(true)?>';
+        var dateFormatId = '<?php echo getSelectedDateFormat()?>';
+        var oauthToken;
+
+        <?php if(model('user')->isLoggedIn()):?>
+            enableWelcomeStemps = "<?php echo config('enable-welcome-steps', true) ? '1' : 0?>";
+            var welcomeVideoId = "<?php echo str_replace('https://www.youtube.com/watch?v=','', config('welcome-last-step-video',''))?>";
+            <?php
+                    $db = Database::getInstance()->query("SELECT * FROM users WHERE role=? LIMIT 1", 1);
+            $user = $db->fetch(PDO::FETCH_ASSOC);
+            ?>
+            var welcomeTitle = "<?php echo '<strong>'.$user['full_name'].'</strong> '.l('from').' '.config('site-title', 'SmartPost')?>";
+
+            <?php if(config('welcome-last-step-video','')):?>
+                var lastStep = "<div class='welcome-screen-big' style='height:360px;padding:10px;max-width:90%'>" +
+                    "<h4 class='colored' style='font-weight:lighter'><?php _l('welcome-congratulation')?></h4>" +
+                    "<p><?php _l('welcome-congratulation-note', array('site' => config('site-title', 'SmartPost')))?></p>" +
+                    "<div class='welcome-watch-video'><a href='' onclick='return finishWelcomeScreen(this)'><i class='las la-play-circle'></i></a> <p>Watch our tutorial</p></div>" +
+                    "</div>";
+            <?php else:?>
+                var lastStep = "<div class='welcome-screen-big' style='height:360px;padding:10px;max-width:90%'>" +
+                    "<h4 class='colored' style='font-weight:lighter'><?php _l('welcome-congratulation')?></h4>" +
+                    "<p><?php _l('welcome-congratulation-note', array('site' => config('site-title', 'SmartPost')))?></p>" +
+                    "</div>";
+            <?php endif?>
+            var welcomeStepsWeb = [
+                {
+                    content: "<div class='welcome-screen-big' style='height:270px;padding:30px;max-width:80%'>" +
+                    "<h4 class='colored' style='font-weight:lighter'><?php _l('welcome-to-site', array('site' => config('site-title', 'SmartPost')))?></h4>" +
+                    "<p><?php _l('welcome-getstarted-note')?></p>" +
+                    "</div>",
+                    title: welcomeTitle,
+                    orphan : true
+                },
+                {
+                    element: "#left-compose-menu",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('compose-a-post')?></h6><p><?php _l('compose-a-post-note')?></p>"
+                },
+                {
+                    element: "#top-acount-menu",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('welcome-title-1')?></h6><p><?php _l('welcome-title-1-note')?></p>"
+                },
+                {
+                    element: "#top-schedule-menu",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('welcome-2-title')?></h6><p><?php _l('welcome-2-title-note')?></p>"
+                },
+                {
+                    element: "#report-icon-color",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('welcome-3-title')?></h6><p><?php _l('welcome-3-title-note')?></p>"
+                },
+                {
+                    element: "#drafts-icon-color",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('welcome-4-title')?></h6><p><?php _l('welcome-4-title-note')?></p>"
+                },
+                {
+                    element: "#rss-icon-color",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('welcome-5-title')?></h6><p><?php _l('welcome-5-title-note')?></p>"
+                },
+                {
+                    element: "#captions-icon-color",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('welcome-6-title')?> </h6><p><?php _l('welcome-6-title-note')?></p>"
+                },
+                {
+                    element: "#filemanager-icon-color",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('welcome-7-title')?></h6><p><?php _l('welcome-7-title-note')?></p>"
+                },
+                {
+                    element: "#groups-icon-color",
+                    title: welcomeTitle,
+                    content: "<h6><?php _l('welcome-8-title')?></h6><p><?php _l('welcome-8-title-note')?> </p>"
+                },
+                {
+                    element: "#change-language-selector",
+                    title: welcomeTitle,
+                    placement: 'bottom',
+                    content: "<h6>Switch Language</h6><p>You can change to your own language from here , we support multiple languages</p>"
+                },
+                {
+                    element: "#user-account-menu",
+                    title: welcomeTitle,
+                    placement: 'bottom',
+                    content: "<h6>Account Menu</h6><p>This is your account menu , you can see your settings, change your password e.t.c</p>"
+                },
+                {
+                    element: "#post-left-pane",
+                    title: welcomeTitle,
+                    content: "<h6>Select Video & Photo</h6><p>Here you can select from your uploaded photos, videos, also you can upload or import from here</p>"
+                },
+                {
+                    element: "#post-middle-top-accounts",
+                    title: welcomeTitle,
+                    content: "<h6>Add accounts</h6><p>Here you can select your connected accounts by clicking the button on the right</p>"
+                },
+                {
+                    element: "#post-preview-right",
+                    title: welcomeTitle,
+                    placement: 'left',
+                    content: "<h6>Post Preview</h6><p>As you are selecting photo, writing text e.t.c you can see the preview here </p>"
+                },
+                {
+                    element: "#post-botton-container",
+                    title: welcomeTitle,
+                    placement: 'top',
+                    content: "<h6>Publish your Post</h6><p>After creating your content you can choose to publish your post or send it to draft </p>"
+                },
+                {
+                    title: welcomeTitle,
+                    content: lastStep,
+                    template: "<div class='popover tour' style='min-width:300px;max-width:400px'> <div class='arrow'></div> <div class='welcome-title'>"+welcomeTitle+" <a href='' data-role='end'><i class='las la-times'></i></a></div> <div class='popover-content' ></div> <div class='popover-navigation clearfix'>   <button class='btn btn-primary float-right' data-role='end'>Finish</button> </div> </div>",
+                    orphan : true
+                }
+            ];
+
+        <?php endif?>
+    <?php endif?>
+</script>
+<script src="<?php echo assetUrl('assets/js/plugin.js')?>?time=<?php echo fileatime(path('assets/js/plugin.js'))?>"></script>
+<script src="<?php echo assetUrl('assets/js/trumbowyg/trumbowyg.min.js')?>"></script>
+
+<script src="<?php echo assetUrl('styles/main/js/main.js')?>?time=<?php echo fileatime(path('styles/main/js/main.js'))?>"></script>
+<?php Hook::getInstance()->fire("footer.after.js")?>
+<?php if($pageType != 'frontend'):?>
+    <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+    <?php if(config('dropbox-api-key')):?>
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="<?php echo config('dropbox-api-key')?>"></script>
+    <?php endif?>
+
+    <?php if(config('onedrive-client-id')):?>
+        <script>
+            var onedriveKey = "<?php echo config('onedrive-client-id')?>"
+        </script>
+        <script type="text/javascript" src="https://js.live.net/v7.0/OneDrive.js"></script>
+    <?php endif?>
+    <?php if(config('beamer-id', '')):?>
+        <script>
+            var beamer_config = {
+                product_id : "<?php echo config('beamer-id', '')?>",
+                button_position: 'top-right'
+            };
+        </script>
+        <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js"></script>
+    <?php endif?>
+<?php else:?>
+    <script src="<?php echo assetUrl('styles/main/js/animate.js')?>"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <?php if(config('enable-captcha', false)):?>
+        <script>
+            var  onloadCallback = function() {
+                window.captchIsLoaded = true
+            }
+        </script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+                async defer>
+        </script>
+    <?php endif?>
+
+<?php endif?>
+
+<?php echo str_replace('&#39;', "'", config('embed-code', ''))?>
+</body>
+</html>
